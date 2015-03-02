@@ -1,0 +1,16 @@
+/**
+ * @pLABYRINT 2015
+ * ICP project
+ * @author: xsusov01, xband00
+ *   
+*/
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    cout << "Hello World!" << endl;
+    return 0;
+}
+
