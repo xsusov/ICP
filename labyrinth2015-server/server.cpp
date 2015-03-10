@@ -9,17 +9,14 @@
 
 /// TDD - test first, enjoyment from pure coding later
 
+using namespace std;
+
 #include <iostream>
 
 /// Classes:
+#include "constants.h"
 #include "player.h"
-
-using namespace std;
-
-namespace labyrinth {
-    const int north = 0, east = 1, south = 2, west = 3;
-    const int boardMinSize = 5, boardMaxSize = 11;
-}
+#include "gameboard.h"
 
 int main()
 {

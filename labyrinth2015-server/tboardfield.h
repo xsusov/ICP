@@ -4,8 +4,6 @@
 #include <iostream>
 #include "boardfield.h"
 
-using namespace std;
-
 class TBoardField : BoardField
 {
 public:

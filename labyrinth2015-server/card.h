@@ -4,15 +4,13 @@
 #include <iostream>
 #include "gameitem.h"
 
-using namespace std;
-
 class Card
 {
 public:
     Card();
 private:
     int id;
-    string text;
+    std::string text;
     GameItem *item;
 };
 

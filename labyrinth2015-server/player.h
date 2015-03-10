@@ -5,15 +5,13 @@
 #include "playerfigure.h"
 #include "card.h"
 
-using namespace std;
-
 class Player
 {
 public:
-    Player();
+    Player(const std::string name );
 private:
     int id;
-    string name;
+    std::string name;
     int score;
     PlayerFigure *figure;
     int color;

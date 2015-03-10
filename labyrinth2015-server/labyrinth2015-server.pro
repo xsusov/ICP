@@ -31,5 +31,6 @@ HEADERS += \
     playerfigure.h \
     iboardfield.h \
     tboardfield.h \
-    lboardfield.h
+    lboardfield.h \
+    constants.h
 

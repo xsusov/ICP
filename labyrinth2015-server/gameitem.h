@@ -4,8 +4,6 @@
 #include <iostream>
 #include "gameobject.h"
 
-using namespace std;
-
 class GameItem : GameObject
 {
 public:

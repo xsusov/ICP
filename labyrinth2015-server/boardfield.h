@@ -6,8 +6,6 @@
 #include "gameitem.h"
 #include "player.h"
 
-using namespace std;
-
 class BoardField : GameObject
 {
 public:
@@ -17,7 +15,6 @@ public:
     BoardField *getNeighbor( int direction );
     void rotate( int direction );
     bool isOpenPath( int direction );
-
 
 private:
     int posX;
