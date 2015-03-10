@@ -11,6 +11,9 @@
 
 #include <iostream>
 
+/// Classes:
+#include "player.h"
+
 using namespace std;
 
 int main()
