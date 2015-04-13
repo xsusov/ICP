@@ -9,6 +9,7 @@ class Player
 {
 public:
     Player(const std::string name );
+    char draw();
 private:
     int id;
     std::string name;

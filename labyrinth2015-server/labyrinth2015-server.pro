@@ -2,6 +2,7 @@ TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
+QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += \
     server.cpp \
@@ -15,7 +16,8 @@ SOURCES += \
     playerfigure.cpp \
     iboardfield.cpp \
     tboardfield.cpp \
-    lboardfield.cpp
+    lboardfield.cpp \
+    clienthandler.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -32,5 +34,6 @@ HEADERS += \
     iboardfield.h \
     tboardfield.h \
     lboardfield.h \
-    constants.h
+    constants.h \
+    clienthandler.h
 

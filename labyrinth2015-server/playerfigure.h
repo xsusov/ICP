@@ -8,6 +8,9 @@ class PlayerFigure : GameObject
 {
 public:
     PlayerFigure();
+    char draw();
+private:
+    char figure;
 };
 
 #endif // PLAYERFIGURE_H

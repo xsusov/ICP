@@ -4,10 +4,17 @@
 #include <iostream>
 #include "boardfield.h"
 
-class IBoardField : BoardField
+class IBoardField : public BoardField
 {
 public:
-    IBoardField();
+    IBoardField(const int x,const int y);
+protected:
+    int posX;
+    int posY;
+
+    bool path[4];
+    BoardField *neighbor[4];
+    Player *playerSlot[4];
 };
 
 #endif // IBOARDFIELD_H

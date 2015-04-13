@@ -12,15 +12,31 @@
 using namespace std;
 
 #include <iostream>
-
+#include <exception>
 /// Classes:
 #include "constants.h"
+#include "clienthandler.h"
 #include "player.h"
 #include "gameboard.h"
 
 int main()
 {
     cout << "Welcome to Labyrint server" << endl;
+
+    ClientHandler *client = new ClientHandler();
+
+    while( !client->startNewGame() );
+
+    GameBoard *newBoard;
+    try{
+        newBoard = new GameBoard( client->getSize() );
+    }
+    catch( const char *exp ){
+        std::cout << "caught " << exp << endl;
+    }
+
+    newBoard->draw();
+
     return 0;
 }
 

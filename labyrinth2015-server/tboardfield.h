@@ -7,7 +7,14 @@
 class TBoardField : BoardField
 {
 public:
-    TBoardField();
+    TBoardField(const int x,const int y);
+protected:
+    int posX;
+    int posY;
+
+    bool path[4];
+    BoardField *neighbor[4];
+    Player *playerSlot[4];
 };
 
 #endif // TBOARDFIELD_H
