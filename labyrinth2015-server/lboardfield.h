@@ -8,6 +8,7 @@ class LBoardField : public BoardField
 {
 public:
     LBoardField(const int x,const int y );
+    //char getPath(const int direction);
 protected:
     int posX;
     int posY;

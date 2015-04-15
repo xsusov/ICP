@@ -1,8 +1,7 @@
 #include "lboardfield.h"
+#include "constants.h"
 
 LBoardField::LBoardField(const int x, const int y)
-    : posX{x},
-      posY{y},
-      path{true, true, false, false}
+    : BoardField(x, y, true, true, false, false)
 {
 }

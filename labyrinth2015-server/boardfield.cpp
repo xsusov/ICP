@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <vector>
 #include "boardfield.h"
 #include "constants.h"
 
@@ -8,10 +10,10 @@ BoardField::BoardField()
 {
 }
 
-BoardField::BoardField(const int x, const int y)
+BoardField::BoardField(const int x, const int y, bool pathNorth, bool pathEast, bool pathSouth, bool pathWest)
     : posX{x},
       posY{y},
-      path{ false, false, false, false },
+      path{ pathNorth, pathEast, pathSouth, pathWest },
       playerSlot{nullptr, nullptr, nullptr, nullptr}
 {
 }
@@ -47,7 +49,7 @@ void BoardField::printRow(const int row)
 
     switch(row){
         case(0):
-            std::cout << closed << closed << getPath(labyrinth::north) << closed << closed << "fuck";
+            std::cout << closed << closed << getPath(labyrinth::north) << closed << closed;
             break;
         case(1):
             std::cout << closed << getPlayerSlot(0) << opened << getPlayerSlot(1) << closed;
@@ -106,4 +108,13 @@ void BoardField::appendRow(const int row, std::string& str)
             str.push_back(closed);
             break;
     };
+}
+
+void BoardField::rotate(int x)
+{
+    x %= 4;
+    if( !x )
+        return;
+
+    std::rotate( path.rbegin(), path.rbegin() + x, path.rend());
 }

@@ -35,6 +35,7 @@ int main()
         std::cout << "caught " << exp << endl;
     }
 
+    newBoard->setUpFields();
     newBoard->draw();
 
     return 0;

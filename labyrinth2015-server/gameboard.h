@@ -10,14 +10,16 @@ class GameBoard
 {
 public:
     GameBoard( const int size );
+    ~GameBoard();
     void draw();
     void setUpFields();
-    BoardField& getField( const int posX, const int posY );
-
+    BoardField* getField( const int posX, const int posY );
+    inline int pos(const int x, const int y);
+    inline bool isCorner(const int pos);
 private:
     const int size;
     const int totalFields;
-    BoardField *field;
+    BoardField **field;
 };
 
 #endif // GAMEBOARD_H
