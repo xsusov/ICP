@@ -23,6 +23,7 @@ private:
     const int size;
     const int totalFields;
     BoardField **field;
+    BoardField *freeField;
 };
 
 #endif // GAMEBOARD_H

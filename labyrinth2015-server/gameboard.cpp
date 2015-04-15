@@ -69,6 +69,9 @@ void GameBoard::draw()
             line.clear();
         }
     }
+
+    std::cout << std::endl << "Free boardfield:" << std::endl;
+    freeField->draw();
 }
 
 void GameBoard::setUpFields()
@@ -105,13 +108,14 @@ void GameBoard::setUpFields()
                 else{
                     field[y * size + x]->rotate( rotateDistribution(randGenerator));
                 }
-
             }
             else{
                 field[y * size + x] = new BoardField(x,y);
             }
         }
     }
+
+    freeField =  new TBoardField(-1,-1);
 }
 
 BoardField *GameBoard::getNeighbour(BoardField *from, const int direction)
