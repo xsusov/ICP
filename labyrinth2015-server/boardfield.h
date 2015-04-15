@@ -11,7 +11,7 @@ class BoardField : public GameObject
 {
 public:
     BoardField();
-    BoardField(const int x, const int y, bool pathNorth = false, bool pathEast = false, bool pathSouth = false, bool pathWest = false );
+    BoardField(const int x, const int y, bool pathNorth = false, bool pathEast = false, bool pathSouth = false, bool pathWest = false, GameItem* item = nullptr );
     int getPosX();
     int getPosY();
     BoardField *getNeighbor( int direction );
@@ -21,6 +21,7 @@ public:
     char getPath(const int direction);
     void printRow(const int row);
     char getPlayerSlot(const int pos);
+    char getItem();
     void appendRow(const int row, std::string& str);
 protected:
     int posX;

@@ -7,7 +7,10 @@
 class GameItem : GameObject
 {
 public:
-    GameItem();
+    GameItem( const char figure = '$');
+    char getFigure();
+private:
+    char figure;
 };
 
 #endif // GAMEITEM_H

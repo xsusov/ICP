@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <vector>
-#include "boardfield.h"
 #include "constants.h"
+#include "boardfield.h"
+
 
 using namespace labyrinth;
 
@@ -10,11 +11,12 @@ BoardField::BoardField()
 {
 }
 
-BoardField::BoardField(const int x, const int y, bool pathNorth, bool pathEast, bool pathSouth, bool pathWest)
+BoardField::BoardField(const int x, const int y, bool pathNorth, bool pathEast, bool pathSouth, bool pathWest, GameItem *item)
     : posX{x},
       posY{y},
       path{ pathNorth, pathEast, pathSouth, pathWest },
-      playerSlot{nullptr, nullptr, nullptr, nullptr}
+      playerSlot{nullptr, nullptr, nullptr, nullptr},
+      item{item}
 {
 }
 
@@ -44,6 +46,11 @@ void BoardField::draw()
 char BoardField::getPlayerSlot(const int pos)
 {
     return playerSlot[pos] != nullptr ? playerSlot[pos]->draw() : opened;
+}
+
+char BoardField::getItem()
+{
+    return item != nullptr ? item->getFigure() : opened;
 }
 
 void BoardField::printRow(const int row)
@@ -94,7 +101,7 @@ void BoardField::appendRow(const int row, std::string& str)
         case(2):
             str.push_back(getPath(labyrinth::west));
             str.push_back(opened);
-            str.push_back(opened);
+            str.push_back(getItem());
             str.push_back(opened);
             str.push_back(getPath(labyrinth::east));
             break;

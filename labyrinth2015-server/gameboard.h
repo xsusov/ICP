@@ -2,9 +2,10 @@
 #define GAMEBOARD_H
 
 #include "exception"
-#include "constants.h"
 #include "boardfield.h"
 #include "lboardfield.h"
+#include "tboardfield.h"
+#include "iboardfield.h"
 
 class GameBoard
 {

@@ -11,9 +11,15 @@ namespace labyrinth {
     const int boardMinSize = 5, boardMaxSize = 11;
 
     const char opened = ' ';
-    const char closed = '#';
+    const char closed = '@';//'#';
 
-    const char playerFigure[4]{ '@', '&', '%', '$'};
+    const char playerFigure[4]{ '@', '&', '%', '!'};
+/*
+    const char *welcome =
+"********************************************************************************\n"
+"******************************   LABYRINTH   ***********************************\n"
+"********************************************************************************\n"
+;*/
 }
 
 #endif // CONSTANTS_H

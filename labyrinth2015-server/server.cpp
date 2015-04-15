@@ -21,18 +21,25 @@ using namespace std;
 
 int main()
 {
-    cout << "Welcome to Labyrint server" << endl;
+    std::cout << "Welcome to Labyrint server" << endl;
+    //std::cout << labyrinth::welcome;
 
     ClientHandler *client = new ClientHandler();
 
     while( !client->startNewGame() );
 
     GameBoard *newBoard;
-    try{
-        newBoard = new GameBoard( client->getSize() );
-    }
-    catch( const char *exp ){
-        std::cout << "caught " << exp << endl;
+    while( !newBoard ){
+        try{
+            int size = client->getSize();
+            if( size == -1 )
+                return 1;
+
+            newBoard = new GameBoard( size );
+        }
+        catch( const char *exp ){
+            std::cout << exp << endl;
+        }
     }
 
     newBoard->setUpFields();

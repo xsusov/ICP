@@ -1,5 +1,6 @@
-#include "gameboard.h"
 #include "constants.h"
+#include "gameboard.h"
+#include <random>
 
 using namespace labyrinth;
 
@@ -74,17 +75,37 @@ void GameBoard::setUpFields()
 {
     int corner = 1;
 
+    std::default_random_engine randGenerator;
+    std::uniform_int_distribution<int> rotateDistribution(0,3);
+
     for( int y = 0; y < size; ++y){
         for( int x = 0; x < size; ++x){
-            if( isCorner(pos(x,y)) ){
-                std::cout << x << y << std::endl;
-
+            if( isCorner(pos(x,y)) ){                       // corner field - allways must be L-field, with open path towards inside labyrinth
                 field[y * size + x] = new LBoardField(x,y);
                 field[y * size + x]->rotate(corner);
-                field[y * size + x]->draw();
                 corner += corner;
                 if( corner > 4 )
                     corner--;
+            }
+            else if( !(x % 2 || y % 2)){           // odd row and odd colum - T-field
+                field[y * size + x] = new TBoardField(x,y);
+
+                // @todo extract method for this
+                if( !x )
+                    field[y * size + x]->rotate(3);
+                else if( !y ){
+                    continue;
+                }
+                else if( x == size - 1 ){
+                    field[y * size + x]->rotate(1);
+                }
+                else if( y == size - 1 ){
+                    field[y * size + x]->rotate(2);
+                }
+                else{
+                    field[y * size + x]->rotate( rotateDistribution(randGenerator));
+                }
+
             }
             else{
                 field[y * size + x] = new BoardField(x,y);

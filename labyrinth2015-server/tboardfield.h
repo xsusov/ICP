@@ -4,7 +4,7 @@
 #include <iostream>
 #include "boardfield.h"
 
-class TBoardField : BoardField
+class TBoardField : public BoardField
 {
 public:
     TBoardField(const int x,const int y);
