@@ -1,4 +1,7 @@
 #include "gameboard.h"
+#include "constants.h"
+
+using namespace labyrinth;
 
 GameBoard::GameBoard( const int size = 7 )
     : size{size},
@@ -40,6 +43,17 @@ inline bool GameBoard::isCorner(const int pos)
     return pos == 0 || pos  == size - 1 || pos == totalFields - size || pos == totalFields - 1;
 }
 
+bool GameBoard::isPathOpen(const int xFrom, const int yFrom, const int direction)
+{
+    BoardField *from = getField( xFrom, yFrom );
+    if( from == nullptr )
+        return false;
+
+    BoardField *to = getNeighbour( from, direction );
+
+    return from->isOpen( direction ) && to->isOpen( opositeDirection(direction) );
+}
+
 
 void GameBoard::draw()
 {
@@ -79,7 +93,36 @@ void GameBoard::setUpFields()
     }
 }
 
+BoardField *GameBoard::getNeighbour(BoardField *from, const int direction)
+{
+    int neighbourX = from->getPosX(),
+        neighbourY = from->getPosY();
+
+    switch( direction ){
+        case( north ):
+            neighbourY--;
+            break;
+        case( east ):
+            neighbourX++;
+            break;
+        case( south ):
+            neighbourY++;
+            break;
+        case( west ):
+            neighbourX--;
+            break;
+        default:
+            return nullptr;
+    }
+
+    return getField( neighbourX, neighbourY );
+}
+
 BoardField* GameBoard::getField( int posX, int posY )
 {
+    if( posX < 0 || posX >= size || posY < 0 || posY >= size )
+        return nullptr;
+
     return field[ posY * size + posX ];
 }
+

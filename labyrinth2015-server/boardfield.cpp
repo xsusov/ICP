@@ -23,6 +23,11 @@ int BoardField::getPosX()
     return posX;
 }
 
+int BoardField::getPosY()
+{
+    return posY;
+}
+
 char BoardField::getPath(const int direction)
 {
     return path[direction] ? labyrinth::opened : labyrinth::closed;
@@ -108,6 +113,14 @@ void BoardField::appendRow(const int row, std::string& str)
             str.push_back(closed);
             break;
     };
+}
+
+bool BoardField::isOpen( int direction )
+{
+    if( direction < north || direction > west )
+        return false;
+
+    return path[direction] == opened;
 }
 
 void BoardField::rotate(int x)

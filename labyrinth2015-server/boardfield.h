@@ -16,7 +16,7 @@ public:
     int getPosY();
     BoardField *getNeighbor( int direction );
     void rotate( int x );
-    bool isOpenPath( int direction );
+    bool isOpen( int direction );
     void draw();
     char getPath(const int direction);
     void printRow(const int row);
