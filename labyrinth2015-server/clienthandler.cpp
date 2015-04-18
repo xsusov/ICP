@@ -101,16 +101,12 @@ int ClientHandler::getShiftNum(const int size, char mode)
     return num - 1;
 }
 
-bool ClientHandler::getShiftDirection(char mode)
+bool ClientHandler::getShiftDirection(bool rowMode)
 {
     int direction;
-    std::cout << "Select shift direction: " << std::endl;
-    if( mode == 'r'){
-        std::cout << "0 - Left to right" << std::endl << "1 - Right to left" << std::endl;
-    }
-    else{
-       std::cout << "0 - Top to bottom" << std::endl << "1 - Bottom to top" << std::endl;
-    }
+    std::cout << "Select shift direction: " << std::endl
+              << "0 - " << (rowMode ? "Left to right" : "Top to bottom") << std::endl
+              << "1 - " << (rowMode ? "Right to left" : "Bottom to top") << std::endl;
     std::cin >> direction;
     return direction;
 }

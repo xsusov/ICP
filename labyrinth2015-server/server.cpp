@@ -76,7 +76,7 @@ int main()
             continue;
         else{
             int num = client->getShiftNum(newBoard->getSize(), shiftMode);
-            bool direction = client->getShiftDirection(shiftMode);
+            bool direction = client->getShiftDirection(shiftMode == 'r');
             newBoard->shift(shiftMode, num, direction);
         }
         newBoard->draw();

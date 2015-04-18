@@ -14,7 +14,7 @@ public:
     int getRotate();
     char getShiftMode();
     int getShiftNum(const int size, char mode);
-    bool getShiftDirection(char mode);
+    bool getShiftDirection(bool rowMode);
 
 private:
     std::string userInput;

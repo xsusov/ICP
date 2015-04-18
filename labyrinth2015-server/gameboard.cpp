@@ -214,15 +214,15 @@ void GameBoard::shiftColumn(const int col, bool bottomToTop)
     BoardField *tmp = nullptr;
     int i = 0;
     if( bottomToTop ){
-        tmp = field[ (size - 1) * size +  col ];
-        for( i = size -1; i > 0; i--){
-            field[ i * size + col ] = field[ (i - 1 )* size  + col ];
+        tmp = field[ col ];
+        for( i = 0; i < size - 1; i++){
+            field[ i * size + col ] = field[ (i + 1 )* size  + col ];
             field[ i * size + col ]->setPosY(field[ i * size + col ]->getPosY() - 1) ;
         }
         field[ col ]->swapPlayers(*tmp);
-        field[ col ] = freeField;
-        field[ col ]->setPosX(col);
-        field[ col ]->setPosY(0);
+        field[ (size - 1)*size + col ] = freeField;
+        field[ (size - 1)*size + col  ]->setPosX(col);
+        field[ (size - 1)*size + col  ]->setPosY(size - 1);
         freeField = tmp;
         freeField->setPosX(-1);
         freeField->setPosY(-1);

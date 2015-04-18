@@ -77,13 +77,14 @@ void BoardField::printRow(const int row)
             std::cout << closed << getPlayerSlot(0) << opened << getPlayerSlot(1) << closed;
             break;
         case(2):
-            std::cout << getPath(labyrinth::west) << opened << opened << opened << getPath(labyrinth::east);
+            std::cout << getPath(labyrinth::west) << opened << drawItem() << opened << getPath(labyrinth::east);
             break;
         case(3):
             std::cout << closed << getPlayerSlot(2) << opened << getPlayerSlot(3) << closed;
             break;
         case(4):
             std::cout << closed << closed << getPath(labyrinth::south) << closed << closed;
+            break;
     };
 }
 
