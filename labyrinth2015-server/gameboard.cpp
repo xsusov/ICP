@@ -209,12 +209,50 @@ void GameBoard::rotateFreeField(const int rotate)
     freeField->rotate(rotate);
 }
 
-void GameBoard::shiftColumn(const int row, bool topToBottom)
+void GameBoard::shiftColumn(const int col, bool topToBottom)
 {
-    BoardField *tmp;
+    BoardField *tmp = nullptr;
+    int i = 0;
+    if( !topToBottom ){
+        tmp = field[ (size - 1) * size +  col ];
+        for( i = size -1; i > 0; i--){
+            field[ i * size + col ] = field[ (i - 1 )* size  + col ];
+            field[ i * size + col ]->setPosY(field[ i * size + col ]->getPosY() - 1) ;
+        }
+        field[ col ]->swapPlayers(*tmp);
+        field[ col ] = freeField;
+        field[ col ]->setPosX(col);
+        field[ col ]->setPosY(0);
+        freeField = tmp;
+        freeField->setPosX(-1);
+        freeField->setPosY(-1);
+    }
+    else{
+        tmp = field[ col ];
+        for( i = 0; i < size - 1; i++){
+            field[ i * size + col ] = field[ (i + 1 )* size  + col ];
+        }
+        freeField = field[ i * size + col ];
+        field[ i * size + col ] = tmp;
+    }
+
 }
 
 void GameBoard::shiftRow(const int row, bool rightToLeft )
 {
-    BoardField *tmp;
+    //BoardField *tmp = field[ posY * size ];
+    return;
+}
+
+int GameBoard::getSize()
+{
+    return size;
+}
+
+void GameBoard::shift(const char shiftMode, const int num, const bool direction)
+{
+    if( shiftMode == 'r')
+        shiftRow(num, direction);
+    else if( shiftMode == 'c')
+        shiftColumn(num, direction);
 }

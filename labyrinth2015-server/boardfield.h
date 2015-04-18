@@ -14,6 +14,8 @@ public:
     BoardField(const int x, const int y, bool pathNorth = false, bool pathEast = false, bool pathSouth = false, bool pathWest = false, GameItem* item = nullptr );
     int getPosX();
     int getPosY();
+    void setPosX( const int x );
+    void setPosY( const int y );
     BoardField *getNeighbor( int direction );
     void rotate( int x );
     //virtual void rotateIn( const int x, const int y, const int size ) = 0;
@@ -22,9 +24,11 @@ public:
     char getPath(const int direction);
     void printRow(const int row);
     char getPlayerSlot(const int pos);
-    char getItem();
+    char drawItem();
     void appendRow(const int row, std::string& str);
     void setItem(GameItem *newItem);
+    GameItem *getItem();
+    void swapPlayers(BoardField &swapField);
 protected:
     int posX;
     int posY;

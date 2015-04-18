@@ -12,6 +12,10 @@ public:
     int getSize();
     int getItemCount();
     int getRotate();
+    char getShiftMode();
+    int getShiftNum(const int size);
+    bool getShiftDirection();
+
 private:
     std::string userInput;
     std::stringstream inputStream;

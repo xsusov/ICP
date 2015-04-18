@@ -73,3 +73,18 @@ int ClientHandler::getRotate()
     }
     return rotate;
 }
+
+char ClientHandler::getShiftMode()
+{
+    return 'n';
+}
+
+int ClientHandler::getShiftNum(const int size)
+{
+    return 0;
+}
+
+bool ClientHandler::getShiftDirection()
+{
+    return false;
+}

@@ -23,6 +23,8 @@ public:
     void rotateFreeField(const int rotate);
     void shiftColumn(const int row, bool topToBottom = false);
     void shiftRow(const int row, bool rightToLeft = false);
+    int getSize();
+    void shift(const char shiftMode='r', const int num=0, const bool direction=false);
 private:
     const int size;
     const int totalFields;

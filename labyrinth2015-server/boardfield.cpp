@@ -30,6 +30,16 @@ int BoardField::getPosY()
     return posY;
 }
 
+void BoardField::setPosX(const int x)
+{
+    posX = x;
+}
+
+void BoardField::setPosY(const int y)
+{
+    posY = y;
+}
+
 char BoardField::getPath(const int direction)
 {
     return path[direction] ? labyrinth::opened : labyrinth::closed;
@@ -48,7 +58,7 @@ char BoardField::getPlayerSlot(const int pos)
     return playerSlot[pos] != nullptr ? playerSlot[pos]->draw() : opened;
 }
 
-char BoardField::getItem()
+char BoardField::drawItem()
 {
     return item != nullptr ? item->getFigure() : opened;
 }
@@ -101,7 +111,7 @@ void BoardField::appendRow(const int row, std::string& str)
         case(2):
             str.push_back(getPath(labyrinth::west));
             str.push_back(opened);
-            str.push_back(getItem());
+            str.push_back(drawItem());
             str.push_back(opened);
             str.push_back(getPath(labyrinth::east));
             break;
@@ -125,6 +135,21 @@ void BoardField::appendRow(const int row, std::string& str)
 void BoardField::setItem(GameItem *newItem)
 {
     item = newItem;
+}
+
+GameItem *BoardField::getItem()
+{
+    return item;
+}
+
+void BoardField::swapPlayers(BoardField &swapField)
+{
+    Player *tmp = nullptr;
+    for( int i = 0; i < 4; i++){
+        tmp = playerSlot[i];
+        playerSlot[i] = swapField.playerSlot[i];
+        swapField.playerSlot[i] = tmp;
+    }
 }
 
 bool BoardField::isOpen( int direction )

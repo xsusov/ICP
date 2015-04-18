@@ -63,12 +63,24 @@ int main()
 
     newBoard->setUpItems(items);
     newBoard->draw();
+    while( 1 ){
+        int rotate = client->getRotate();
+        if( rotate > 0)
+            newBoard->rotateFreeField( rotate );
 
-    int rotate = client->getRotate();
-    if( rotate > 0)
-        newBoard->rotateFreeField( rotate );
+        newBoard->draw();
 
-    newBoard->draw();
+        char shiftMode = client->getShiftMode();
+        if(!(shiftMode == 'r' || shiftMode == 'c'))
+            continue;
+        else{
+            int num = client->getShiftNum(newBoard->getSize());
+            bool direction = client->getShiftDirection();
+            newBoard->shift(shiftMode, num, direction);
+        }
+        newBoard->draw();
+    }
+
 
     return 0;
 }
