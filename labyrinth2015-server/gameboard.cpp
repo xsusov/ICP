@@ -4,6 +4,13 @@
 
 using namespace labyrinth;
 
+bool random_bool(const float ratio)
+{
+    int random = std::rand() % 101;
+    if (random < ratio * 100) return true;
+    return false;
+}
+
 GameBoard::GameBoard( const int size = 7 )
     : size{size},
       totalFields{size * size}
@@ -82,7 +89,7 @@ void GameBoard::setUpItems(std::vector<GameItem *> &items )
         for( int x = 0; x < size; ++x){
             if( i >=  items.size())
                 return;
-            if( (1) || (totalFields - (y * size + x) <=  items.size() - i))
+            if(random_bool(items.size()/((float)totalFields+1)) || (totalFields - (y * size + x) <=  items.size() - i))
             {
                 field[y * size + x]->setItem( items[(y * size + x)] );
                 i++;
