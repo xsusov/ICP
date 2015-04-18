@@ -29,8 +29,8 @@ int main()
 
     while( !client->startNewGame() );
 
-    GameBoard *newBoard;
-    while( !newBoard ){
+    GameBoard *newBoard = nullptr;
+    while( newBoard == nullptr ){
         try{
             int size = client->getSize();
             if( size == -1 )

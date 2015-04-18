@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include "clienthandler.h"
+#include <stdio.h>
 
 ClientHandler::ClientHandler()
 {
