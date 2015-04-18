@@ -1,8 +1,8 @@
 #include "card.h"
 #include <string>
 
-Card::Card(GameItem * ptr, std::string message)
+Card::Card(GameItem * ptr_item, std::string message)
+    : item{ptr_item},
+      text{message}
 {
-    item = ptr;
-    text = message;
 }

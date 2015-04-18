@@ -4,17 +4,28 @@
 #include <iostream>
 #include "playerfigure.h"
 #include "card.h"
+#include "deck.h"
 
 class Player
 {
 public:
     Player(const std::string playerName );
-    char draw();
+    void drawCard(Deck &deck);
+    //Getters.
+    Card * getCard() {return card;}
+    int getScore() {return score;}
+    int getColor() {return color;}
+    int getFigure() {return figure;}
+    //Setters.
+    void incScore();
+
 private:
+    static int count;
+
     int id;
     std::string name;
     int score;
-    PlayerFigure *figure;
+    char figure;
     int color;
     Card *card;
 };

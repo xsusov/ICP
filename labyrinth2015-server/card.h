@@ -9,8 +9,8 @@ class Card
 public:
     Card(GameItem * ptr, std::string message);
 private:
-    std::string text;
     GameItem *item;
+    std::string text;
 };
 
 #endif // CARD_H

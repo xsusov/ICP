@@ -55,7 +55,7 @@ void BoardField::draw()
 
 char BoardField::getPlayerSlot(const int pos)
 {
-    return playerSlot[pos] != nullptr ? playerSlot[pos]->draw() : opened;
+    return playerSlot[pos] != nullptr ? playerSlot[pos]->getFigure() : opened;
 }
 
 char BoardField::drawItem()
