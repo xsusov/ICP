@@ -56,6 +56,23 @@ int main()
         }
     }
 
+    int playerCount = 0;
+    while( !playerCount ){
+        try{
+            playerCount = client->getPlayerCount();
+        }
+        catch( const char *exp ){
+            std::cout << exp << endl;
+        }
+    }
+
+    std::vector<Player*> players;
+    for (int i = 0; i < playerCount; i++)
+    {
+        std::cout << "Player no. " << i+1 << "." << std::endl;
+        players.push_back(new Player(client->getPlayerName(players)));
+    }
+
     newBoard->setUpFields();
 
     std::vector<GameItem*> items;
