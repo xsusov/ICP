@@ -1,6 +1,8 @@
 #ifndef CLIENTHANDLER_H
 #define CLIENTHANDLER_H
 #include <iostream>
+#include <string>
+#include <sstream>
 
 class ClientHandler
 {
@@ -10,6 +12,9 @@ public:
     int getSize();
     int getItemCount();
     int getRotate();
+private:
+    std::string userInput;
+    std::stringstream inputStream;
 };
 
 #endif // CLIENTHANDLER_H

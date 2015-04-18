@@ -21,6 +21,8 @@ public:
     inline bool isCorner(const int pos);
     bool isPathOpen(const int xFrom, const int yFrom, const int direction );
     void rotateFreeField(const int rotate);
+    void shiftColumn(const int row, bool topToBottom = false);
+    void shiftRow(const int row, bool rightToLeft = false);
 private:
     const int size;
     const int totalFields;

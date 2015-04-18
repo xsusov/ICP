@@ -4,6 +4,8 @@
 #include <stdio.h>
 
 ClientHandler::ClientHandler()
+    : userInput{""},
+      inputStream{userInput}
 {
 }
 
@@ -38,11 +40,9 @@ int ClientHandler::getSize()
 
 int ClientHandler::getItemCount()
 {
-    std::cout << "Select number of items: " << std::endl;
-    std::cout << "12 or 24" << std::endl;
-    int count ;
-    std::string userInput;
-    getline(std::cin, userInput);
+    int count;
+    std::cout << "Select number of items: " << std::endl << "12 or 24" << std::endl;
+    std::cin >> userInput;
     std::stringstream numberStream(userInput);
     if( !(numberStream >> count)){
         std::cout << "Invalid number, press Q to Quit, or ANY KEY to try again";
@@ -63,5 +63,13 @@ int ClientHandler::getItemCount()
 
 int ClientHandler::getRotate()
 {
-    return 0;
+    int rotate;
+    std::cout << "How many times do you wanna rotate free field for: " << std::endl;
+    std::cin >> userInput;
+    std::stringstream numberStream(userInput);
+    if( !(numberStream >> rotate)){
+        std::cout << "Invalid number, press ANY KEY to try again";
+        return getRotate();
+    }
+    return rotate;
 }

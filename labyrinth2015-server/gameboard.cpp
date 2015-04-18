@@ -206,5 +206,15 @@ BoardField* GameBoard::getField( int posX, int posY )
 
 void GameBoard::rotateFreeField(const int rotate)
 {
-    return;
+    freeField->rotate(rotate);
+}
+
+void GameBoard::shiftColumn(const int row, bool topToBottom)
+{
+    BoardField *tmp;
+}
+
+void GameBoard::shiftRow(const int row, bool rightToLeft )
+{
+    BoardField *tmp;
 }
