@@ -66,6 +66,7 @@ int main()
         }
     }
 
+    int actualPlayer = 0;
     std::vector<Player*> players;
     for (int i = 0; i < playerCount; i++)
     {
@@ -81,13 +82,14 @@ int main()
     newBoard->setUpItems(items);
     bool win = false;
     while( !win ){
+        Player* player = players[actualPlayer++ % playerCount];
+
         newBoard->draw();
         int rotate = client->getRotate();
         if( rotate > 0)
             newBoard->rotateFreeField( rotate );
 
         newBoard->draw();
-
         char shiftMode = client->getShiftMode();
         if(!(shiftMode == 'r' || shiftMode == 'c'))
             continue;
