@@ -67,6 +67,7 @@ int main()
     }
 
     int actualPlayer = 0;
+    Player* player = nullptr;
     std::vector<Player*> players;
     for (int i = 0; i < playerCount; i++)
     {
@@ -82,7 +83,7 @@ int main()
     newBoard->setUpItems(items);
     bool win = false;
     while( !win ){
-        Player* player = players[actualPlayer++ % playerCount];
+        player = players[actualPlayer++ % playerCount];
 
         newBoard->draw();
         int rotate = client->getRotate();
