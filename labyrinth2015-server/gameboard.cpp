@@ -209,11 +209,11 @@ void GameBoard::rotateFreeField(const int rotate)
     freeField->rotate(rotate);
 }
 
-void GameBoard::shiftColumn(const int col, bool topToBottom)
+void GameBoard::shiftColumn(const int col, bool bottomToTop)
 {
     BoardField *tmp = nullptr;
     int i = 0;
-    if( !topToBottom ){
+    if( bottomToTop ){
         tmp = field[ (size - 1) * size +  col ];
         for( i = size -1; i > 0; i--){
             field[ i * size + col ] = field[ (i - 1 )* size  + col ];

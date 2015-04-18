@@ -112,5 +112,5 @@ bool ClientHandler::getShiftDirection(char mode)
        std::cout << "0 - Top to bottom" << std::endl << "1 - Bottom to top" << std::endl;
     }
     std::cin >> direction;
-    return !direction;
+    return direction;
 }

@@ -13,7 +13,6 @@ SOURCES += \
     boardfield.cpp \
     gameboard.cpp \
     deck.cpp \
-    playerfigure.cpp \
     iboardfield.cpp \
     tboardfield.cpp \
     lboardfield.cpp \
@@ -30,7 +29,6 @@ HEADERS += \
     boardfield.h \
     gameboard.h \
     deck.h \
-    playerfigure.h \
     iboardfield.h \
     tboardfield.h \
     lboardfield.h \
