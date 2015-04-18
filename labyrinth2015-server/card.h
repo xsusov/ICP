@@ -7,9 +7,8 @@
 class Card
 {
 public:
-    Card();
+    Card(GameItem * ptr, std::string message);
 private:
-    int id;
     std::string text;
     GameItem *item;
 };
