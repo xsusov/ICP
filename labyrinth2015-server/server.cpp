@@ -76,6 +76,7 @@ int main()
     }
 
     newBoard->setUpFields();
+    newBoard->setUpPlayers(players);
 
     std::vector<GameItem*> items;
     GameItem::fillVector(items, itemCount);

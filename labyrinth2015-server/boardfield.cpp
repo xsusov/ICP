@@ -198,3 +198,13 @@ void BoardField::rotate(int x)
 
     std::rotate( path.rbegin(), path.rbegin() + x, path.rend());
 }
+
+void BoardField::addPlayer(Player *player)
+{
+    for( int i = 0; i < 4; i++){
+        if( playerSlot[i] == nullptr ){
+            playerSlot[i] = player;
+            return;
+        }
+    }
+}

@@ -106,6 +106,17 @@ void GameBoard::setUpItems(std::vector<GameItem *> &items )
     freeField->setItem( items[0] );
 }
 
+void GameBoard::setUpPlayers(std::vector<Player *> &players)
+{
+    int startingFieldsX[4] { 0, max, 0, max};
+    int startingFieldsY[4] { 0, 0, max, max};
+    int i = 0;
+    for( Player *player: players ){
+        getField( startingFieldsX[i], startingFieldsY[i] )->addPlayer(player);
+        i++;
+    }
+}
+
 void GameBoard::setUpFields()
 {
     int corner = 1;
