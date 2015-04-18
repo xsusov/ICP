@@ -62,8 +62,9 @@ int main()
     GameItem::fillVector(items, itemCount);
 
     newBoard->setUpItems(items);
-    newBoard->draw();
-    while( 1 ){
+    bool win = false;
+    while( !win ){
+        newBoard->draw();
         int rotate = client->getRotate();
         if( rotate > 0)
             newBoard->rotateFreeField( rotate );
@@ -74,8 +75,8 @@ int main()
         if(!(shiftMode == 'r' || shiftMode == 'c'))
             continue;
         else{
-            int num = client->getShiftNum(newBoard->getSize());
-            bool direction = client->getShiftDirection();
+            int num = client->getShiftNum(newBoard->getSize(), shiftMode);
+            bool direction = client->getShiftDirection(shiftMode);
             newBoard->shift(shiftMode, num, direction);
         }
         newBoard->draw();

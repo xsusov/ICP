@@ -76,15 +76,41 @@ int ClientHandler::getRotate()
 
 char ClientHandler::getShiftMode()
 {
-    return 'n';
+    char mode;
+    std::cout << "Select shift mode:" << std::endl << "r - rows shift" << std::endl << "c - columns shift" << std::endl << "other - skip" << std::endl;
+    std::cin >> mode;
+    return mode;
 }
 
-int ClientHandler::getShiftNum(const int size)
+int ClientHandler::getShiftNum(const int size, char mode)
 {
-    return 0;
+    int num;
+    std::cout << "Which "<< (mode == 'r' ? "row" : "column") << " do you want to shif: " << std::endl;
+    std::cout << "1-" << size << std::endl;
+    std::cin >> userInput;
+    std::stringstream numberStream(userInput);
+    if( !(numberStream >> num)){
+        std::cout << "wrong " << (mode == 'r' ? "row" : "column") << " number, try again" << std::endl;
+        return getShiftNum(size, mode);
+    }
+    if( num < 1 || num > size ){
+        std::cout << "wrong " << (mode == 'r' ? "row" : "column") << " number, try again" << std::endl;
+        return getShiftNum(size, mode);
+    }
+
+    return num - 1;
 }
 
-bool ClientHandler::getShiftDirection()
+bool ClientHandler::getShiftDirection(char mode)
 {
-    return false;
+    int direction;
+    std::cout << "Select shift direction: " << std::endl;
+    if( mode == 'r'){
+        std::cout << "0 - Left to right" << std::endl << "1 - Right to left" << std::endl;
+    }
+    else{
+       std::cout << "0 - Top to bottom" << std::endl << "1 - Bottom to top" << std::endl;
+    }
+    std::cin >> direction;
+    return !direction;
 }

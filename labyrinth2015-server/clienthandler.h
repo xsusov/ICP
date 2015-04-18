@@ -13,8 +13,8 @@ public:
     int getItemCount();
     int getRotate();
     char getShiftMode();
-    int getShiftNum(const int size);
-    bool getShiftDirection();
+    int getShiftNum(const int size, char mode);
+    bool getShiftDirection(char mode);
 
 private:
     std::string userInput;

@@ -150,6 +150,9 @@ void BoardField::swapPlayers(BoardField &swapField)
         playerSlot[i] = swapField.playerSlot[i];
         swapField.playerSlot[i] = tmp;
     }
+
+    // @todo:
+    // player pos update
 }
 
 bool BoardField::isOpen( int direction )
