@@ -34,6 +34,7 @@ public:
     void setItem(GameItem *newItem);
     GameItem *getItem();
     void swapPlayers(BoardField &swapField);
+    void addPlayer(Player *player);
 protected:
     int posX;
     int posY;
