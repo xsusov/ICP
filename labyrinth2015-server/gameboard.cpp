@@ -12,6 +12,7 @@ bool random_bool(const float ratio)
 
 GameBoard::GameBoard( const int size = 7 )
     : size{size},
+      max{size - 1},
       totalFields{size * size}
 {
     if( size < labyrinth::boardMinSize || size > labyrinth::boardMaxSize ){
@@ -27,7 +28,7 @@ GameBoard::GameBoard( const int size = 7 )
     for( int i = 0; i < totalFields; i++){
         field[i] = nullptr;
     }
-
+    freeField = nullptr;
     /// new field will be filled with randomly selected board fields, given some rules (corner field must be LBoardField fe.)
 }
 
@@ -209,39 +210,61 @@ void GameBoard::rotateFreeField(const int rotate)
     freeField->rotate(rotate);
 }
 
-void GameBoard::shiftColumn(const int col, bool bottomToTop)
+void GameBoard::shiftColumn(const int col, bool up)
 {
-    BoardField *tmp = nullptr;
     int i = 0;
-    if( bottomToTop ){
-        tmp = field[ col ];
-        for( i = 0; i < size - 1; i++){
+    const int first { up ? max * size + col : col };
+    const int last  { up ? col : max * size + col };
+
+    BoardField *tmp = field[ last ];
+
+    if( up ){
+        for( i = 0; i < max; i++){
             field[ i * size + col ] = field[ (i + 1 )* size  + col ];
-            field[ i * size + col ]->setPosY(field[ i * size + col ]->getPosY() - 1) ;
+            field[ i * size + col ]->decPosY();
         }
-        field[ col ]->swapPlayers(*tmp);
-        field[ (size - 1)*size + col ] = freeField;
-        field[ (size - 1)*size + col  ]->setPosX(col);
-        field[ (size - 1)*size + col  ]->setPosY(size - 1);
-        freeField = tmp;
-        freeField->setPosX(-1);
-        freeField->setPosY(-1);
+        freeField->updatePos(last, max);
     }
     else{
-        tmp = field[ col ];
-        for( i = 0; i < size - 1; i++){
-            field[ i * size + col ] = field[ (i + 1 )* size  + col ];
+        for( i = size - 1; i > 0; i--){
+            field[ i * size + col ] = field[ (i - 1 )* size  + col ];
+            field[ i * size + col ]->incPosY(); ;
         }
-        freeField = field[ i * size + col ];
-        field[ i * size + col ] = tmp;
+        freeField->updatePos(first, 0);
     }
-
+    freeField->swapPlayers(*tmp);
+    field[ first ] = freeField;
+    freeField = tmp;
+    freeField->updatePos(-1,-1);
 }
 
-void GameBoard::shiftRow(const int row, bool rightToLeft )
+void GameBoard::shiftRow(const int row, bool left )
 {
-    //BoardField *tmp = field[ posY * size ];
-    return;
+    int i = 0;
+    const int first { left ? row * size + max : row * size };
+    const int last  { left ? row * size : row * size + max };
+
+    BoardField *tmp = field[ last ];
+
+    if( left ){
+        for( i = 0; i < max; i++){
+            field[ row * size + i ] = field[ row * size + i + 1 ];
+            field[ row * size + i ]->decPosX();
+        }
+        freeField->updatePos(max, row);
+    }
+    else{
+        for( i = max; i >= 0; i--){
+            field[ row * size + i ] = field[ row * size + i - 1 ];
+            field[ row * size + i ]->incPosX();
+        }
+        freeField->updatePos(0, row);
+    }
+
+    freeField->swapPlayers(*tmp);
+    field[ first ] = freeField;
+    freeField = tmp;
+    freeField->updatePos(-1,-1);
 }
 
 int GameBoard::getSize()

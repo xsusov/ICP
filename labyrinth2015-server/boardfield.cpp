@@ -40,6 +40,32 @@ void BoardField::setPosY(const int y)
     posY = y;
 }
 
+void BoardField::incPosX()
+{
+    posX++;
+}
+
+void BoardField::incPosY()
+{
+    posY++;
+}
+
+void BoardField::decPosX()
+{
+    posX--;
+}
+
+void BoardField::decPosY()
+{
+    posY--;
+}
+
+void BoardField::updatePos( const int x, const int y )
+{
+    posX = x;
+    posY = y;
+}
+
 char BoardField::getPath(const int direction)
 {
     return path[direction] ? labyrinth::opened : labyrinth::closed;

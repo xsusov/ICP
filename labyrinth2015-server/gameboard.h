@@ -21,12 +21,13 @@ public:
     inline bool isCorner(const int pos);
     bool isPathOpen(const int xFrom, const int yFrom, const int direction );
     void rotateFreeField(const int rotate);
-    void shiftColumn(const int row, bool bottomToTop = false);
-    void shiftRow(const int row, bool rightToLeft = false);
+    void shiftColumn(const int row, bool up = false);
+    void shiftRow(const int row, bool right = false);
     int getSize();
     void shift(const char shiftMode='r', const int num=0, const bool direction=false);
 private:
     const int size;
+    const int max;
     const int totalFields;
     BoardField **field;
     BoardField *freeField;

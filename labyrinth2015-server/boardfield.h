@@ -16,6 +16,11 @@ public:
     int getPosY();
     void setPosX( const int x );
     void setPosY( const int y );
+    void incPosX();
+    void incPosY();
+    void decPosX();
+    void decPosY();
+    void updatePos( const int x, const int y );
     BoardField *getNeighbor( int direction );
     void rotate( int x );
     //virtual void rotateIn( const int x, const int y, const int size ) = 0;
