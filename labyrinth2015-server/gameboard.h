@@ -20,6 +20,7 @@ public:
     inline int pos(const int x, const int y);
     inline bool isCorner(const int pos);
     bool isPathOpen(const int xFrom, const int yFrom, const int direction );
+    void rotateFreeField(const int rotate);
 private:
     const int size;
     const int totalFields;

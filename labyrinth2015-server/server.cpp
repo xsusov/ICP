@@ -60,7 +60,14 @@ int main()
 
     std::vector<GameItem*> items;
     GameItem::fillVector(items, itemCount);
+
     newBoard->setUpItems(items);
+    newBoard->draw();
+
+    int rotate = client->getRotate();
+    if( rotate > 0)
+        newBoard->rotateFreeField( rotate );
+
     newBoard->draw();
 
     return 0;

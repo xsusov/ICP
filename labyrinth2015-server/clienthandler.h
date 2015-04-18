@@ -9,6 +9,7 @@ public:
     bool startNewGame();
     int getSize();
     int getItemCount();
+    int getRotate();
 };
 
 #endif // CLIENTHANDLER_H

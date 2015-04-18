@@ -7,8 +7,7 @@ using namespace labyrinth;
 bool random_bool(const float ratio)
 {
     int random = std::rand() % 101;
-    if (random < ratio * 100) return true;
-    return false;
+    return random < static_cast<int>(ratio * 100);
 }
 
 GameBoard::GameBoard( const int size = 7 )
@@ -84,19 +83,22 @@ void GameBoard::draw()
 void GameBoard::setUpItems(std::vector<GameItem *> &items )
 {
     int i = 0;
-
+    float ratio = (float)items.size() / ((float)(totalFields + 1));
+    try{
     for( int y = 0; y < size; ++y){
         for( int x = 0; x < size; ++x){
             if( i >=  items.size())
                 return;
-            if(random_bool(items.size()/((float)totalFields+1)) || (totalFields - (y * size + x) <=  items.size() - i))
+            if((totalFields - (y * size + x) <=  (items.size() - i)) || random_bool(ratio))
             {
-                field[y * size + x]->setItem( items[(y * size + x)] );
-                i++;
+                field[y * size + x]->setItem( items[i++] );
             }
         }
     }
-
+    }
+    catch( std::exception &e){
+       std::cerr << e.what();
+    }
     if( i >=  items.size())
         return;
 
@@ -202,3 +204,7 @@ BoardField* GameBoard::getField( int posX, int posY )
     return field[ posY * size + posX ];
 }
 
+void GameBoard::rotateFreeField(const int rotate)
+{
+    return;
+}

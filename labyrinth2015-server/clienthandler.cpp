@@ -61,3 +61,7 @@ int ClientHandler::getItemCount()
     return count;
 }
 
+int ClientHandler::getRotate()
+{
+    return 0;
+}
