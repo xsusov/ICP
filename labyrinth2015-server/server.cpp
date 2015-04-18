@@ -18,6 +18,7 @@ using namespace std;
 #include "clienthandler.h"
 #include "player.h"
 #include "gameboard.h"
+#include "gameitem.h"
 
 int main()
 {
@@ -42,7 +43,13 @@ int main()
         }
     }
 
+    int itemCount = 3;
+
     newBoard->setUpFields();
+
+    std::vector<GameItem*> items;
+    GameItem::fillVector(items, itemCount);
+    newBoard->setUpItems(items);
     newBoard->draw();
 
     return 0;

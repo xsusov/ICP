@@ -14,6 +14,7 @@ public:
     ~GameBoard();
     void draw();
     void setUpFields();
+    void setUpItems(std::vector<GameItem *> &items);
     BoardField* getField( const int posX, const int posY );
     BoardField *getNeighbour(BoardField *from, const int direction );
     inline int pos(const int x, const int y);

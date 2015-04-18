@@ -14,6 +14,7 @@ namespace labyrinth {
     const char closed = 'X';
 
     const char playerFigure[4]{ '@', '&', '%', '!'};
+    const char itemFigure[24]{'a', 'b', 'c'};
 /*
     const char *welcome =
 "********************************************************************************\n"

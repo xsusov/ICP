@@ -122,6 +122,11 @@ void BoardField::appendRow(const int row, std::string& str)
     };
 }
 
+void BoardField::setItem(GameItem *newItem)
+{
+    item = newItem;
+}
+
 bool BoardField::isOpen( int direction )
 {
     if( direction < north || direction > west )

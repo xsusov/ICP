@@ -74,6 +74,28 @@ void GameBoard::draw()
     freeField->draw();
 }
 
+void GameBoard::setUpItems(std::vector<GameItem *> &items )
+{
+    int i = 0;
+
+    for( int y = 0; y < size; ++y){
+        for( int x = 0; x < size; ++x){
+            if( i >=  items.size())
+                return;
+            if( totalFields - (y * size + x) <=  items.size() - i )
+            {
+                field[y * size + x]->setItem( items[(y * size + x) % 3] );
+                i++;
+            }
+        }
+    }
+
+    if( i >=  items.size())
+        return;
+
+    freeField->setItem( items[0] );
+}
+
 void GameBoard::setUpFields()
 {
     int corner = 1;
@@ -110,12 +132,34 @@ void GameBoard::setUpFields()
                 }
             }
             else{
-                field[y * size + x] = new BoardField(x,y);
+                switch(rotateDistribution(randGenerator) % 3){
+                    case(0):
+                        field[y * size + x] = new LBoardField(x,y);
+                        break;
+                    case(1):
+                        field[y * size + x] = new TBoardField(x,y);
+                        break;
+                    case(2):
+                        field[y * size + x] = new IBoardField(x,y);
+                        break;
+                }
+
+                field[y * size + x]->rotate( rotateDistribution(randGenerator));
             }
         }
     }
 
-    freeField =  new TBoardField(-1,-1);
+    switch(rotateDistribution(randGenerator) % 3){
+        case(0):
+            freeField = new LBoardField(-1, -1);
+            break;
+        case(1):
+            freeField = new TBoardField(-1, -1);
+            break;
+        case(2):
+            freeField = new IBoardField(-1, -1);
+            break;
+    }
 }
 
 BoardField *GameBoard::getNeighbour(BoardField *from, const int direction)

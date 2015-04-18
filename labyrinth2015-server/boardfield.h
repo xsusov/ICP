@@ -16,6 +16,7 @@ public:
     int getPosY();
     BoardField *getNeighbor( int direction );
     void rotate( int x );
+    //virtual void rotateIn( const int x, const int y, const int size ) = 0;
     bool isOpen( int direction );
     void draw();
     char getPath(const int direction);
@@ -23,6 +24,7 @@ public:
     char getPlayerSlot(const int pos);
     char getItem();
     void appendRow(const int row, std::string& str);
+    void setItem(GameItem *newItem);
 protected:
     int posX;
     int posY;

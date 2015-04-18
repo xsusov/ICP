@@ -16,7 +16,7 @@ private:
     int score;
     PlayerFigure *figure;
     int color;
-    Card *currentCard;
+    Card *card;
 };
 
 #endif // PLAYER_H
