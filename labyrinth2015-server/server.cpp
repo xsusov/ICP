@@ -87,7 +87,7 @@ int main()
     while( !win ){
         player = players[actualPlayer++ % playerCount];
 
-        std::cout << player->getName()+"'s round!." << std::endl;
+        std::cout << "Round: " << actualPlayer << " " << player->getName()+"'s round!." << std::endl;
         newBoard->draw();
         int rotate = client->getRotate();
         if( rotate > 0)

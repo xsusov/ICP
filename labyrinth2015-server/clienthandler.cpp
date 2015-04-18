@@ -87,7 +87,7 @@ char ClientHandler::getShiftMode()
 int ClientHandler::getShiftNum(const int size, char mode)
 {
     int num;
-    std::cout << "Which "<< (mode == 'r' ? "row" : "column") << " do you want to shif: " << std::endl;
+    std::cout << "Which "<< (mode == 'r' ? "row" : "column") << " do you want to shif (only even): " << std::endl;
     std::cout << "1-" << size << std::endl;
     std::cin >> userInput;
     std::stringstream numberStream(userInput);
@@ -95,7 +95,7 @@ int ClientHandler::getShiftNum(const int size, char mode)
         std::cout << "wrong " << (mode == 'r' ? "row" : "column") << " number, try again" << std::endl;
         return getShiftNum(size, mode);
     }
-    if( num < 1 || num > size ){
+    if( num < 1 || num > size || num % 2){
         std::cout << "wrong " << (mode == 'r' ? "row" : "column") << " number, try again" << std::endl;
         return getShiftNum(size, mode);
     }
