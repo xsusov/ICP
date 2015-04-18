@@ -82,9 +82,11 @@ int main()
 
     newBoard->setUpItems(items);
     bool win = false;
+    const int winningScore = itemCount/playerCount;
     while( !win ){
         player = players[actualPlayer++ % playerCount];
 
+        std::cout << player->getName()+"'s round!." << std::endl;
         newBoard->draw();
         int rotate = client->getRotate();
         if( rotate > 0)
@@ -100,9 +102,10 @@ int main()
             newBoard->shift(shiftMode, num, direction);
         }
         newBoard->draw();
+
+        if(player->getScore() == winningScore)
+            win = true;
     }
-
-
     return 0;
 }
 

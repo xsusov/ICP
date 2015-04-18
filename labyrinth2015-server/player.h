@@ -31,4 +31,6 @@ private:
     Card *card;
 };
 
+void print_results(std::vector<Player*> players);
+
 #endif // PLAYER_H
