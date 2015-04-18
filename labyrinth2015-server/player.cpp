@@ -1,9 +1,8 @@
-#include "constants.h"
 #include "player.h"
+#include "constants.h"
 
-
-Player::Player( const std::string name )
-    : name{ name }
+Player::Player( const std::string playerName )
+    : name{ playerName }
 {
 }
 

@@ -3,8 +3,9 @@
 #include <random>
 #include <algorithm>
 
-GameItem::GameItem(const char figure)
-    : figure{figure}
+GameItem::GameItem(const char figure, const std::string name)
+    : figure{figure},
+      name{name}
 {
 }
 
@@ -16,7 +17,7 @@ char GameItem::getFigure()
 void GameItem::fillVector(std::vector<GameItem*> &vector, const int itemCount)
 {
     for( int i = 0; i < itemCount; i++){
-        GameItem *newItem = new GameItem(labyrinth::itemFigure[i]);
+        GameItem *newItem = new GameItem(labyrinth::itemFigure[i], labyrinth::itemNames[i]);
         vector.push_back(newItem);
     }
 

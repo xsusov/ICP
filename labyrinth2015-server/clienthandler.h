@@ -8,6 +8,7 @@ public:
     ClientHandler();
     bool startNewGame();
     int getSize();
+    int getItemCount();
 };
 
 #endif // CLIENTHANDLER_H

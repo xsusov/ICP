@@ -36,3 +36,28 @@ int ClientHandler::getSize()
     return size;
 }
 
+int ClientHandler::getItemCount()
+{
+    std::cout << "Select number of items: " << std::endl;
+    std::cout << "12 or 24" << std::endl;
+    int count ;
+    std::string userInput;
+    getline(std::cin, userInput);
+    std::stringstream numberStream(userInput);
+    if( !(numberStream >> count)){
+        std::cout << "Invalid number, press Q to Quit, or ANY KEY to try again";
+        char anykey;
+        std::cin >> anykey;
+        if( anykey == 'q' || anykey == 'Q' )
+            return -1;
+        else
+            return getItemCount();
+    }
+
+    if( count != 12 && count != 24 ){
+        return getItemCount();
+    }
+
+    return count;
+}
+

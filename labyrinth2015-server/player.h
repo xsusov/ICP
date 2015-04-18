@@ -8,7 +8,7 @@
 class Player
 {
 public:
-    Player(const std::string name );
+    Player(const std::string playerName );
     char draw();
 private:
     int id;

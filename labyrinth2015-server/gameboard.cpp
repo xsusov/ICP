@@ -82,9 +82,9 @@ void GameBoard::setUpItems(std::vector<GameItem *> &items )
         for( int x = 0; x < size; ++x){
             if( i >=  items.size())
                 return;
-            if( totalFields - (y * size + x) <=  items.size() - i )
+            if( (1) || (totalFields - (y * size + x) <=  items.size() - i))
             {
-                field[y * size + x]->setItem( items[(y * size + x) % 3] );
+                field[y * size + x]->setItem( items[(y * size + x)] );
                 i++;
             }
         }

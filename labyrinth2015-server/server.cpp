@@ -19,11 +19,14 @@ using namespace std;
 #include "player.h"
 #include "gameboard.h"
 #include "gameitem.h"
+#include <random>
+#include <ctime>
 
 int main()
 {
+    std::srand(time(NULL));
     std::cout << "Welcome to Labyrint server" << endl;
-    //std::cout << labyrinth::welcome;
+    std::cout << labyrinth::welcome;
 
     ClientHandler *client = new ClientHandler();
 
@@ -43,7 +46,15 @@ int main()
         }
     }
 
-    int itemCount = 3;
+    int itemCount = 0;
+    while( !itemCount ){
+        try{
+            itemCount = client->getItemCount();
+        }
+        catch( const char *exp ){
+            std::cout << exp << endl;
+        }
+    }
 
     newBoard->setUpFields();
 
