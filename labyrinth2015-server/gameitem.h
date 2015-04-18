@@ -12,6 +12,8 @@ public:
     char getFigure();
     static void fillVector(std::vector<GameItem *> &vector, const int itemCount);
     static int randItem(const int itemCount);
+
+    std::string getName() {return name;}
 private:
     char figure;
     std::string name;
