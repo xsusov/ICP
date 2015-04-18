@@ -56,6 +56,25 @@ int main()
         }
     }
 
+    int playerCount = 0;
+    while( !playerCount ){
+        try{
+            playerCount = client->getPlayerCount();
+        }
+        catch( const char *exp ){
+            std::cout << exp << endl;
+        }
+    }
+
+    int actualPlayer = 0;
+    Player* player = nullptr;
+    std::vector<Player*> players;
+    for (int i = 0; i < playerCount; i++)
+    {
+        std::cout << "Player no. " << i+1 << "." << std::endl;
+        players.push_back(new Player(client->getPlayerName(players)));
+    }
+
     newBoard->setUpFields();
 
     std::vector<GameItem*> items;
@@ -64,13 +83,14 @@ int main()
     newBoard->setUpItems(items);
     bool win = false;
     while( !win ){
+        player = players[actualPlayer++ % playerCount];
+
         newBoard->draw();
         int rotate = client->getRotate();
         if( rotate > 0)
             newBoard->rotateFreeField( rotate );
 
         newBoard->draw();
-
         char shiftMode = client->getShiftMode();
         if(!(shiftMode == 'r' || shiftMode == 'c'))
             continue;

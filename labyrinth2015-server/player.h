@@ -16,6 +16,7 @@ public:
     int getScore() {return score;}
     int getColor() {return color;}
     int getFigure() {return figure;}
+    std::string getName() {return name;}
     //Setters.
     void incScore();
 

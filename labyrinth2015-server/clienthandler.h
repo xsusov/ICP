@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
+#include "player.h"
 
 class ClientHandler
 {
@@ -11,6 +13,8 @@ public:
     bool startNewGame();
     int getSize();
     int getItemCount();
+    std::string getPlayerName(std::vector<Player*> players);
+    int getPlayerCount();
     int getRotate();
     char getShiftMode();
     int getShiftNum(const int size, char mode);

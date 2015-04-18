@@ -1,7 +1,9 @@
 #include <iostream>
 #include <sstream>
 #include "clienthandler.h"
+#include <string>
 #include <stdio.h>
+#include "player.h"
 
 ClientHandler::ClientHandler()
     : userInput{""},
@@ -109,4 +111,43 @@ bool ClientHandler::getShiftDirection(bool rowMode)
               << "1 - " << (rowMode ? "left" : "up") << std::endl;
     std::cin >> direction;
     return direction;
+}
+
+int ClientHandler::getPlayerCount()
+{
+    int count;
+    std::cout << "Select number of players: " << std::endl << "2, 3 or 4" << std::endl;
+    std::cin >> userInput;
+    std::stringstream numberStream(userInput);
+    if( !(numberStream >> count)){
+        std::cout << "Invalid number, press Q to Quit, or ANY OTHER KEY to try again";
+        char anykey;
+        std::cin >> anykey;
+        if( anykey == 'q' || anykey == 'Q' )
+            return -1;
+        else
+            return getPlayerCount();
+    }
+
+    if( count < 2  || count > 4) {
+        std::cout << "Number out of range." << std::endl;
+        return getPlayerCount();
+    }
+    return count;
+}
+
+std::string ClientHandler::getPlayerName(std::vector<Player *> players)
+{
+    std::string name = "";
+    std::cout << "Choose your name." << std::endl;
+    std::cin >> name;
+    for (Player * player : players)
+    {
+        if (player->getName() == name)
+        {
+            std::cout << "Player name has to be unique." << std::endl;
+            return getPlayerName(players);
+        }
+    }
+    return name;
 }
