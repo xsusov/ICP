@@ -112,9 +112,12 @@ void GameBoard::setUpPlayers(std::vector<Player *> &players)
 {
     int startingFieldsX[4] { 0, max, 0, max};
     int startingFieldsY[4] { 0, 0, max, max};
+    BoardField *startingField;
     int i = 0;
     for( Player *player: players ){
-        getField( startingFieldsX[i], startingFieldsY[i] )->addPlayer(player);
+        startingField = getField( startingFieldsX[i], startingFieldsY[i] );
+        startingField->addPlayer(player);
+        player->placeOnField(startingField);
         i++;
     }
 }
@@ -222,7 +225,6 @@ void GameBoard::shiftColumn(const int col, const bool up)
         field[ i ]->updateDirection( direction );
     }
     freeField->updatePos(col, up ? max : 0);
-
     freeField->swapPlayers(*tmp);
     field[ last ] = freeField;
     freeField = tmp;

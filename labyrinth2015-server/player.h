@@ -5,6 +5,10 @@
 #include "playerfigure.h"
 #include "card.h"
 #include "deck.h"
+#include "boardfield.h"
+
+// Forward declaration of BoardField class
+class BoardField;
 
 class Player
 {
@@ -17,8 +21,10 @@ public:
     int getColor() {return color;}
     int getFigure() {return figure;}
     std::string getName() {return name;}
+    BoardField *getCurField() {return curField;}
     //Setters.
     void incScore();
+    void placeOnField( BoardField *newField);
 
 private:
     static int count;
@@ -29,6 +35,7 @@ private:
     char figure;
     int color;
     Card *card;
+    BoardField *curField;
 };
 
 void print_results(std::vector<Player*> players);

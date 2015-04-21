@@ -95,6 +95,7 @@ int ClientHandler::getShiftNum(const int size, char mode)
         std::cout << "wrong " << (mode == 'r' ? "row" : "column") << " number, try again" << std::endl;
         return getShiftNum(size, mode);
     }
+    // if( num < 1 || num > size ){//|| num % 2){ <--- for player movement testing
     if( num < 1 || num > size || num % 2){
         std::cout << "wrong " << (mode == 'r' ? "row" : "column") << " number, try again" << std::endl;
         return getShiftNum(size, mode);
@@ -137,7 +138,7 @@ int ClientHandler::getPlayerCount()
    return count;
 }
 
-std::string ClientHandler::getPlayerName(std::vector<Player *> players)
+std::string ClientHandler::getPlayerName(const std::vector<Player *> &players)
 {
     std::string name = "";
     std::cout << "Choose your name." << std::endl;

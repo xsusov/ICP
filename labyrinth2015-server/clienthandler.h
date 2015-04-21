@@ -13,7 +13,7 @@ public:
     bool startNewGame();
     int getSize();
     int getItemCount();
-    std::string getPlayerName(std::vector<Player*> players);
+    std::string getPlayerName(const std::vector<Player *> &players);
     int getPlayerCount();
     int getRotate();
     char getShiftMode();

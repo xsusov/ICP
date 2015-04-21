@@ -7,6 +7,9 @@
 #include "gameitem.h"
 #include "player.h"
 
+// forward declaration of Player class
+class Player;
+
 class BoardField : public GameObject
 {
 public:
@@ -34,6 +37,7 @@ public:
     GameItem *getItem();
     void swapPlayers(BoardField &swapField);
     void addPlayer(Player *player);
+    void removePlayer(Player *player);
     void updateDirection( const int direction );
 protected:
     int posX;

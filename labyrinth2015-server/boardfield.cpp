@@ -129,11 +129,14 @@ void BoardField::swapPlayers(BoardField &swapField)
     for( int i = 0; i < 4; i++){
         tmp = playerSlot[i];
         playerSlot[i] = swapField.playerSlot[i];
+        if( swapField.playerSlot[i] != nullptr ){
+            playerSlot[i]->placeOnField(this);
+        }
         swapField.playerSlot[i] = tmp;
+        if( swapField.playerSlot[i] != nullptr ){
+            swapField.playerSlot[i]->placeOnField(&swapField);
+        }
     }
-
-    // @todo:
-    // player pos update
 }
 
 bool BoardField::isOpen( int direction )
@@ -158,6 +161,16 @@ void BoardField::addPlayer(Player *player)
     for( int i = 0; i < 4; i++){
         if( playerSlot[i] == nullptr ){
             playerSlot[i] = player;
+            return;
+        }
+    }
+}
+
+void BoardField::removePlayer(Player *player)
+{
+    for( int i = 0; i < 4; i++){
+        if( playerSlot[i] == player ){
+            playerSlot[i] = nullptr;
             return;
         }
     }

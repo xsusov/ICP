@@ -21,6 +21,11 @@ void Player::incScore()
     score++;
 }
 
+void Player::placeOnField(BoardField *newField)
+{
+    curField = newField;
+}
+
 bool myCompare(Player * i, Player * j)
 {
     return (i->getScore() < j->getScore());
