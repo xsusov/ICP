@@ -19,6 +19,7 @@ using namespace std;
 #include "player.h"
 #include "gameboard.h"
 #include "gameitem.h"
+#include "deck.h"
 #include <random>
 #include <ctime>
 
@@ -82,12 +83,19 @@ int main()
     GameItem::fillVector(items, itemCount);
 
     newBoard->setUpItems(items);
+
+    Deck deck(items);
+
     bool win = false;
     const int winningScore = itemCount/playerCount;
     while( !win ){
         player = players[actualPlayer++ % playerCount];
 
         std::cout << "Round: " << actualPlayer << " " << player->getName()+"'s turn!." << std::endl;
+        if( player->getCard() == nullptr ){
+            player->drawCard(deck);
+        }
+        std::cout << "Quest: " << player->getQuest() << std::endl;
         newBoard->draw();
         int rotate = client->getRotate();
         if( rotate > 0)

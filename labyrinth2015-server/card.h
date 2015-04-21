@@ -8,6 +8,7 @@ class Card
 {
 public:
     Card(GameItem * ptr, std::string message);
+    const std::string getText() {return text;}
 private:
     GameItem *item;
     std::string text;

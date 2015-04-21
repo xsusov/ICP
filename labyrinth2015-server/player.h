@@ -22,6 +22,7 @@ public:
     int getFigure() {return figure;}
     std::string getName() {return name;}
     BoardField *getCurField() {return curField;}
+    std::string getQuest() {return (card != nullptr ? card->getText() : "");}
     //Setters.
     void incScore();
     void placeOnField( BoardField *newField);
@@ -38,6 +39,6 @@ private:
     BoardField *curField;
 };
 
-void print_results(std::vector<Player*> players);
+void print_results(std::vector<Player *> &players);
 
 #endif // PLAYER_H

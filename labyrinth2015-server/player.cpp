@@ -31,7 +31,7 @@ bool myCompare(Player * i, Player * j)
     return (i->getScore() < j->getScore());
 }
 
-void print_results(std::vector<Player*> players)
+void print_results(std::vector<Player*> &players)
 {
     std::sort(players.begin(), players.end(), myCompare);
     std::cout << std::endl << "Game Over!" << std::endl;
