@@ -12,16 +12,15 @@ class BoardField : public GameObject
 public:
     BoardField();
     BoardField(const int x, const int y, bool pathNorth = false, bool pathEast = false, bool pathSouth = false, bool pathWest = false, GameItem* item = nullptr );
-    int getPosX() const;
-    int getPosY() const;
-    void setPosX( const int x );
-    void setPosY( const int y );
-    void incPosX();
-    void incPosY();
-    void decPosX();
-    void decPosY();
-    void updatePos( const int x, const int y );
-    //BoardField *getNeighbor( const int direction ) const;
+    inline int getPosX() const {return posX;}
+    inline int getPosY() const {return posY;}
+    inline void setPosX( const int x ) {posX = x;}
+    inline void setPosY( const int y ) {posY = y;}
+    inline void incPosX() {posX++;}
+    inline void incPosY() {posY++;}
+    inline void decPosX() {posX--;}
+    inline void decPosY() {posY--;}
+    inline void updatePos( const int x, const int y ) {posX = x; posY = y;}
     void rotate( int x );
     //virtual void rotateIn( const int x, const int y, const int size ) = 0;
     bool isOpen( int direction );
@@ -35,6 +34,7 @@ public:
     GameItem *getItem();
     void swapPlayers(BoardField &swapField);
     void addPlayer(Player *player);
+    void updateDirection( const int direction );
 protected:
     int posX;
     int posY;

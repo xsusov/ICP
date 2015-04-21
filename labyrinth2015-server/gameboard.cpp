@@ -209,30 +209,22 @@ void GameBoard::rotateFreeField(const int rotate)
     freeField->rotate(rotate);
 }
 
-void GameBoard::shiftColumn(const int col, bool up)
+void GameBoard::shiftColumn(const int col, const bool up)
 {
-    int i = 0;
-    const int first { up ? max * size + col : col };
-    const int last  { up ? col : max * size + col };
+    const int first { up ? col :  max * size + col };
+    const int last  { up ? max * size + col : col };
+    const int offset{ up ? size : -size };
+    const int direction{ up ? north : south };
+    BoardField *tmp = field[ first ];
 
-    BoardField *tmp = field[ last ];
+    for( int i = first; i != last; i += offset ){
+        field[ i ] = field[ i + offset];
+        field[ i ]->updateDirection( direction );
+    }
+    freeField->updatePos(col, up ? max : 0);
 
-    if( up ){
-        for( i = 0; i < max; i++){
-            field[ i * size + col ] = field[ (i + 1 )* size  + col ];
-            field[ i * size + col ]->decPosY();
-        }
-        freeField->updatePos(last, max);
-    }
-    else{
-        for( i = size - 1; i > 0; i--){
-            field[ i * size + col ] = field[ (i - 1 )* size  + col ];
-            field[ i * size + col ]->incPosY(); ;
-        }
-        freeField->updatePos(first, 0);
-    }
     freeField->swapPlayers(*tmp);
-    field[ first ] = freeField;
+    field[ last ] = freeField;
     freeField = tmp;
     freeField->updatePos(-1,-1);
 }

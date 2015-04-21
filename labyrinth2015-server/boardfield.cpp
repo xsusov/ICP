@@ -20,52 +20,6 @@ BoardField::BoardField(const int x, const int y, bool pathNorth, bool pathEast, 
 {
 }
 
-int BoardField::getPosX() const
-{
-    return posX;
-}
-
-int BoardField::getPosY() const
-{
-    return posY;
-}
-
-void BoardField::setPosX(const int x)
-{
-    posX = x;
-}
-
-void BoardField::setPosY(const int y)
-{
-    posY = y;
-}
-
-void BoardField::incPosX()
-{
-    posX++;
-}
-
-void BoardField::incPosY()
-{
-    posY++;
-}
-
-void BoardField::decPosX()
-{
-    posX--;
-}
-
-void BoardField::decPosY()
-{
-    posY--;
-}
-
-void BoardField::updatePos( const int x, const int y )
-{
-    posX = x;
-    posY = y;
-}
-
 char BoardField::getPath(const int direction)
 {
     return path[direction] ? labyrinth::opened : labyrinth::closed;
@@ -208,3 +162,24 @@ void BoardField::addPlayer(Player *player)
         }
     }
 }
+
+void BoardField::updateDirection( const int direction )
+{
+  switch( direction % 4 ){
+      case( north ):
+          decPosY();
+          break;
+      case( east ):
+          incPosX();
+          break;
+      case( south ):
+          incPosY();
+          break;
+      case( west ):
+          decPosY();
+          break;
+      default:
+          return;
+  }
+}
+
