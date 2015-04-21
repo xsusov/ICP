@@ -57,7 +57,9 @@ bool GameBoard::isPathOpen(const int xFrom, const int yFrom, const int direction
     if( from == nullptr )
         return false;
 
-    BoardField *to = getNeighbour( from, direction );
+    BoardField *to = getNeighbour( *from, direction );
+    if( to == nullptr )
+        return false;
 
     return from->isOpen( direction ) && to->isOpen( opositeDirection(direction) );
 }
@@ -183,32 +185,18 @@ void GameBoard::setUpFields()
     }
 }
 
-BoardField *GameBoard::getNeighbour(BoardField *from, const int direction)
+BoardField *GameBoard::getNeighbour(const BoardField &from, const int direction) const
 {
-    int neighbourX = from->getPosX(),
-        neighbourY = from->getPosY();
+    int neighbourX = from.getPosX(),
+        neighbourY = from.getPosY();
 
-    switch( direction ){
-        case( north ):
-            neighbourY--;
-            break;
-        case( east ):
-            neighbourX++;
-            break;
-        case( south ):
-            neighbourY++;
-            break;
-        case( west ):
-            neighbourX--;
-            break;
-        default:
-            return nullptr;
-    }
+    if( !updateDirection( neighbourX, neighbourY, direction ))
+        return nullptr;
 
     return getField( neighbourX, neighbourY );
 }
 
-BoardField* GameBoard::getField( int posX, int posY )
+BoardField* GameBoard::getField( int posX, int posY ) const
 {
     if( posX < 0 || posX >= size || posY < 0 || posY >= size )
         return nullptr;
@@ -289,4 +277,35 @@ void GameBoard::shift(const char shiftMode, const int num, const bool direction)
         shiftRow(num, direction);
     else if( shiftMode == 'c')
         shiftColumn(num, direction);
+}
+
+bool GameBoard::isEdge(const int x, const int y) const
+{
+  return !x || !y || x == max || y == max;
+}
+
+bool GameBoard::isEdgingDirection(const BoardField &from, const int direction) const
+{
+  return getNeighbour(from, direction) != nullptr;
+}
+
+bool GameBoard::updateDirection( int &x, int &y, const int direction )
+{
+  switch( direction ){
+      case( north ):
+          y--;
+          break;
+      case( east ):
+          x++;
+          break;
+      case( south ):
+          y++;
+          break;
+      case( west ):
+          x--;
+          break;
+      default:
+          return false;
+  }
+  return true;
 }

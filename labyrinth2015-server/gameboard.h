@@ -16,8 +16,8 @@ public:
     void setUpFields();
     void setUpItems(std::vector<GameItem *> &items);
     void setUpPlayers(std::vector<Player*> &players);
-    BoardField* getField( const int posX, const int posY );
-    BoardField *getNeighbour(BoardField *from, const int direction );
+    BoardField *getField( const int posX, const int posY ) const;
+    BoardField *getNeighbour(const BoardField &from, const int direction ) const;
     inline int pos(const int x, const int y);
     inline bool isCorner(const int pos);
     bool isPathOpen(const int xFrom, const int yFrom, const int direction );
@@ -32,6 +32,10 @@ private:
     const int totalFields;
     BoardField **field;
     BoardField *freeField;
+
+    inline bool isEdge(const int x, const int y) const;
+    inline bool isEdgingDirection(const BoardField &from, const int direction ) const;
+    inline static bool updateDirection( int &x, int &y, const int direction );
 };
 
 #endif // GAMEBOARD_H

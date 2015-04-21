@@ -20,12 +20,12 @@ BoardField::BoardField(const int x, const int y, bool pathNorth, bool pathEast, 
 {
 }
 
-int BoardField::getPosX()
+int BoardField::getPosX() const
 {
     return posX;
 }
 
-int BoardField::getPosY()
+int BoardField::getPosY() const
 {
     return posY;
 }

@@ -12,8 +12,8 @@ class BoardField : public GameObject
 public:
     BoardField();
     BoardField(const int x, const int y, bool pathNorth = false, bool pathEast = false, bool pathSouth = false, bool pathWest = false, GameItem* item = nullptr );
-    int getPosX();
-    int getPosY();
+    int getPosX() const;
+    int getPosY() const;
     void setPosX( const int x );
     void setPosY( const int y );
     void incPosX();
@@ -21,7 +21,7 @@ public:
     void decPosX();
     void decPosY();
     void updatePos( const int x, const int y );
-    BoardField *getNeighbor( int direction );
+    //BoardField *getNeighbor( const int direction ) const;
     void rotate( int x );
     //virtual void rotateIn( const int x, const int y, const int size ) = 0;
     bool isOpen( int direction );
