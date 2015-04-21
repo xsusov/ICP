@@ -21,11 +21,17 @@ void Player::incScore()
     score++;
 }
 
+bool myCompare(Player * i, Player * j)
+{
+    return (i->getScore() < j->getScore());
+}
+
 void print_results(std::vector<Player*> players)
 {
-    std::sort(players.begin(), players.end());
+    std::sort(players.begin(), players.end(), myCompare);
+    std::cout << std::endl << "Game Over!" << std::endl;
     for (int i = players.size(); i > 0; i--)
     {
-        std::cout << "l";
+        std::cout << players[i-1]->getName() << "'s score is " << players[i-1]->getScore() << std::endl;
     }
 }

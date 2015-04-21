@@ -133,14 +133,15 @@ int ClientHandler::getPlayerCount()
         std::cout << "Number out of range." << std::endl;
         return getPlayerCount();
     }
-    return count;
+   std::getline(std::cin, userInput);
+   return count;
 }
 
 std::string ClientHandler::getPlayerName(std::vector<Player *> players)
 {
     std::string name = "";
     std::cout << "Choose your name." << std::endl;
-    std::cin >> name;
+    std::getline(std::cin, name);
     for (Player * player : players)
     {
         if (player->getName() == name)

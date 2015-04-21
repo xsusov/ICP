@@ -1,7 +1,7 @@
 /**
  * @project: LABYRINT 2015
  * ICP project
- * @author: xsusov01, xband00
+ * @author: xsusov01, xbandz00
  * @file: server.c
  * @date: 2.3.2015
  * @brief: server side of labyrint application
@@ -87,7 +87,7 @@ int main()
     while( !win ){
         player = players[actualPlayer++ % playerCount];
 
-        std::cout << "Round: " << actualPlayer << " " << player->getName()+"'s round!." << std::endl;
+        std::cout << "Round: " << actualPlayer << " " << player->getName()+"'s turn!." << std::endl;
         newBoard->draw();
         int rotate = client->getRotate();
         if( rotate > 0)
@@ -107,6 +107,7 @@ int main()
         if(player->getScore() == winningScore)
             win = true;
     }
+    print_results(players); // Results.
     return 0;
 }
 
