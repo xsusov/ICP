@@ -8,14 +8,7 @@ class LBoardField : public BoardField
 {
 public:
     LBoardField(const int x,const int y );
-    //char getPath(const int direction);
-protected:
-    int posX;
-    int posY;
-
-    bool path[4];
-    BoardField *neighbor[4];
-    Player *playerSlot[4];
+    void rotateInside( const int x, const int y, const int max );
 };
 
 #endif // LBOARDFIELD_H

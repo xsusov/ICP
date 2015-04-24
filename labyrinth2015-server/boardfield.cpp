@@ -20,6 +20,11 @@ BoardField::BoardField(const int x, const int y, bool pathNorth, bool pathEast, 
 {
 }
 
+BoardField::~BoardField()
+{
+
+}
+
 char BoardField::getPath(const int direction)
 {
     return path[direction] ? labyrinth::opened : labyrinth::closed;

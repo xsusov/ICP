@@ -31,7 +31,7 @@ private:
     const int size;
     const int max;
     const int totalFields;
-    BoardField **field;
+    std::vector<BoardField *> field;
     BoardField *freeField;
 
     inline bool isEdge(const int x, const int y) const;

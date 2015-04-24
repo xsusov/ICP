@@ -8,13 +8,7 @@ class IBoardField : public BoardField
 {
 public:
     IBoardField(const int x,const int y);
-protected:
-    int posX;
-    int posY;
-
-    bool path[4];
-    BoardField *neighbor[4];
-    Player *playerSlot[4];
+    void rotateInside( const int x, const int y, const int max );
 };
 
 #endif // IBOARDFIELD_H
