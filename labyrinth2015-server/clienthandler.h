@@ -19,6 +19,7 @@ public:
     char getShiftMode();
     int getShiftNum(const int size, char mode);
     bool getShiftDirection(bool rowMode);
+    int getMoveDirection();
 
 private:
     std::string userInput;

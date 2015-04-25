@@ -155,3 +155,17 @@ std::string ClientHandler::getPlayerName(const std::vector<Player *> &players)
     }
     return name;
 }
+
+int ClientHandler::getMoveDirection()
+{
+    char direction = 0;
+    std::cout << "Choose move direction. (W↑ S↓ A← D→)" << std::endl;
+    std::cin >> direction;
+    if (direction == 'W' || direction == 'w') return north;
+    else if (direction == 'S' || direction == 's') return south;
+    else if (direction == 'A' || direction == 'a') return west;
+    else if (direction == 'D' || direction == 'd') return east;
+
+    std::cout << "Invalid direction, try again (W↑ S↓ A← D→)." << std::endl;
+    return getMoveDirection();
+}
