@@ -81,39 +81,19 @@ void BoardField::appendRow(const int row, std::string& str)
 
     switch(row){
         case(0):
-            str.push_back(closed);
-            str.push_back(closed);
-            str.push_back(getPath(labyrinth::north));
-            str.push_back(closed);
-            str.push_back(closed);
+            str += {closed, closed, getPath(north), closed, closed};
             break;
         case(1):
-            str.push_back(closed);
-            str.push_back(getPlayerSlot(0));
-            str.push_back(opened);
-            str.push_back(getPlayerSlot(1));
-            str.push_back(closed);
+            str += {closed, getPlayerSlot(north), opened, getPlayerSlot(east), closed};
             break;
         case(2):
-            str.push_back(getPath(labyrinth::west));
-            str.push_back(opened);
-            str.push_back(drawItem());
-            str.push_back(opened);
-            str.push_back(getPath(labyrinth::east));
+            str += {getPath(west), opened, drawItem(), opened, getPath(east)};
             break;
         case(3):
-            str.push_back(closed);
-            str.push_back(getPlayerSlot(2));
-            str.push_back(opened);
-            str.push_back(getPlayerSlot(3));
-            str.push_back(closed);
+            str += {closed, getPlayerSlot(west), opened, getPlayerSlot(south), closed};
             break;
         case(4):
-            str.push_back(closed);
-            str.push_back(closed);
-            str.push_back(getPath(labyrinth::south));
-            str.push_back(closed);
-            str.push_back(closed);
+            str += {closed, closed, getPath(south), closed, closed};
             break;
     };
 }
@@ -199,5 +179,10 @@ void BoardField::updateDirection( const int direction )
       default:
           return;
   }
+}
+
+void BoardField::removeItem()
+{
+    item = nullptr;
 }
 

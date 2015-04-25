@@ -26,6 +26,22 @@ void Player::placeOnField(BoardField *newField)
     curField = newField;
 }
 
+bool Player::pickupItem()
+{
+    if(curField == nullptr)
+        return false;
+
+    if(curField->getItem() == card->getItem()){
+        curField->removeItem();
+        incScore();
+        delete card;
+        card = nullptr;
+        return true;
+    }
+
+    return false;
+}
+
 bool myCompare(Player * i, Player * j)
 {
     return (i->getScore() < j->getScore());

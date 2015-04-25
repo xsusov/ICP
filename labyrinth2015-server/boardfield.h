@@ -40,6 +40,7 @@ public:
     void addPlayer(Player *player);
     void removePlayer(Player *player);
     void updateDirection( const int direction );
+    void removeItem();
 protected:
     int posX;
     int posY;

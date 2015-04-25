@@ -26,15 +26,15 @@ GameBoard::GameBoard( const int size = 7 )
 
     field.reserve(totalFields);
     for( int i = 0; i < totalFields; i++){
-        field[i] = nullptr;
+        field.push_back(nullptr);
     }
     /// new field will be filled with randomly selected board fields, given some rules (corner field must be LBoardField fe.)
 }
 
 GameBoard::~GameBoard()
 {
-    for( int i = 0; i < totalFields; i++){
-        delete field[i];
+    for( auto curField : field){
+        delete curField;
     }
 }
 
@@ -45,7 +45,7 @@ inline int GameBoard::pos(const int x, const int y)
 
 inline bool GameBoard::isCorner(const int pos)
 {
-    return !pos|| pos == max || pos == totalFields - size || pos == totalFields - 1;
+    return !pos || pos == max || pos == totalFields - size || pos == totalFields - 1;
 }
 
 bool GameBoard::isPathOpen(const int xFrom, const int yFrom, const int direction)
@@ -82,16 +82,16 @@ void GameBoard::draw()
 
 void GameBoard::setUpItems(std::vector<GameItem *> &items )
 {
-    int i = 0;
+    std::size_t i = 0;
     int curPos = 0;
-    float ratio = (float)items.size() / ((float)(totalFields + 1));
+    float ratio = static_cast<float>(items.size()) / static_cast<float>(totalFields + 1);
     try{
     for( int y = 0; y < size; ++y){
         for( int x = 0; x < size; ++x){
             if( i >=  items.size())
                 return;
             curPos = pos(x, y);
-            if((totalFields - curPos <=  (items.size() - i)) || random_bool(ratio)){
+            if((static_cast<std::size_t>(totalFields - curPos) <=  (items.size() - i)) || random_bool(ratio)){
                 field[curPos]->setItem( items[i++] );
             }
         }
@@ -103,7 +103,7 @@ void GameBoard::setUpItems(std::vector<GameItem *> &items )
     if( i >=  items.size())
         return;
 
-    freeField->setItem( items[0] );
+    freeField->setItem( items[i] );
 }
 
 void GameBoard::setUpPlayers(std::vector<Player *> &players)
@@ -202,8 +202,8 @@ void GameBoard::shiftColumn(const int col, const bool up)
     BoardField *tmp = field[ first ];
 
     for( int i = first; i != last; i += offset ){
-       (field[ i ] = field[ i + offset])->updateDirection( direction );;
-        //field[ i ]->updateDirection( direction );
+        field[ i ] = field[ i + offset];
+        field[ i ]->updateDirection( direction );
     }
     freeField->updatePos(col, up ? max : 0);
     freeField->swapPlayers(*tmp);
@@ -283,4 +283,23 @@ bool GameBoard::updateDirection( int &x, int &y, const int direction )
           return false;
   }
   return true;
+}
+
+bool GameBoard::movePlayer(Player *player, const int direction)
+{
+    if(player == nullptr)
+        return false;
+
+    BoardField *from = player->getCurField();
+    if( from == nullptr || !from->isOpen(direction) || isEdgingDirection(*from,direction))
+        return false;
+
+    BoardField *to = getNeighbour(*from, direction);
+    if( to == nullptr )
+        return false;
+
+    from->removePlayer(player);
+    to->addPlayer(player);
+    player->placeOnField(to);
+    return true;
 }

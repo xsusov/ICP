@@ -1,5 +1,13 @@
+*.o
+*.cpp.autosave
+*.h.autosave
+*.pro.user
+*~
 clienthandler.cpp.autosave
 gameboard.cpp.autosave
 .gitignore~
 labyrinth2015-server.pro.user~
 labyrinth2015-server.pro.user
+labyrinth2015-server.pro.user.18
+labyrinth2015-server.pro.user.3.2-pre1
+labyrinth2015-server/labyrinth2015-server.pro.user

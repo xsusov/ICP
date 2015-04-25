@@ -37,6 +37,8 @@ private:
     int color;
     Card *card;
     BoardField *curField;
+
+    bool pickupItem();
 };
 
 void print_results(std::vector<Player *> &players);

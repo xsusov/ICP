@@ -9,9 +9,10 @@ class Card
 public:
     Card(GameItem * ptr, std::string message);
     const std::string getText() {return text;}
+    GameItem *getItem() {return item;}
 private:
     GameItem *item;
-    std::string text;
+    const std::string text;
 };
 
 #endif // CARD_H
