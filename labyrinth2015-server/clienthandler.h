@@ -22,7 +22,6 @@ public:
 
 private:
     std::string userInput;
-    std::stringstream inputStream;
 };
 
 #endif // CLIENTHANDLER_H

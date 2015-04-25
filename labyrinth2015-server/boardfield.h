@@ -6,6 +6,7 @@
 #include "gameobject.h"
 #include "gameitem.h"
 #include "player.h"
+#include "constants.h"
 
 // forward declaration of Player class
 class Player;
@@ -27,7 +28,7 @@ public:
     inline void updatePos( const int x, const int y ) {posX = x; posY = y;}
     void rotate( int x = 1 );
     virtual void rotateInside( const int x, const int y, const int max ) = 0;
-    bool isOpen( int direction );
+    bool isOpen(const int direction ) const;
     void draw();
     char getPath(const int direction);
     void printRow(const int row);
@@ -46,8 +47,7 @@ protected:
     int posY;
 
     std::vector<bool> path;
-    BoardField *neighbor[4];
-    Player *playerSlot[4];
+    Player *playerSlot[labyrinth::maxPlayers];
     GameItem *item;
 private:
 };

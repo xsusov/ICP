@@ -50,34 +50,32 @@ char BoardField::drawItem()
 
 void BoardField::printRow(const int row)
 {
-    if( row < 0 || row > 4){
-        return void();
-    }
+    if( row < minRow || row > maxRow )
+        return;
 
     switch(row){
         case(0):
-            std::cout << closed << closed << getPath(labyrinth::north) << closed << closed;
+            std::cout << closed << closed << getPath(north) << closed << closed;
             break;
         case(1):
-            std::cout << closed << getPlayerSlot(0) << opened << getPlayerSlot(1) << closed;
+            std::cout << closed << getPlayerSlot(north) << opened << getPlayerSlot(east) << closed;
             break;
         case(2):
-            std::cout << getPath(labyrinth::west) << opened << drawItem() << opened << getPath(labyrinth::east);
+            std::cout << getPath(west) << opened << drawItem() << opened << getPath(east);
             break;
         case(3):
-            std::cout << closed << getPlayerSlot(2) << opened << getPlayerSlot(3) << closed;
+            std::cout << closed << getPlayerSlot(west) << opened << getPlayerSlot(south) << closed;
             break;
         case(4):
-            std::cout << closed << closed << getPath(labyrinth::south) << closed << closed;
+            std::cout << closed << closed << getPath(south) << closed << closed;
             break;
     };
 }
 
 void BoardField::appendRow(const int row, std::string& str)
 {
-    if( row < 0 || row > 4){
-        return void();
-    }
+    if( row < minRow || row > maxRow)
+        return;
 
     switch(row){
         case(0):
@@ -124,12 +122,9 @@ void BoardField::swapPlayers(BoardField &swapField)
     }
 }
 
-bool BoardField::isOpen( int direction )
+bool BoardField::isOpen( const int direction ) const
 {
-    if( direction < north || direction > west )
-        return false;
-
-    return path[direction] == opened;
+    return path[roundDirection(direction)] == opened;
 }
 
 void BoardField::rotate(int x)
@@ -143,7 +138,7 @@ void BoardField::rotate(int x)
 
 void BoardField::addPlayer(Player *player)
 {
-    for( int i = 0; i < 4; i++){
+    for( int i = 0; i < maxPlayers; i++){
         if( playerSlot[i] == nullptr ){
             playerSlot[i] = player;
             return;
@@ -153,7 +148,7 @@ void BoardField::addPlayer(Player *player)
 
 void BoardField::removePlayer(Player *player)
 {
-    for( int i = 0; i < 4; i++){
+    for( int i = 0; i < maxPlayers; i++){
         if( playerSlot[i] == player ){
             playerSlot[i] = nullptr;
             return;
@@ -163,21 +158,11 @@ void BoardField::removePlayer(Player *player)
 
 void BoardField::updateDirection( const int direction )
 {
-  switch( direction % 4 ){
-      case( north ):
-          decPosY();
-          break;
-      case( east ):
-          incPosX();
-          break;
-      case( south ):
-          incPosY();
-          break;
-      case( west ):
-          decPosY();
-          break;
-      default:
-          return;
+  switch( roundDirection(direction)){
+      case( north ): return decPosY();
+      case( east ):  return incPosX();
+      case( south ): return incPosY();
+      case( west ):  return decPosY();
   }
 }
 

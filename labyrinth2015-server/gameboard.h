@@ -37,6 +37,7 @@ private:
     inline bool isEdge(const int x, const int y) const;
     inline bool isEdgingDirection(const BoardField &from, const int direction ) const;
     inline static bool updateDirection( int &x, int &y, const int direction );
+    static BoardField* makeRandBoardfield(const int x, const int y , const int randNum);
 };
 
 #endif // GAMEBOARD_H

@@ -9,14 +9,25 @@ namespace labyrinth {
                     south,
                     west};
 
+    const int directionCount = 4;
+
+    inline int roundDirection( const int direction ){
+        return direction % directionCount;
+    }
+
     inline int opositeDirection( const int direction ){
-        return (direction + 2) % 4;
+        return (direction + 2) % directionCount;
     }
 
     const int boardMinSize = 5, boardMaxSize = 11;
+    const int minRow = 0, maxRow = 4;
+    const int minPlayers = 2, maxPlayers = 4;
 
     const char opened = ' ';
     const char closed = 'X';
+
+    const int itemsSmall = 12;
+    const int itemsLarge = 24;
 
     const char playerFigure[4]{ '@', '&', '%', '!'};
     const char itemFigure[24]{'a', 'b', 'c', 'd', 'e', 'f',
@@ -29,10 +40,13 @@ namespace labyrinth {
                                "m", "n", "o", "p", "q", "s",
                                "t", "u", "v", "w", "x", "y"};
 
-    const std::string welcome = {
-"********************************************************************************\n"
-"******************************   LABYRINTH   ***********************************\n"
-"********************************************************************************\n"};
+    const char row = 'r';
+    const std::string rowStr = "row";
+    const std::string columnStr = "column";
+
+    inline const std::string getShiftStr(const char mode){
+        return (mode == row ? rowStr : columnStr);
+    }
 }
 
 #endif // CONSTANTS_H

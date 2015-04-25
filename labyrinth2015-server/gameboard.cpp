@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "strings.h"
 #include "gameboard.h"
 #include <random>
 
@@ -17,11 +18,11 @@ GameBoard::GameBoard( const int size = 7 )
       freeField{nullptr}
 {
     if( size < labyrinth::boardMinSize || size > labyrinth::boardMaxSize ){
-        throw "Wrong board size. Please, select size in range from 5 to 11.";
+        throw expWrongSize;
     }
 
     if( !(size%2) ){
-        throw "Wrong board size. Board size oughts to be odd number.";
+        throw expWrongEvenSize;
     }
 
     field.reserve(totalFields);
@@ -76,7 +77,7 @@ void GameBoard::draw()
         }
     }
 
-    std::cout << std::endl << "Free boardfield:" << std::endl;
+    std::cout << std::endl << strFreeField << std::endl;
     freeField->draw();
 }
 
@@ -134,6 +135,8 @@ void GameBoard::setUpFields()
                field[i] = new TBoardField(x,y);
             }
             else{
+                field[i] = makeRandBoardfield(x, y, rotateDistribution(randGenerator));
+               /*
                 switch(rotateDistribution(randGenerator) % 3){
                     case(0):
                         field[i] = new LBoardField(x,y);
@@ -145,6 +148,7 @@ void GameBoard::setUpFields()
                         field[i] = new IBoardField(x,y);
                         break;
                 }
+                */
             }
 
             field[i]->rotate( rotateDistribution(randGenerator));
@@ -154,6 +158,8 @@ void GameBoard::setUpFields()
         }
     }
 
+    freeField = makeRandBoardfield(-1, -1, rotateDistribution(randGenerator));
+   /*
     switch(rotateDistribution(randGenerator) % 3){
         case(0):
             freeField = new LBoardField(-1, -1);
@@ -164,10 +170,25 @@ void GameBoard::setUpFields()
         case(2):
             freeField = new IBoardField(-1, -1);
             break;
-    }
+    }*/
 
     freeField->rotate( rotateDistribution(randGenerator));
 }
+
+BoardField *GameBoard::makeRandBoardfield(const int x, const int y, const int randNum)
+{
+    switch(randNum % 3){
+        case(0):
+            return new LBoardField(x,y);
+        case(1):
+            return new TBoardField(x,y);
+        case(2):
+            return new IBoardField(x,y);
+        default:
+            return nullptr;
+    }
+}
+
 
 BoardField *GameBoard::getNeighbour(const BoardField &from, const int direction) const
 {
@@ -248,24 +269,22 @@ int GameBoard::getSize()
 
 void GameBoard::shift(const char shiftMode, const int num, const bool direction)
 {
-    if( shiftMode == 'r')
-        shiftRow(num, direction);
-    else if( shiftMode == 'c')
-        shiftColumn(num, direction);
+    ( shiftMode == 'r') ? shiftRow(num, direction) : shiftColumn(num, direction);
 }
 
 bool GameBoard::isEdge(const int x, const int y) const
 {
-  return !x || !y || x == max || y == max;
+    return !x || !y || x == max || y == max;
 }
 
 bool GameBoard::isEdgingDirection(const BoardField &from, const int direction) const
 {
-  return getNeighbour(from, direction) != nullptr;
+    return getNeighbour(from, direction) != nullptr;
 }
 
 bool GameBoard::updateDirection( int &x, int &y, const int direction )
 {
+    // @todo -> look at border limit
   switch( direction ){
       case( north ):
           y--;

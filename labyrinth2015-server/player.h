@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include <iostream>
-#include "playerfigure.h"
+//#include "playerfigure.h"
 #include "card.h"
 #include "deck.h"
 #include "boardfield.h"

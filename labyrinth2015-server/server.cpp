@@ -15,6 +15,7 @@ using namespace std;
 #include <exception>
 /// Classes:
 #include "constants.h"
+#include "strings.h"
 #include "clienthandler.h"
 #include "player.h"
 #include "gameboard.h"
@@ -23,10 +24,23 @@ using namespace std;
 #include <random>
 #include <ctime>
 
+using namespace labyrinth;
+
 int main()
 {
+    /*
+     MVC - model - viewer - controler
+     CMD vs. GUI -> zmena (idealne) 2 radky v main labyrinth-cli.cpp a labyrinth.cpp
+
+     kernel = new Kernel(); //
+
+     controler = new CmdControler();
+     viewer = new CmdViewer();
+     game = controler->getGame()
+     Kernel->run( game, viewer, controler )
+     */
+
     std::srand(time(NULL));
-    std::cout << "Welcome to Labyrint server" << endl;
     std::cout << labyrinth::welcome;
 
     ClientHandler *client = new ClientHandler();
@@ -70,9 +84,8 @@ int main()
     int actualPlayer = 0;
     Player* player = nullptr;
     std::vector<Player*> players;
-    for (int i = 0; i < playerCount; i++)
-    {
-        std::cout << "Player no. " << i+1 << "." << std::endl;
+    for (int i = 0; i < playerCount; i++){
+        std::cout << strPlayerNumber << i+1 << std::endl;
         players.push_back(new Player(client->getPlayerName(players)));
     }
 
@@ -91,7 +104,7 @@ int main()
     while( !win ){
         player = players[actualPlayer++ % playerCount];
 
-        std::cout << "Round: " << actualPlayer << " " << player->getName()+"'s turn!." << std::endl;
+        std::cout << strRound << actualPlayer << " " << player->getName()+ strTurn << std::endl;
         if( player->getCard() == nullptr ){
             player->drawCard(deck);
         }

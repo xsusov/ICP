@@ -14,6 +14,7 @@ public:
     static int randItem(const int itemCount);
 
     std::string getName() {return name;}
+    void draw();
 private:
     char figure;
     std::string name;

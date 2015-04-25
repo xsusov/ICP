@@ -33,5 +33,6 @@ HEADERS += \
     tboardfield.h \
     lboardfield.h \
     constants.h \
-    clienthandler.h
+    clienthandler.h \
+    strings.h
 

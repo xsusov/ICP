@@ -17,8 +17,7 @@ char GameItem::getFigure()
 void GameItem::fillVector(std::vector<GameItem*> &vector, const int itemCount)
 {
     for( int i = 0; i < itemCount; i++){
-        GameItem *newItem = new GameItem(labyrinth::itemFigure[i], labyrinth::itemNames[i]);
-        vector.push_back(newItem);
+        vector.push_back(new GameItem(labyrinth::itemFigure[i], labyrinth::itemNames[i]));
     }
 
     std::random_shuffle(vector.begin(), vector.end(), GameItem::randItem);
@@ -27,4 +26,9 @@ void GameItem::fillVector(std::vector<GameItem*> &vector, const int itemCount)
 int GameItem::randItem(const int itemCount)
 {
     return std::rand() % itemCount;
+}
+
+void GameItem::draw()
+{
+    std::cout << figure;
 }
