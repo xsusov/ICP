@@ -61,6 +61,13 @@ int main()
         }
     }
 
+
+    while (true)
+    {
+        std::cout << client->getMoveDirection() << std::endl;
+    }
+
+
     int itemCount = 0;
     while( !itemCount ){
         try{

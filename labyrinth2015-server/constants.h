@@ -7,7 +7,8 @@ namespace labyrinth {
     enum direction{ north,
                     east,
                     south,
-                    west};
+                    west,
+                    stop};
 
     const int directionCount = 4;
 
