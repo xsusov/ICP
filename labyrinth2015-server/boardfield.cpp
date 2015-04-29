@@ -124,7 +124,7 @@ void BoardField::swapPlayers(BoardField &swapField)
 
 bool BoardField::isOpen( const int direction ) const
 {
-    return path[roundDirection(direction)] == opened;
+    return path[roundDirection(direction)];
 }
 
 void BoardField::rotate(int x)
@@ -159,10 +159,14 @@ void BoardField::removePlayer(Player *player)
 void BoardField::updateDirection( const int direction )
 {
   switch( roundDirection(direction)){
-      case( north ): return decPosY();
-      case( east ):  return incPosX();
-      case( south ): return incPosY();
-      case( west ):  return decPosY();
+      case( north ): decPosY();
+                     return;
+      case( east ):  incPosX();
+                     return;
+      case( south ): incPosY();
+                     return;
+      case( west ):  decPosY();
+                     return;
   }
 }
 

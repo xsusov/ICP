@@ -26,6 +26,7 @@ public:
     //Setters.
     void incScore();
     void placeOnField( BoardField *newField);
+    bool pickupItem();
 
 private:
     static int count;
@@ -38,7 +39,7 @@ private:
     Card *card;
     BoardField *curField;
 
-    bool pickupItem();
+
 };
 
 void print_results(std::vector<Player *> &players);

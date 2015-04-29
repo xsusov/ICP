@@ -285,7 +285,7 @@ bool GameBoard::isEdgingDirection(const BoardField &from, const int direction) c
 bool GameBoard::updateDirection( int &x, int &y, const int direction )
 {
     // @todo -> look at border limit
-  switch( direction ){
+  switch( roundDirection(direction )){
       case( north ):
           y--;
           break;
@@ -298,9 +298,7 @@ bool GameBoard::updateDirection( int &x, int &y, const int direction )
       case( west ):
           x--;
           break;
-      default:
-          return false;
-  }
+    }
   return true;
 }
 
@@ -310,11 +308,11 @@ bool GameBoard::movePlayer(Player *player, const int direction)
         return false;
 
     BoardField *from = player->getCurField();
-    if( from == nullptr || !from->isOpen(direction) || isEdgingDirection(*from,direction))
+    if( from == nullptr || !from->isOpen(direction))// || isEdgingDirection(*from,direction))
         return false;
 
     BoardField *to = getNeighbour(*from, direction);
-    if( to == nullptr )
+    if( to == nullptr || !to->isOpen(opositeDirection(direction)) )
         return false;
 
     from->removePlayer(player);

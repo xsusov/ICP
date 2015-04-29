@@ -61,12 +61,12 @@ int main()
         }
     }
 
-
+/*
     while (true)
     {
         std::cout << client->getMoveDirection() << std::endl;
     }
-
+*/
 
     int itemCount = 0;
     while( !itemCount ){
@@ -123,14 +123,31 @@ int main()
 
         newBoard->draw();
         char shiftMode = client->getShiftMode();
-        if(!(shiftMode == 'r' || shiftMode == 'c'))
-            continue;
+        if(!(shiftMode == 'r' || shiftMode == 'c')){
+
+        }
         else{
             int num = client->getShiftNum(newBoard->getSize(), shiftMode);
             bool direction = client->getShiftDirection(shiftMode == 'r');
             newBoard->shift(shiftMode, num, direction);
         }
         newBoard->draw();
+
+        int dir = client->getMoveDirection();
+        while(dir != stop)
+        {
+
+            std::cout << dir << std::endl;
+            if( !newBoard->movePlayer(player, dir)){
+                std::cout << "cant move in choosen direction" << std::endl;
+            }
+            if(player->pickupItem()){
+                newBoard->draw();
+                break;
+            }
+            newBoard->draw();
+            dir = client->getMoveDirection();
+        }
 
         if(player->getScore() == winningScore)
             win = true;
