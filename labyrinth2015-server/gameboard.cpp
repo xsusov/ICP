@@ -37,6 +37,36 @@ GameBoard::~GameBoard()
     for( auto curField : field){
         delete curField;
     }
+
+    delete freeField;
+}
+
+void GameBoard::setUpFields()
+{
+    std::default_random_engine randGenerator;
+    std::uniform_int_distribution<int> rotateDistribution(0,3);
+    int i = 0;
+    for( int y = 0; y < size; ++y){
+        for( int x = 0; x < size; ++x){
+            if( isCorner(i)){    // corner field - allways must be L-field, with open path towards inside labyrinth
+               field[i] = new LBoardField(x,y);
+            }
+            else if( !(x % 2 || y % 2)){ // odd row and odd colum - T-field
+               field[i] = new TBoardField(x,y);
+            }
+            else{
+                field[i] = makeRandBoardfield(x, y, rotateDistribution(randGenerator));
+            }
+
+            field[i]->rotate( rotateDistribution(randGenerator));
+            if(isEdge( x, y ))
+                field[i]->rotateInside(x, y, max);
+            i++;
+        }
+    }
+
+    freeField = makeRandBoardfield(-1, -1, rotateDistribution(randGenerator));
+    freeField->rotate( rotateDistribution(randGenerator));
 }
 
 inline int GameBoard::pos(const int x, const int y)
@@ -121,60 +151,6 @@ void GameBoard::setUpPlayers(std::vector<Player *> &players)
     }
 }
 
-void GameBoard::setUpFields()
-{
-    std::default_random_engine randGenerator;
-    std::uniform_int_distribution<int> rotateDistribution(0,3);
-    int i = 0;
-    for( int y = 0; y < size; ++y){
-        for( int x = 0; x < size; ++x){
-            if( isCorner(i)){    // corner field - allways must be L-field, with open path towards inside labyrinth
-               field[i] = new LBoardField(x,y);
-            }
-            else if( !(x % 2 || y % 2)){ // odd row and odd colum - T-field
-               field[i] = new TBoardField(x,y);
-            }
-            else{
-                field[i] = makeRandBoardfield(x, y, rotateDistribution(randGenerator));
-               /*
-                switch(rotateDistribution(randGenerator) % 3){
-                    case(0):
-                        field[i] = new LBoardField(x,y);
-                        break;
-                    case(1):
-                        field[i] = new TBoardField(x,y);
-                        break;
-                    case(2):
-                        field[i] = new IBoardField(x,y);
-                        break;
-                }
-                */
-            }
-
-            field[i]->rotate( rotateDistribution(randGenerator));
-            if(isEdge( x, y ))
-                field[i]->rotateInside(x, y, max);
-            i++;
-        }
-    }
-
-    freeField = makeRandBoardfield(-1, -1, rotateDistribution(randGenerator));
-   /*
-    switch(rotateDistribution(randGenerator) % 3){
-        case(0):
-            freeField = new LBoardField(-1, -1);
-            break;
-        case(1):
-            freeField = new TBoardField(-1, -1);
-            break;
-        case(2):
-            freeField = new IBoardField(-1, -1);
-            break;
-    }*/
-
-    freeField->rotate( rotateDistribution(randGenerator));
-}
-
 BoardField *GameBoard::makeRandBoardfield(const int x, const int y, const int randNum)
 {
     switch(randNum % 3){
@@ -220,46 +196,34 @@ void GameBoard::shiftColumn(const int col, const bool up)
     const int last  { up ? max * size + col : col };
     const int offset{ up ? size : -size };
     const int direction{ up ? north : south };
-    BoardField *tmp = field[ first ];
 
-    for( int i = first; i != last; i += offset ){
-        field[ i ] = field[ i + offset];
-        field[ i ]->updateDirection( direction );
-    }
-    freeField->updatePos(col, up ? max : 0);
-    freeField->swapPlayers(*tmp);
-    field[ last ] = freeField;
-    freeField = tmp;
-    freeField->updatePos(-1,-1);
+    shift( first, last, offset, direction, col, up ? max : 0);
 }
 
 void GameBoard::shiftRow(const int row, bool left )
 {
-    int i = 0;
-    const int first { left ? row * size + max : row * size };
-    const int last  { left ? row * size : row * size + max };
+    const int first { left ? row * size: row * size  + max };
+    const int last  { left ? row * size + max : row * size };
+    const int offset{ left ? 1 : -1 };
+    const int direction{ left ? west : east };
 
-    BoardField *tmp = field[ last ];
+    shift( first, last, offset, direction, left ? max : 0, row );
+}
 
-    if( left ){
-        for( i = 0; i < max; i++){
-            field[ row * size + i ] = field[ row * size + i + 1 ];
-            field[ row * size + i ]->decPosX();
-        }
-        freeField->updatePos(max, row);
+void GameBoard::shift(const int first, const int last, const int offset, const int direction, const int lastX, const int lastY )
+{
+    BoardField *tmp = field[ first ];
+
+    for( int i = first; i != last; i += offset ){
+         field[ i ] = field[ i + offset];
+         field[ i ]->updateDirection( direction );
     }
-    else{
-        for( i = max; i >= 0; i--){
-            field[ row * size + i ] = field[ row * size + i - 1 ];
-            field[ row * size + i ]->incPosX();
-        }
-        freeField->updatePos(0, row);
-    }
-
-    freeField->swapPlayers(*tmp);
-    field[ first ] = freeField;
+    field[ last ] = freeField;
+    field[ last ]->updatePos( lastX, lastY );
+    tmp->swapPlayers(*field[ last ]);
     freeField = tmp;
     freeField->updatePos(-1,-1);
+
 }
 
 int GameBoard::getSize()
