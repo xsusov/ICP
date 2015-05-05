@@ -61,13 +61,6 @@ int main()
         }
     }
 
-/*
-    while (true)
-    {
-        std::cout << client->getMoveDirection() << std::endl;
-    }
-*/
-
     int itemCount = 0;
     while( !itemCount ){
         try{
@@ -152,6 +145,7 @@ int main()
         if(player->getScore() == winningScore)
             win = true;
     }
+
     print_results(players); // Results.
     return 0;
 }

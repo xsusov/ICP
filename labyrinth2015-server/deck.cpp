@@ -5,7 +5,17 @@
 #include "card.h"
 #include "gameitem.h"
 
+Deck::Deck()
+{
+
+}
+
 Deck::Deck(std::vector<GameItem*> &vector)
+{
+    addItems(vector);
+}
+
+void Deck::addItems(std::vector<GameItem *> &vector)
 {
     for (GameItem* item : vector)
     {

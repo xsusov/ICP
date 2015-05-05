@@ -24,7 +24,7 @@ public:
     void rotateFreeField(const int rotate);
     void shiftColumn(const int row, const bool up = false);
     void shiftRow(const int row, bool right = false);
-    int getSize();
+    int getSize() {return size;}
     void shift(const char shiftMode='r', const int num=0, const bool direction=false);
     void shift(const int first, const int last, const int offset, const int direction, const int lastX, const int lastY );
     bool movePlayer( Player *player, const int direction );
@@ -39,6 +39,7 @@ private:
     inline bool isEdgingDirection(const BoardField &from, const int direction ) const;
     inline static bool updateDirection( int &x, int &y, const int direction );
     static BoardField* makeRandBoardfield(const int x, const int y , const int randNum);
+    bool isWalkable(BoardField *from, const int direction ) const;
 };
 
 #endif // GAMEBOARD_H

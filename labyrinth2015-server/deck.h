@@ -9,9 +9,10 @@ class Deck
 {
 
 public:
+    Deck();
     Deck(std::vector<GameItem*> &vector);
     unsigned int size() {return CardStack.size();}
-
+    void addItems(std::vector<GameItem*> &vector);
     void push(Card*);
     Card* pop();
 

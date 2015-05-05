@@ -96,16 +96,6 @@ void BoardField::appendRow(const int row, std::string& str)
     };
 }
 
-void BoardField::setItem(GameItem *newItem)
-{
-    item = newItem;
-}
-
-GameItem *BoardField::getItem()
-{
-    return item;
-}
-
 void BoardField::swapPlayers(BoardField &swapField)
 {
     Player *tmp = nullptr;
@@ -169,9 +159,3 @@ void BoardField::updateDirection( const int direction )
                      return;
   }
 }
-
-void BoardField::removeItem()
-{
-    item = nullptr;
-}
-

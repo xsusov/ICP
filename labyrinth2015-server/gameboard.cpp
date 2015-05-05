@@ -226,11 +226,6 @@ void GameBoard::shift(const int first, const int last, const int offset, const i
 
 }
 
-int GameBoard::getSize()
-{
-    return size;
-}
-
 void GameBoard::shift(const char shiftMode, const int num, const bool direction)
 {
     ( shiftMode == 'r') ? shiftRow(num, direction) : shiftColumn(num, direction);
@@ -266,19 +261,28 @@ bool GameBoard::updateDirection( int &x, int &y, const int direction )
   return true;
 }
 
-bool GameBoard::movePlayer(Player *player, const int direction)
+bool GameBoard::isWalkable(BoardField *from, const int direction ) const
 {
-    if(player == nullptr)
-        return false;
-
-    BoardField *from = player->getCurField();
-    if( from == nullptr || !from->isOpen(direction))// || isEdgingDirection(*from,direction))
+    if( from == nullptr || !from->isOpen(direction))
         return false;
 
     BoardField *to = getNeighbour(*from, direction);
     if( to == nullptr || !to->isOpen(opositeDirection(direction)) )
         return false;
 
+    return true;
+}
+
+bool GameBoard::movePlayer(Player *player, const int direction)
+{
+    if(player == nullptr)
+        return false;
+
+    BoardField *from = player->getCurField();
+    if( !isWalkable( from, direction))
+        return false;
+
+    BoardField *to = getNeighbour(*from, direction);
     from->removePlayer(player);
     to->addPlayer(player);
     player->placeOnField(to);

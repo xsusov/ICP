@@ -26,6 +26,9 @@ public:
     inline void decPosX() {posX--;}
     inline void decPosY() {posY--;}
     inline void updatePos( const int x, const int y ) {posX = x; posY = y;}
+    GameItem *getItem() {return item;}
+    void setItem(GameItem *newItem) {item = newItem;}
+    void removeItem() {item = nullptr;}
     void rotate( int x = 1 );
     virtual void rotateInside( const int x, const int y, const int max ) = 0;
     bool isOpen(const int direction ) const;
@@ -35,13 +38,11 @@ public:
     char getPlayerSlot(const int pos);
     char drawItem();
     void appendRow(const int row, std::string& str);
-    void setItem(GameItem *newItem);
-    GameItem *getItem();
     void swapPlayers(BoardField &swapField);
     void addPlayer(Player *player);
     void removePlayer(Player *player);
     void updateDirection( const int direction );
-    void removeItem();
+
 protected:
     int posX;
     int posY;
@@ -49,7 +50,6 @@ protected:
     std::vector<bool> path;
     Player *playerSlot[labyrinth::maxPlayers];
     GameItem *item;
-private:
 };
 
 #endif // BOARDFIELD_H

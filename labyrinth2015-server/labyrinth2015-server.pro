@@ -16,7 +16,9 @@ SOURCES += \
     iboardfield.cpp \
     tboardfield.cpp \
     lboardfield.cpp \
-    clienthandler.cpp
+    clienthandler.cpp \
+    game.cpp \
+    viewer.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -34,5 +36,7 @@ HEADERS += \
     lboardfield.h \
     constants.h \
     clienthandler.h \
-    strings.h
+    strings.h \
+    game.h \
+    viewer.h
 
