@@ -23,8 +23,90 @@ using namespace std;
 #include "deck.h"
 #include <random>
 #include <ctime>
+#include "game.h"
+#include "controller.h"
+#include "viewer.h"
+#include "viewercli.h"
 
 using namespace labyrinth;
+
+
+int cliGame()
+{
+    int size {0};
+    int itemCount {0};
+    int playerCount {0};
+    std::string gameName {""};
+    /// MVC
+    /// MODEL
+    Game *game {nullptr};
+    /// VIEW
+    ViewerCli view;
+    /// CONTROLLER
+    ClientHandler controller;
+
+
+    /// controler->getGame();
+    if((gameName = controller.getGame()).empty()){
+        size = controller.getSize();
+        itemCount = controller.getItemCount();
+        playerCount = controller.getPlayerCount();
+        game = new Game(size, playerCount, itemCount);
+
+        for(int i = 0; i < playerCount; i++){
+            game->addPlayer(controller.getPlayerName(game->getPlayers()));
+        }
+    }
+    else{
+        game = Game::loadGame(gameName);
+    }
+
+    try{
+        int rotate;
+        int shiftNum, direction;
+        do{
+            /// start new round and use view to display it to player
+            game->nextRound();
+            view.drawHeader(game->getRoundHeader());
+            view.drawBoard(game->getBoardStr());
+
+            /// free field rotation before shifiting (can be skipped)
+            while((rotate = controller.getRotate()) > 0){
+                game->getBoard()->rotateFreeField(rotate);
+                view.drawField(game->getFreeFieldString());
+            }
+
+            /// shifting row or column of gameboard (can be skipped)
+            if(controller.getShift(size, shiftNum, direction)){
+                game->shift(shiftNum, direction);
+                view.drawBoard(game->getBoardStr());
+            }
+
+            /// movement
+            while((direction = controller.getMoveDirection()) != stop){
+                if(!game->move(direction)){
+                    view.drawWarnning(wrongDirection);
+                    continue;
+                }
+
+                view.drawBoard(game->getBoardStr());
+                if( game->turnEnd()){
+                    break;
+                }
+            }
+
+        }while( !game->finish());
+
+        ///view.drawResult();
+    }
+    catch(std::exception &ex){
+        std::cerr << ex.what() << std::endl;
+    }
+
+    delete game;
+
+    return 0;
+}
 
 int main()
 {
@@ -43,14 +125,21 @@ int main()
     std::srand(time(NULL));
     std::cout << labyrinth::welcome;
 
+    /// terminal mode
+    return cliGame();
+
+
+
     ClientHandler *client = new ClientHandler();
 
     while( !client->startNewGame() );
 
+    int size;
+
     GameBoard *newBoard = nullptr;
     while( newBoard == nullptr ){
         try{
-            int size = client->getSize();
+            size = client->getSize();
             if( size == -1 )
                 return 1;
 
@@ -98,6 +187,7 @@ int main()
     newBoard->setUpItems(items);
 
     Deck deck(items);
+    Deck discardpile;
 
     bool win = false;
     const int winningScore = itemCount/playerCount;
@@ -134,6 +224,8 @@ int main()
                 std::cout << "cant move in choosen direction" << std::endl;
             }
             if(player->pickupItem()){
+                discardpile.push(player->getCard());
+                player->dropCard();
                 newBoard->draw();
                 break;
             }

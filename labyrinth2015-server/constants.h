@@ -21,6 +21,8 @@ namespace labyrinth {
     }
 
     const int boardMinSize = 5, boardMaxSize = 11;
+    const int posFree = -1;
+
     const int minRow = 0, maxRow = 4;
     const int minPlayers = 2, maxPlayers = 4;
 

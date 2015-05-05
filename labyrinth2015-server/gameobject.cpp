@@ -3,3 +3,8 @@
 GameObject::GameObject()
 {
 }
+
+GameObject::~GameObject()
+{
+
+}

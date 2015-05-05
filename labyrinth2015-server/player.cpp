@@ -34,8 +34,6 @@ bool Player::pickupItem()
     if(curField->getItem() == card->getItem()){
         curField->removeItem();
         incScore();
-        delete card;
-        card = nullptr;
         return true;
     }
 

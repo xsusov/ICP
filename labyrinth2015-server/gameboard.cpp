@@ -11,7 +11,7 @@ bool random_bool(const float ratio)
     return random < static_cast<int>(ratio * 100);
 }
 
-GameBoard::GameBoard( const int size = 7 )
+GameBoard::GameBoard( const int size )
     : size{size},
       max{size - 1},
       totalFields{size * size},
@@ -96,26 +96,18 @@ bool GameBoard::isPathOpen(const int xFrom, const int yFrom, const int direction
 void GameBoard::draw()
 {
     std::string line {""};
-    //std::string lineOut {""};
-
     for( int y = 0; y < size; ++y){
         for( int i = 0; i < 5; i++){
             for( int x = 0; x < size; ++x){
                 getField(x,y)->appendRow(i, line);
-               // getField(x,y)->appendRow(i, lineOut);
-
             }
-            //lineOut += '\n';
             std::cout << line << std::endl;
             line.clear();
         }
     }
 
-    //std::cout << lineOut << std::endl;
     std::cout << std::endl << strFreeField << std::endl;
     freeField->draw();
-
-
 }
 
 void GameBoard::setUpItems(std::vector<GameItem *> &items )

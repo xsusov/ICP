@@ -9,6 +9,11 @@ GameItem::GameItem(const char figure, const std::string name)
 {
 }
 
+GameItem::~GameItem()
+{
+
+}
+
 char GameItem::getFigure()
 {
     return figure;

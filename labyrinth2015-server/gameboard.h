@@ -10,7 +10,7 @@
 class GameBoard
 {
 public:
-    GameBoard( const int size );
+    GameBoard( const int size = 7 );
     ~GameBoard();
     void draw();
     void setUpFields();

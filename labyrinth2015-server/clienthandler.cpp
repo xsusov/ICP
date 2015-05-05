@@ -175,3 +175,13 @@ int ClientHandler::getMoveDirection()
     std::cout << "Invalid direction, try again." << std::endl;
     return getMoveDirection();
 }
+
+std::string ClientHandler::getGame()
+{
+    return "";
+}
+
+int ClientHandler::getShift(const int size, int &shiftNum, int &direction)
+{
+    return 0;
+}

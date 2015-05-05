@@ -19,3 +19,8 @@ void ViewerCli::drawField(const std::string fieldStr)
 {
     std::cout << fieldStr << std::endl;
 }
+
+void ViewerCli::drawWarnning(const std::string warrning)
+{
+    std::cout << warrning << std::endl;
+}

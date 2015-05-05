@@ -12,6 +12,7 @@ const std::string welcome = {
 strPlayerNumber = "Player #",
 strRound = "Round: ",
 strTurn = "'s turn!.",
+strQuest = "Quest: ",
 strAnyKey = "Press ANY KEY to start new game.",
 strBoardSize ="Please, select game board size:",
 strBoardSizeRange = "Eneter odd number in range from 5 to 11.",
@@ -29,8 +30,16 @@ strNumOORange = "Number out of range.",
 strTryAgain  = " number, try again",
 strFreeField = "Free boardfield:";
 
+
+const std::string wrongDirection =  "can't move in choosen direction";
+
 const char* const expWrongSize = "Wrong board size. Please, select size in range from 5 to 11.";
 const char* const expWrongEvenSize = "Wrong board size. Board size oughts to be odd number.";
+
+/// log strings:
+const char logD = ';';
+const std::string logEndOfRound = "###";
+
 }
 
 #endif // STRINGS_H

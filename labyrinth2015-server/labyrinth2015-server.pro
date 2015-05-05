@@ -19,7 +19,8 @@ SOURCES += \
     clienthandler.cpp \
     game.cpp \
     viewer.cpp \
-    viewercli.cpp
+    viewercli.cpp \
+    controller.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -40,5 +41,6 @@ HEADERS += \
     strings.h \
     game.h \
     viewer.h \
-    viewercli.h
+    viewercli.h \
+    controller.h
 

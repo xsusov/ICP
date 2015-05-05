@@ -19,10 +19,11 @@ public:
     Card * getCard() {return card;}
     int getScore() {return score;}
     int getColor() {return color;}
-    int getFigure() {return figure;}
+    char getFigure() {return figure;}
     std::string getName() {return name;}
     BoardField *getCurField() {return curField;}
     std::string getQuest() {return (card != nullptr ? card->getText() : "");}
+    void dropCard() {card=nullptr;}
     //Setters.
     void incScore();
     void placeOnField( BoardField *newField);
@@ -38,8 +39,6 @@ private:
     int color;
     Card *card;
     BoardField *curField;
-
-
 };
 
 void print_results(std::vector<Player *> &players);

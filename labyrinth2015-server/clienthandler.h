@@ -5,8 +5,9 @@
 #include <sstream>
 #include <vector>
 #include "player.h"
+#include "controller.h"
 
-class ClientHandler
+class ClientHandler : public Controller
 {
 public:
     ClientHandler();
@@ -20,6 +21,9 @@ public:
     int getShiftNum(const int size, char mode);
     int getShiftDirection(bool rowMode);
     int getMoveDirection();
+    std::string getGame();
+
+    virtual int getShift(const int size, int &shiftNum, int &direction);
 
 private:
     std::string userInput;
