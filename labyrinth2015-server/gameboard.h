@@ -12,13 +12,14 @@ class GameBoard
 public:
     GameBoard( const int size = 7 );
     ~GameBoard();
+    std::string getStr();
     void draw();
     void setUpFields();
     void setUpItems(std::vector<GameItem *> &items);
     void setUpPlayers(std::vector<Player*> &players);
     BoardField *getField( const int posX, const int posY ) const;
     BoardField *getNeighbour(const BoardField &from, const int direction ) const;
-    inline int pos(const int x, const int y);
+    inline int pos(const int x, const int y) const {return y * size + x;}
     inline bool isCorner(const int pos);
     bool isPathOpen(const int xFrom, const int yFrom, const int direction );
     void rotateFreeField(const int rotate);

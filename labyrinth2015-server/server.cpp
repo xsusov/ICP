@@ -126,7 +126,7 @@ int main()
     std::cout << labyrinth::welcome;
 
     /// terminal mode
-    return cliGame();
+    ///return cliGame();
 
 
 

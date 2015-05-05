@@ -41,6 +41,28 @@ GameBoard::~GameBoard()
     delete freeField;
 }
 
+std::string GameBoard::getStr()
+{
+    std::string str {""};
+    for( int y = 0; y < size; ++y){
+        for( int i = 0; i < 5; i++){
+            for( int x = 0; x < size; ++x){
+                getField(x,y)->appendRow(i, str);
+            }
+            str += '\n';
+        }
+    }
+
+    return str;
+}
+
+void GameBoard::draw()
+{
+    std::cout << getStr() << std::endl;
+    std::cout << strFreeField << std::endl << freeField->getStr() << std::endl;
+}
+
+
 void GameBoard::setUpFields()
 {
     std::default_random_engine randGenerator;
@@ -69,11 +91,6 @@ void GameBoard::setUpFields()
     freeField->rotate( rotateDistribution(randGenerator));
 }
 
-inline int GameBoard::pos(const int x, const int y)
-{
-    return y * size + x;
-}
-
 inline bool GameBoard::isCorner(const int pos)
 {
     return !pos || pos == max || pos == totalFields - size || pos == totalFields - 1;
@@ -90,24 +107,6 @@ bool GameBoard::isPathOpen(const int xFrom, const int yFrom, const int direction
         return false;
 
     return from->isOpen( direction ) && to->isOpen( opositeDirection(direction) );
-}
-
-
-void GameBoard::draw()
-{
-    std::string line {""};
-    for( int y = 0; y < size; ++y){
-        for( int i = 0; i < 5; i++){
-            for( int x = 0; x < size; ++x){
-                getField(x,y)->appendRow(i, line);
-            }
-            std::cout << line << std::endl;
-            line.clear();
-        }
-    }
-
-    std::cout << std::endl << strFreeField << std::endl;
-    freeField->draw();
 }
 
 void GameBoard::setUpItems(std::vector<GameItem *> &items )
@@ -181,7 +180,7 @@ BoardField* GameBoard::getField( int posX, int posY ) const
     if( posX < 0 || posX > max || posY < 0 || posY > max )
         return nullptr;
 
-    return field[ posY * size + posX ];
+    return field[ pos(posX, posY) ];
 }
 
 void GameBoard::rotateFreeField(const int rotate)

@@ -32,13 +32,10 @@ char BoardField::getPath(const int direction)
 
 void BoardField::draw()
 {
-    for(int i = 0; i < 5; i++){
-        printRow(i);
-        std::cout << std::endl;
-    }
+    std::cout << getStr() << std::endl;
 }
 
-std::string BoardField::getString()
+std::string BoardField::getStr()
 {
     std::string fieldStr;
     for(int i = 0; i < 5; i++){
