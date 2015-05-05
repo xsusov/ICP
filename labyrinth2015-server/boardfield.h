@@ -33,6 +33,7 @@ public:
     virtual void rotateInside( const int x, const int y, const int max ) = 0;
     bool isOpen(const int direction ) const;
     void draw();
+    std::string getString();
     char getPath(const int direction);
     void printRow(const int row);
     char getPlayerSlot(const int pos);

@@ -38,6 +38,17 @@ void BoardField::draw()
     }
 }
 
+std::string BoardField::getString()
+{
+    std::string fieldStr;
+    for(int i = 0; i < 5; i++){
+        appendRow(i, fieldStr);
+        fieldStr += '\n';
+    }
+
+    return fieldStr;
+}
+
 char BoardField::getPlayerSlot(const int pos)
 {
     return playerSlot[pos] != nullptr ? playerSlot[pos]->getFigure() : opened;

@@ -18,7 +18,8 @@ SOURCES += \
     lboardfield.cpp \
     clienthandler.cpp \
     game.cpp \
-    viewer.cpp
+    viewer.cpp \
+    viewercli.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -38,5 +39,6 @@ HEADERS += \
     clienthandler.h \
     strings.h \
     game.h \
-    viewer.h
+    viewer.h \
+    viewercli.h
 
