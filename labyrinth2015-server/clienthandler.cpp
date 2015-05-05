@@ -24,19 +24,30 @@ int ClientHandler::getSize()
 {
     std::cout << strBoardSize << std::endl << strBoardSizeRange << std::endl;
     int size ;
-    std::string userInput;
-    getline(std::cin, userInput);
-    std::stringstream numberStream(userInput);
-    if( !(numberStream >> size) ){
-        std::cout << strInvalidNumber;
-        char anykey;
-        std::cin >> anykey;
 
-        if( anykey == 'q' || anykey == 'Q' )
-            return -1;
-        else
-            return getSize();
-    }
+    do{
+    std::getline(std::cin, userInput);
+    std::stringstream numberStream(userInput);
+
+        if( !(numberStream >> size) ){
+            std::cout << strInvalidNumber << std::endl;
+            char anykey;
+            std::cin >> anykey;
+            if( anykey == 'q' || anykey == 'Q' ){
+                return -1;
+            }
+            std::cout << strBoardSize << std::endl << strBoardSizeRange << std::endl;
+        }
+        else if( size < labyrinth::boardMinSize || size > labyrinth::boardMaxSize ){
+            std::cout << expWrongSize << std::endl;
+        }
+        else if( !(size%2) ){
+            std::cout << expWrongEvenSize << std::endl;
+        }
+        else{
+            break;
+        }
+    } while(1);
 
     return size;
 }
@@ -51,10 +62,12 @@ int ClientHandler::getItemCount()
         std::cout << strInvalidNumber;
         char anykey;
         std::cin >> anykey;
-        if( anykey == 'q' || anykey == 'Q' )
+        if( anykey == 'q' || anykey == 'Q' ){
             return -1;
-        else
+        }
+        else{
             return getItemCount();
+        }
     }
 
     if( !(count == itemsSmall || count == itemsLarge )){
@@ -130,10 +143,12 @@ int ClientHandler::getPlayerCount()
         std::cout << strInvalidNumber;
         char anykey;
         std::cin >> anykey;
-        if( anykey == 'q' || anykey == 'Q' )
+        if( anykey == 'q' || anykey == 'Q' ){
             return -1;
-        else
+        }
+        else{
             return getPlayerCount();
+        }
     }
 
     if( count < minPlayers || count > maxPlayers) {
@@ -181,7 +196,41 @@ std::string ClientHandler::getGame()
     return "";
 }
 
+Game *ClientHandler::getNewGame()
+{
+    Game *newGame {nullptr};
+    int size {0};
+    int itemCount {0};
+    int playerCount {0};
+
+    size = getSize();
+    if(size < 0){
+        return nullptr;
+    }
+    itemCount = getItemCount();
+    if(itemCount < 0){
+        return nullptr;
+    }
+    playerCount = getPlayerCount();
+    if(playerCount < 0){
+        return nullptr;
+    }
+
+    newGame = new Game(size, playerCount, itemCount);
+
+    for(int i = 0; i < playerCount; i++){
+        newGame->addPlayer(getPlayerName(newGame->getPlayers()));
+    }
+
+    return newGame;
+}
+
 int ClientHandler::getShift(const int size, int &shiftNum, int &direction)
 {
-    return 0;
+    char mode = getShiftMode();
+    if(!( mode == 'r' || mode == 'R' || mode == 'c' || mode == 'C' ))
+        return 0;
+    shiftNum = getShiftNum(size, mode);
+    direction = getShiftDirection(mode == row);
+    return 1;
 }

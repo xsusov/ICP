@@ -24,7 +24,7 @@ public:
     bool finish();
     static Game *loadGame(std::string savegame);
     int shift(const int num, const int direction);
-    int move(const int direction);
+    bool move(const int direction);
     bool turnEnd();
 
 private:

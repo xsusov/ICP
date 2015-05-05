@@ -18,6 +18,7 @@ public:
     void setUpItems(std::vector<GameItem *> &items);
     void setUpPlayers(std::vector<Player*> &players);
     BoardField *getField( const int posX, const int posY ) const;
+    BoardField *getFreeField() const {return freeField;}
     BoardField *getNeighbour(const BoardField &from, const int direction ) const;
     inline int pos(const int x, const int y) const {return y * size + x;}
     inline bool isCorner(const int pos);

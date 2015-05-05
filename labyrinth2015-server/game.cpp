@@ -12,6 +12,7 @@ Game::Game()
 
 Game::Game(const std::size_t size, const int playerCount, const int itemCount )
     : round{0},
+      turn{0},
       currentPlayer{nullptr},
       board{GameBoard( size )}
 {
@@ -57,8 +58,9 @@ std::string Game::getRoundHeader()
 {
     std::stringstream header;
 
-    header << strRound << round << std::endl << currentPlayer->getName() << strTurn << std::endl;
-    header << strQuest << currentPlayer->getQuest() << std::endl;
+    header << strRound << round % (int)players.size() << std::endl << currentPlayer->getName() << strTurn << std::endl
+           << strFigure << currentPlayer->getFigure() << " " << strScore <<  currentPlayer->getScore() << std::endl
+           << strQuest << currentPlayer->getQuest() << std::endl;
 
     return header.str();
 }
@@ -97,12 +99,12 @@ std::string Game::getRoundStr()
 
 std::string Game::getBoardStr()
 {
-    return "";
+    return board.getStr();
 }
 
 std::string Game::getFreeFieldString()
 {
-    return "";
+    return board.getFreeField()->getStr();
 }
 
 bool Game::finish()
@@ -120,12 +122,20 @@ int Game::shift(const int num, const int direction)
     board.shift(num, direction);
     /// @todo: check for last move undo
     ///
-    return 0;
+    return 1;
 }
 
-int Game::move(const int direction)
+bool Game::move(const int direction)
 {
-    return board.movePlayer(currentPlayer, direction);
+    if(!board.movePlayer(currentPlayer, direction)){
+        return false;
+    }
+
+    if(currentPlayer->pickupItem()){
+        discardpile.push(currentPlayer->getCard());
+        currentPlayer->dropCard();
+    }
+    return true;
 }
 
 bool Game::turnEnd()

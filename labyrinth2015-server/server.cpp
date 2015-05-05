@@ -33,42 +33,35 @@ using namespace labyrinth;
 
 int cliGame()
 {
-    int size {0};
-    int itemCount {0};
-    int playerCount {0};
+    /// MVC:
+    Game *game {nullptr};       /// MODEL
+    ViewerCli view;             /// VIEW
+    ClientHandler controller;   /// CONTROLLER
+
     std::string gameName {""};
-    /// MVC
-    /// MODEL
-    Game *game {nullptr};
-    /// VIEW
-    ViewerCli view;
-    /// CONTROLLER
-    ClientHandler controller;
-
-
-    /// controler->getGame();
     if((gameName = controller.getGame()).empty()){
-        size = controller.getSize();
-        itemCount = controller.getItemCount();
-        playerCount = controller.getPlayerCount();
-        game = new Game(size, playerCount, itemCount);
-
-        for(int i = 0; i < playerCount; i++){
-            game->addPlayer(controller.getPlayerName(game->getPlayers()));
-        }
+        game = controller.getNewGame();
     }
     else{
         game = Game::loadGame(gameName);
     }
 
+    if( !game ){
+        return 0;
+    }
+
     try{
         int rotate;
         int shiftNum, direction;
+
+        game->setUp();
+
         do{
             /// start new round and use view to display it to player
             game->nextRound();
             view.drawHeader(game->getRoundHeader());
             view.drawBoard(game->getBoardStr());
+            view.drawField(game->getFreeFieldString());
 
             /// free field rotation before shifiting (can be skipped)
             while((rotate = controller.getRotate()) > 0){
@@ -77,14 +70,16 @@ int cliGame()
             }
 
             /// shifting row or column of gameboard (can be skipped)
-            if(controller.getShift(size, shiftNum, direction)){
+            if(controller.getShift(game->getBoard()->getSize(), shiftNum, direction)){
                 game->shift(shiftNum, direction);
                 view.drawBoard(game->getBoardStr());
+                view.drawField(game->getFreeFieldString());
             }
 
             /// movement
             while((direction = controller.getMoveDirection()) != stop){
                 if(!game->move(direction)){
+                    view.drawHeader(game->getRoundHeader());
                     view.drawWarnning(wrongDirection);
                     continue;
                 }
@@ -97,6 +92,7 @@ int cliGame()
 
         }while( !game->finish());
 
+        print_results(game->getPlayers()); // Results.
         ///view.drawResult();
     }
     catch(std::exception &ex){
@@ -126,7 +122,7 @@ int main()
     std::cout << labyrinth::welcome;
 
     /// terminal mode
-    ///return cliGame();
+    return cliGame();
 
 
 
