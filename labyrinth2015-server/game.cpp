@@ -29,3 +29,4 @@ void Game::nextRound()
     round++;
     currentPlayer = players[turn++ % (int)players.size()];
 }
+

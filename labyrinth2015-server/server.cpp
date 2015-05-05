@@ -121,15 +121,14 @@ int main()
         }
         else{
             int num = client->getShiftNum(newBoard->getSize(), shiftMode);
-            bool direction = client->getShiftDirection(shiftMode == 'r');
-            newBoard->shift(shiftMode, num, direction);
+            int direction = client->getShiftDirection(shiftMode == 'r');
+            newBoard->shift(num, direction);
         }
         newBoard->draw();
 
         int dir = client->getMoveDirection();
         while(dir != stop)
         {
-
             std::cout << dir << std::endl;
             if( !newBoard->movePlayer(player, dir)){
                 std::cout << "cant move in choosen direction" << std::endl;

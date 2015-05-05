@@ -1,10 +1,10 @@
 #ifndef VIEWER_H
 #define VIEWER_H
 
-class viewer
+class Viewer
 {
 public:
-    viewer();
+    Viewer();
 };
 
 #endif // VIEWER_H

@@ -18,7 +18,7 @@ public:
     int getRotate();
     char getShiftMode();
     int getShiftNum(const int size, char mode);
-    bool getShiftDirection(bool rowMode);
+    int getShiftDirection(bool rowMode);
     int getMoveDirection();
 
 private:

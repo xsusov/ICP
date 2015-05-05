@@ -190,26 +190,6 @@ void GameBoard::rotateFreeField(const int rotate)
     freeField->rotate(rotate);
 }
 
-void GameBoard::shiftColumn(const int col, const bool up)
-{
-    const int first { up ? col :  max * size + col };
-    const int last  { up ? max * size + col : col };
-    const int offset{ up ? size : -size };
-    const int direction{ up ? north : south };
-
-    shift( first, last, offset, direction, col, up ? max : 0);
-}
-
-void GameBoard::shiftRow(const int row, bool left )
-{
-    const int first { left ? row * size: row * size  + max };
-    const int last  { left ? row * size + max : row * size };
-    const int offset{ left ? 1 : -1 };
-    const int direction{ left ? west : east };
-
-    shift( first, last, offset, direction, left ? max : 0, row );
-}
-
 void GameBoard::shift(const int first, const int last, const int offset, const int direction, const int lastX, const int lastY )
 {
     BoardField *tmp = field[ first ];
@@ -226,9 +206,18 @@ void GameBoard::shift(const int first, const int last, const int offset, const i
 
 }
 
-void GameBoard::shift(const char shiftMode, const int num, const bool direction)
+void GameBoard::shift(const int num, const int direction)
 {
-    ( shiftMode == 'r') ? shiftRow(num, direction) : shiftColumn(num, direction);
+    switch( direction ){
+        case north:
+            return shift( num, max * size + num, size, north, num, max);
+        case east:
+            return shift( num * size  + max, num * size, -1, east, 0, num );
+        case south:
+            return shift( max * size + num, num, -size, south, num, 0);
+        case west:
+            return shift( num * size, num * size + max , 1, west, max, num );
+    }
 }
 
 bool GameBoard::isEdge(const int x, const int y) const

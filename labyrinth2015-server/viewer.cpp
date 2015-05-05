@@ -1,5 +1,5 @@
 #include "viewer.h"
 
-viewer::viewer()
+Viewer::Viewer()
 {
 }

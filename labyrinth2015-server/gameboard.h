@@ -22,10 +22,8 @@ public:
     inline bool isCorner(const int pos);
     bool isPathOpen(const int xFrom, const int yFrom, const int direction );
     void rotateFreeField(const int rotate);
-    void shiftColumn(const int row, const bool up = false);
-    void shiftRow(const int row, bool right = false);
     int getSize() {return size;}
-    void shift(const char shiftMode='r', const int num=0, const bool direction=false);
+    void shift(const int num=0, const int direction=0);
     void shift(const int first, const int last, const int offset, const int direction, const int lastX, const int lastY );
     bool movePlayer( Player *player, const int direction );
 private:
