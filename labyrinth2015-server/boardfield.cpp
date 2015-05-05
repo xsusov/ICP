@@ -165,7 +165,7 @@ void BoardField::updateDirection( const int direction )
                      return;
       case( south ): incPosY();
                      return;
-      case( west ):  decPosY();
+      case( west ):  decPosX();
                      return;
   }
 }
