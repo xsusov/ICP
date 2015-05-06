@@ -1,8 +1,14 @@
-#include "viewercli.h"
 #include <iostream>
+#include "viewercli.h"
+#include "strings.h"
 
 ViewerCli::ViewerCli()
 {
+}
+
+void ViewerCli::welcome()
+{
+    std::cout << labyrinth::welcome;
 }
 
 void ViewerCli::drawHeader(const std::string header)
@@ -23,4 +29,9 @@ void ViewerCli::drawField(const std::string fieldStr)
 void ViewerCli::drawWarnning(const std::string warrning)
 {
     std::cout << warrning << std::endl;
+}
+
+void ViewerCli::drawResults(std::vector<Player *> &players)
+{
+     print_results(players);
 }
