@@ -12,6 +12,7 @@
 using namespace std;
 
 #include <iostream>
+#include <fstream>
 #include <exception>
 /// Classes:
 #include "constants.h"
@@ -37,11 +38,18 @@ int cliGame()
     Game *game {nullptr};       /// MODEL
     ViewerCli view;             /// VIEW
     ClientHandler controller;   /// CONTROLLER
+    std::ofstream log;          /// LOG
+
+
+    log.open("labyrinth.log",  std::fstream::out | std::fstream::trunc );
+    if( !log.is_open() ){
+        std::cerr << "err opening log file" << std::endl;
+    }
 
     view.welcome();
     std::srand(time(NULL));
 
-    std::string gameName {""};
+    std::string gameName {""};    
     if((gameName = controller.getGame()).empty()){
         game = controller.getNewGame();
     }
@@ -92,6 +100,9 @@ int cliGame()
                     break;
                 }
             }
+
+            log << game->getRoundStr();
+            log.flush();
 
         }while( !game->finish());
 

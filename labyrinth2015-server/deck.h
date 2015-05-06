@@ -15,7 +15,7 @@ public:
     void addItems(std::vector<GameItem*> &vector);
     void push(Card*);
     Card* pop();
-
+    std::vector<Card*> &getCardStack() {return CardStack;}
 private:
     std::vector<Card*> CardStack;
 };

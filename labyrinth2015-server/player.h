@@ -28,6 +28,7 @@ public:
     void incScore();
     void placeOnField( BoardField *newField);
     bool pickupItem();
+    char getItem();
 
 private:
     static int count;

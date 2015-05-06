@@ -40,6 +40,11 @@ bool Player::pickupItem()
     return false;
 }
 
+char Player::getItem()
+{
+    return (card != nullptr ) ? card->getItem()->getFigure()  : '0';
+}
+
 bool myCompare(Player * i, Player * j)
 {
     return (i->getScore() < j->getScore());

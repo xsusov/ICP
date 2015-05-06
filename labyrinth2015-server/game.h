@@ -22,7 +22,7 @@ public:
     std::string getFreeFieldString();
     GameBoard *getBoard() {return &board;}
     bool finish();
-    static Game *loadGame(std::string savegame);
+    static Game *loadGame(const std::string savegame);
     int shift(const int num, const int direction);
     bool move(const int direction);
     bool turnEnd();
