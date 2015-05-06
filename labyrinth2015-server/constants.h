@@ -9,7 +9,7 @@ namespace labyrinth {
                     south,
                     west,
                     stop};
-
+    const int saveN = 6;
     const int directionCount = 4;
 
     inline int roundDirection( const int direction ){

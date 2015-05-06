@@ -34,7 +34,9 @@ strNumOORange = "Number out of range.",
 strTryAgain  = " number, try again",
 strFreeField = "Free boardfield:",
 strCredits = "xsusov01 & xbandz00\n 2015 - VUT FIT",
-strLoadGame = "Enter name of saved game:";
+strLoadGame = "Enter name of saved game:",
+strSaveGame = "Enter name for saving game:",
+strSave = "(or SAVE to save current game)";
 
 /// menu
 const std::string

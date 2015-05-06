@@ -24,6 +24,7 @@ public:
     int getMoveDirection();
     int mainMenu();
     std::string getGame();
+    std::string getSaveGameName();
     Game *getNewGame();
     virtual int getShift(const int size, int &shiftNum, int &direction);
 

@@ -24,6 +24,7 @@ public:
     GameBoard *getBoard() {return &board;}
     bool finish();
     static Game *loadGame(const std::string savegame);
+    bool saveGame(const std::string savegame);
     int shift(const int num, const int direction);
     bool move(const int direction);
     bool turnEnd();

@@ -71,6 +71,9 @@ int cliGame()
             game->nextRound();
         }
 
+        log << game->getRoundStr();
+        log.flush();
+
         while( true ){
             /// start new round and use view to display it to player
             view.drawHeader(game->getRoundHeader());
@@ -92,7 +95,11 @@ int cliGame()
 
             /// movement
             while((direction = controller.getMoveDirection()) != stop){
-                if(!game->move(direction)){
+                if(direction == saveN){
+                    gameName = controller.getSaveGameName();
+                    game->saveGame(gameName);
+                }
+                else if(!game->move(direction)){
                     view.drawHeader(game->getRoundHeader());
                     view.drawWarnning(wrongDirection);
                     continue;

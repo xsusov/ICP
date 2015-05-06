@@ -168,14 +168,13 @@ Game *Game::loadGame(const std::string savegame)
     save.open( savegame, std::ifstream::in );
 
     std::ofstream newLog;
-    newLog.open("labyrinth2.log",  std::fstream::out | std::fstream::trunc );
+    newLog.open(logfile,  std::fstream::out | std::fstream::trunc );
 
     while( std::getline(save, round) ){
         newLog << round << std::endl;
-        newLog.flush();
         lastround = round;
+        newLog.flush();
     }
-
 
     std::cout << "Loaded: " << lastround << std::endl;
     std::cout.flush();
@@ -292,6 +291,26 @@ Game *Game::loadGame(const std::string savegame)
     ///loadedGame->setUp();
 
     return loadedGame;
+}
+
+bool Game::saveGame(const std::string savegame)
+{
+    std::string round {""};
+    std::ifstream log;
+    log.open(logfile, std::ifstream::in );
+
+    std::ofstream save;
+    save.open(savegame,  std::fstream::out | std::fstream::trunc );
+    if(!save.is_open()){
+        return false;
+    }
+
+    while(std::getline(log, round)){
+        save << round << std::endl;
+        save.flush();
+    }
+
+    return true;
 }
 
 int Game::shift(const int num, const int direction)

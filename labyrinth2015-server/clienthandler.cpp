@@ -180,14 +180,26 @@ std::string ClientHandler::getPlayerName(const std::vector<Player *> &players)
 
 int ClientHandler::getMoveDirection()
 {
-    char direction = 0;
-    std::cout << strSelectMoveDirection << std::endl;
+    std::string direction;
+    std::cout << strSelectMoveDirection << std::endl << strSave << std::endl;
+
+
+    if(!std::cin){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+    }
+    //std::getline(std::cin, direction);
     std::cin >> direction;
-    if (direction == 'W' || direction == 'w') return north;
-    else if (direction == 'S' || direction == 's') return south;
-    else if (direction == 'A' || direction == 'a') return west;
-    else if (direction == 'D' || direction == 'd') return east;
-    else if (direction == 'E' || direction == 'e' || direction == '0' ) return stop;
+   // std::cin.clear();
+    //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+
+    if (direction == "W" || direction == "w") return north;
+    else if (direction == "S" || direction == "s") return south;
+    else if (direction == "A" || direction == "a") return west;
+    else if (direction == "D" || direction == "d") return east;
+    else if (direction == "E" || direction == "e" || direction == "0" ) return stop;
+    else if (direction == "U" || direction == "SAVE" || direction == "save" ) return saveN;
 
     std::cout << strInvalidMove << std::endl;
     return getMoveDirection();
@@ -207,8 +219,6 @@ int ClientHandler::mainMenu()
     return option;
 }
 
-
-
 std::string ClientHandler::getGame()
 {
     std::string savegame {newGame};
@@ -227,6 +237,17 @@ std::string ClientHandler::getGame()
     }
 
     return newGame;
+}
+
+std::string ClientHandler::getSaveGameName()
+{
+    std::string savegame {newGame};
+    std::cout << strSaveGame << std::endl;
+
+    ///std::cin.clear();
+    //std::getline(std::cin, savegame);
+    std::cin >> savegame;
+    return savegame;
 }
 
 Game *ClientHandler::getNewGame()
