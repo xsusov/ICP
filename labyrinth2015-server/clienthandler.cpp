@@ -6,6 +6,7 @@
 #include "player.h"
 #include "constants.h"
 #include "strings.h"
+#include <limits>
 
 using namespace labyrinth;
 
@@ -24,9 +25,11 @@ int ClientHandler::getSize()
 {
     std::cout << strBoardSize << std::endl << strBoardSizeRange << std::endl;
     int size ;
+    std::cin.clear();
+    fflush(stdin);
 
     do{
-    std::getline(std::cin, userInput);
+    std::cin >> userInput;
     std::stringstream numberStream(userInput);
 
         if( !(numberStream >> size) ){
@@ -193,6 +196,27 @@ int ClientHandler::getMoveDirection()
 
 std::string ClientHandler::getGame()
 {
+    std::cout << "1: Start new game" << std::endl
+              << "2: Load game" << std::endl
+              << "3: Credits" << std::endl
+              << "4: Exit" << std::endl;
+    int option;
+
+    std::cin >> option;
+    std::string savegame {""};
+    switch( option ){
+        case 1:
+            return "";
+        case 2:
+            std::cin >> savegame;
+            return savegame;
+        case 3:
+            std::cout << "xsusov01 & xbandz00" << std::endl;
+            return getGame();
+        case 4:
+            exit(0);
+    }
+
     return "";
 }
 

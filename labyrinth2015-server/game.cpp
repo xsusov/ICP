@@ -13,7 +13,6 @@ Game::Game()
 
 Game::Game(const std::size_t size, const int playerCount, const int itemCount )
     : round{0},
-      turn{0},
       currentPlayer{nullptr},
       board{GameBoard( size )}
 {
@@ -47,8 +46,7 @@ void Game::setUp()
 
 void Game::nextRound()
 {
-    round++;
-    currentPlayer = players[turn++ % (int)players.size()];
+    currentPlayer = players[round++ % (int)players.size()];
 
     if( currentPlayer->getCard() == nullptr ){
         currentPlayer->drawCard(deck);
@@ -72,15 +70,16 @@ std::string Game::getRoundStr()
     ss << logEndOfRound;
     /// ROUND
     ss << round << logD;
-    /// TURN
-    ss << turn << logD;
-    /// ITEMS
-    ///
 
+    /// SIZE
+    ss << (int)board.getSize() << logD;
+
+    /// ITEMS
     ss << (int)items.size() << logD;
 
     /// PLAYERS COUNT
     ss << (int)players.size() << logD;
+
     /// PLAYERS INFO
     for( Player* p : players ){
         ss << p->getName() << logD
@@ -103,8 +102,6 @@ std::string Game::getRoundStr()
         ss << c->getItem()->getFigure();
     }
 
-    /// GAMEBOARD
-    ss << (int)board.getSize() << logD;
     /// BOARD FIELDS
     BoardField *field;
     char itFig;
@@ -186,10 +183,86 @@ Game *Game::loadGame(const std::string savegame)
 
 
     std::cout << "Loaded: " << lastround << std::endl;
-
     std::cout.flush();
 
-    return nullptr;///new Game();
+
+    /// example:
+    /// ###5;5;12;2;ho;@;0;b;0;3;po;&;0;k;4;2;10;iajfehlgdc0;5;6c60e0a0c05gefal305d7e30dk50db90b0cib09h30djb090906a;
+    /// now fun with parsing
+    /*
+    ss << logEndOfRound;
+    /// ROUND
+    ss << round << logD;
+    /// TURN
+    ss << turn << logD;
+    /// ITEMS
+    ss << (int)items.size() << logD;
+    */
+
+    if(!(lastround.substr(0,3) != logEndOfRound)){
+        throw brokenSave;
+    }
+
+    int pos = lastround.find_first_of(logD);
+    int pos2;
+    /// get size
+    std::string token;
+    token = lastround.substr(4, 4 - pos);
+    pos += token.length();
+
+    std::stringstream ss;
+    int size;
+    ss << token;
+    if( !(ss >> size)){
+        throw brokenSave;
+    }
+
+    ss.str() = {""};
+
+    int roundN;
+    int itemCount;
+
+    int playerCount;
+
+    pos++;
+    pos2 = lastround.find(logD, pos);
+    token = lastround.substr(pos, pos2 - pos);
+    ss << token;
+    if( !(ss >> roundN)){
+        throw brokenSave;
+    }
+    ss.str() = {""};
+    pos++;
+    pos2 = lastround.find(logD, pos);
+    token = lastround.substr(pos, pos2 - pos);
+    ss << token;
+    if( !(ss >> itemCount)){
+        throw brokenSave;
+    }
+    ss.str() = {""};
+    pos++;
+    pos2 = lastround.find(logD, pos);
+    token = lastround.substr(pos, pos2 - pos);
+    ss << token;
+    if( !(ss >> playerCount)){
+        throw brokenSave;
+    }
+    ss.str() = {""};
+
+    /* check */
+    std::cout << "round: " << roundN << "size: " << size << "itemcount: " << itemCount << "playerCount: " << playerCount << std::endl;
+
+    Game *loadedGame = nullptr;
+    try{
+        loadedGame = new Game( size, playerCount, itemCount );
+        loadedGame->setRound(roundN);
+    }
+    catch(std::exception &ex){
+        std::cerr << ex.what() << std::endl;
+        loadedGame = nullptr;
+    }
+
+    return loadedGame;
 }
 
 int Game::shift(const int num, const int direction)

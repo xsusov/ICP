@@ -37,6 +37,7 @@ const std::string wrongDirection =  "can't move in choosen direction";
 
 const char* const expWrongSize = "Wrong board size. Please, select size in range from 5 to 11.";
 const char* const expWrongEvenSize = "Wrong board size. Board size oughts to be odd number.";
+const char* const brokenSave = "Save game file corrupted.";
 
 /// log strings:
 const char logD = ';';

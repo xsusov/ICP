@@ -26,10 +26,10 @@ public:
     int shift(const int num, const int direction);
     bool move(const int direction);
     bool turnEnd();
+    void setRound(const int newRound) {round = newRound;}
 
 private:
     int round;
-    int turn;
     Player *currentPlayer;
     int winScore;
     GameBoard board;
