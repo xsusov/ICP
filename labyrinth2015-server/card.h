@@ -7,7 +7,7 @@
 class Card
 {
 public:
-    Card(GameItem * ptr, std::string message);
+    Card(GameItem * ptr, const std::string message);
     const std::string getText() {return text;}
     GameItem *getItem() {return item;}
 private:

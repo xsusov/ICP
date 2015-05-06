@@ -7,7 +7,8 @@ int Player::count = 0;
 Player::Player( const std::string playerName )
     : name{ playerName },
       score { 0 },
-      figure { labyrinth::playerFigure[count++] }
+      figure { labyrinth::playerFigure[count++] },
+      card{nullptr}
 {
 }
 
@@ -22,6 +23,11 @@ Player::Player( const std::string playerName, const char figure, const int score
 void Player::drawCard(Deck &deck)
 {
     card = deck.pop();
+}
+
+std::string Player::getQuest()
+{
+    return ((card != nullptr ) ? card->getText() : "");
 }
 
 void Player::incScore()

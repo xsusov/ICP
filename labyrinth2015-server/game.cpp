@@ -1,5 +1,6 @@
 #include <fstream>
 #include <sstream>
+#include <math.h>
 #include "game.h"
 #include "strings.h"
 
@@ -18,8 +19,8 @@ Game::Game(const std::size_t size, const int playerCount, const int itemCount )
 {
     players.reserve(playerCount);
     GameItem::fillVector(items, itemCount);
-    deck = Deck(items);
-    discardpile = Deck();
+    deck = new Deck(items);
+    discardpile = new Deck();
     winScore = itemCount / playerCount;
 }
 
@@ -30,6 +31,9 @@ Game::~Game()
 
     for(auto i : items)
         delete i;
+
+    delete deck;
+    delete discardpile;
 }
 
 void Game::addPlayer(const std::string playerName)
@@ -59,15 +63,14 @@ void Game::nextRound()
     currentPlayer = players[round++ % (int)players.size()];
 
     if( currentPlayer->getCard() == nullptr ){
-        currentPlayer->drawCard(deck);
+        currentPlayer->drawCard(*deck);
     }
 }
 
 std::string Game::getRoundHeader()
 {
     std::stringstream header;
-
-    header << strRound << (round / (int)players.size()) + 1 << std::endl << currentPlayer->getName() << strTurn << std::endl
+    header << strRound << floor((float)round / (int)players.size()*0.99) + 1 << std::endl << currentPlayer->getName() << strTurn << std::endl
            << strFigure << currentPlayer->getFigure() << " " << strScore <<  currentPlayer->getScore() << std::endl
            << strQuest << currentPlayer->getQuest() << std::endl;
 
@@ -91,24 +94,21 @@ std::string Game::getRoundStr()
     ss << (int)players.size() << logD;
 
     /// DECK
-    ss << (int)deck.size() << logD;
-    for( Card* c : deck.getCardStack() ){
+    ss << (int)deck->size() << logD;
+    for( Card* c : deck->getCardStack() ){
         ss << c->getItem()->getFigure();
     }
-
     ss << logD;
 
     /// DISCARD PILE
-    ss << (int)discardpile.size() << logD;
-    for( Card* c : discardpile.getCardStack() ){
+    ss << (int)discardpile->size() << logD;
+    for( Card* c : discardpile->getCardStack() ){
         ss << c->getItem()->getFigure();
     }
-
     ss << logD;
 
     /// BOARD FIELDS
     BoardField *field;
-
     for( int y = 0; y < (int)board.getSize(); y++ ){
         for( int x = 0; x < (int)board.getSize(); x++ ){
             field = board.getField(x, y);
@@ -131,7 +131,6 @@ std::string Game::getRoundStr()
     }
 
     ss << std::endl;
-
     return ss.str();
 }
 
@@ -201,11 +200,6 @@ Game *Game::loadGame(const std::string savegame)
     std::stringstream ss(lastround);
     std::string token;
 
-    /* parse csv check
-    while(std::getline(ss, token, logD))
-        std::cout << token << std::endl;
-    */
-
     /// get round
     std::getline(ss, token, logD);
     roundN = std::stoi(token.substr(3));
@@ -222,10 +216,7 @@ Game *Game::loadGame(const std::string savegame)
     std::getline(ss, token, logD);
     playerCount = std::stoi(token);
 
-    /* check */
-    //std::cout << "round: " << roundN << "size: " << size << "itemcount: " << itemCount << "playerCount: " << playerCount << std::endl;
-
-    Game *loadedGame = nullptr;
+    Game *loadedGame {nullptr};
     try{
         loadedGame = new Game( size, playerCount, itemCount );
         loadedGame->setRound(roundN);
@@ -240,20 +231,20 @@ Game *Game::loadGame(const std::string savegame)
     len = std::stoi(token);
     std::getline(ss, token, logD);
     GameItem *newItem {nullptr};
-    loadedGame->deck.clear();
+    loadedGame->deck->clear();
     for( int i = 0; i < len; i++){
         newItem = loadedGame->getItemByName(token.at(i));
-        loadedGame->deck.push(new Card(newItem, newItem->getName()));
+        loadedGame->deck->push(new Card(newItem, newItem->getName()));
     }
 
     /// get Discard
     std::getline(ss, token, logD);
     len = std::stoi(token);
     std::getline(ss, token, logD);
-    loadedGame->discardpile.clear();
+    loadedGame->discardpile->clear();
     for( int i = 0; i < len; i++){
         newItem = loadedGame->getItemByName(token.at(i));
-        loadedGame->discardpile.push(new Card(newItem, newItem->getName()));
+        loadedGame->discardpile->push(new Card(newItem, newItem->getName()));
     }
 
     /// get and setup boardfields
@@ -295,7 +286,7 @@ Game *Game::loadGame(const std::string savegame)
 
     loadedGame->currentPlayer = loadedGame->players[roundN % playerCount];
     if( loadedGame->currentPlayer->getCard() == nullptr ){
-        loadedGame->currentPlayer->drawCard(loadedGame->deck);
+        loadedGame->currentPlayer->drawCard(*(loadedGame->deck));
     }
     ///default gameplay
     ///loadedGame->setUp();
@@ -318,7 +309,7 @@ bool Game::move(const int direction)
     }
 
     if(currentPlayer->pickupItem()){
-        discardpile.push(currentPlayer->getCard());
+        discardpile->push(currentPlayer->getCard());
         currentPlayer->dropCard();
     }
     return true;

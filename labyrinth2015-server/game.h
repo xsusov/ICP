@@ -37,8 +37,8 @@ private:
     GameBoard board;
     std::vector<Player*> players;
     std::vector<GameItem*> items;
-    Deck deck;
-    Deck discardpile;
+    Deck *deck;
+    Deck *discardpile;
 };
 
 #endif // GAME_H

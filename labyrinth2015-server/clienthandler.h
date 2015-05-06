@@ -22,6 +22,7 @@ public:
     int getShiftNum(const int size, char mode);
     int getShiftDirection(bool rowMode);
     int getMoveDirection();
+    int mainMenu();
     std::string getGame();
     Game *getNewGame();
     virtual int getShift(const int size, int &shiftNum, int &direction);

@@ -171,17 +171,17 @@ BoardField *GameBoard::makeRandBoardfield(const int x, const int y, const int ra
 BoardField *GameBoard::makeTargetBoardField(const int x, const int y, const int logNum, GameItem *item)
 {
     BoardField *newField {nullptr};
-    if( logNum >= 6){
+    if( logNum >= 6 ){
         newField = new TBoardField(x, y, item);
-        newField->rotate( logNum - 6);
+        newField->rotate(logNum - 6);
     }
-    else if(logNum >= 2){
+    else if( logNum >= 2 ){
         newField = new LBoardField(x, y, item);
-        newField->rotate( logNum - 2);
+        newField->rotate(logNum - 2);
     }
     else{
         newField = new IBoardField(x, y, item);
-        newField->rotate( logNum );
+        newField->rotate(logNum );
     }
 
     return newField;

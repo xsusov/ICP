@@ -16,6 +16,7 @@ public:
     Player(const std::string playerName );
     Player(const std::string playerName, const char figure, const int score, Card* card = nullptr );
     void drawCard(Deck &deck);
+
     //Getters.
     Card * getCard() {return card;}
     int getScore() {return score;}
@@ -23,13 +24,14 @@ public:
     char getFigure() {return figure;}
     std::string getName() {return name;}
     BoardField *getCurField() {return curField;}
-    std::string getQuest() {return (card != nullptr ? card->getText() : "");}
-    void dropCard() {card=nullptr;}
+    std::string getQuest();
+    char getItem();
+
     //Setters.
     void incScore();
-    void placeOnField( BoardField *newField);
+    void placeOnField(BoardField *newField);
     bool pickupItem();
-    char getItem();
+    void dropCard() {card=nullptr;}
 
 private:
     static int count;

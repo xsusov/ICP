@@ -105,14 +105,13 @@ int ClientHandler::getShiftNum(const int size, char mode)
 {
     int num;
     std::cout << strShiftChoosePre << getShiftStr(mode) << strShiftChoosePost << std::endl;
-    std::cout << "1-" << size << std::endl;
+    std::cout << 2 << "-" << size - 1 << std::endl;
     std::cin >> userInput;
     std::stringstream numberStream(userInput);
     if( !(numberStream >> num)){
         std::cout << "wrong " << getShiftStr(mode) << strTryAgain << std::endl;
         return getShiftNum(size, mode);
     }
-    // if( num < 1 || num > size ){//|| num % 2){ <--- for player movement testing
     if( num < 1 || num > size || num % 2){
         std::cout << "wrong " << getShiftStr(mode) << strTryAgain << std::endl;
         return getShiftNum(size, mode);
@@ -182,43 +181,52 @@ std::string ClientHandler::getPlayerName(const std::vector<Player *> &players)
 int ClientHandler::getMoveDirection()
 {
     char direction = 0;
-    std::cout << "Choose move direction, stop with E. (W↑ S↓ A← D→)" << std::endl;
+    std::cout << strSelectMoveDirection << std::endl;
     std::cin >> direction;
     if (direction == 'W' || direction == 'w') return north;
     else if (direction == 'S' || direction == 's') return south;
     else if (direction == 'A' || direction == 'a') return west;
     else if (direction == 'D' || direction == 'd') return east;
-    else if (direction == 'E' || direction == 'e') return stop;
+    else if (direction == 'E' || direction == 'e' || direction == '0' ) return stop;
 
-    std::cout << "Invalid direction, try again." << std::endl;
+    std::cout << strInvalidMove << std::endl;
     return getMoveDirection();
 }
 
-std::string ClientHandler::getGame()
+int ClientHandler::mainMenu()
 {
-    std::cout << "1: Start new game" << std::endl
-              << "2: Load game" << std::endl
-              << "3: Credits" << std::endl
-              << "4: Exit" << std::endl;
     int option;
 
+    std::cout << strMenuNew << std::endl
+              << strMenuLoad << std::endl
+              << strMenuCredits << std::endl
+              << strMenuExit << std::endl;
+
+    std::cin.clear();
     std::cin >> option;
-    std::string savegame {""};
-    switch( option ){
+    return option;
+}
+
+
+
+std::string ClientHandler::getGame()
+{
+    std::string savegame {newGame};
+    switch( mainMenu() ){
         case 1:
-            return "";
+            return newGame;
         case 2:
-            std::cout << "Enter name of saved game:" << std::endl;
+            std::cout << strLoadGame << std::endl;
             std::cin >> savegame;
             return savegame;
         case 3:
-            std::cout << "xsusov01 & xbandz00" << std::endl;
+            std::cout << strCredits << std::endl;
             return getGame();
         case 4:
             exit(0);
     }
 
-    return "";
+    return newGame;
 }
 
 Game *ClientHandler::getNewGame()

@@ -50,6 +50,9 @@ namespace labyrinth {
     inline const std::string getShiftStr(const char mode){
         return (mode == row ? rowStr : columnStr);
     }
+
+    const std::string newGame = "";
+    const std::string logfile = "labyrinth.log";
 }
 
 #endif // CONSTANTS_H

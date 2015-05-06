@@ -41,9 +41,9 @@ int cliGame()
     std::ofstream log;          /// LOG
     bool loaded {false};
 
-    log.open("labyrinth.log",  std::fstream::out | std::fstream::trunc );
+    log.open(logfile,  std::fstream::out | std::fstream::trunc );
     if( !log.is_open() ){
-        std::cerr << "err opening log file" << std::endl;
+        std::cerr << errLogOpen << std::endl;
     }
 
     view.welcome();
@@ -73,7 +73,6 @@ int cliGame()
 
         while( true ){
             /// start new round and use view to display it to player
-
             view.drawHeader(game->getRoundHeader());
             view.drawBoard(game->getBoardStr());
             view.drawField(game->getFreeFieldString());

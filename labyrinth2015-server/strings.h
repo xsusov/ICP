@@ -25,15 +25,26 @@ strShiftMode = "Select shift mode:\nr - rows shift\nc - columns shift\nother - s
 strShiftChoosePre = "Which (even) ",
 strShiftChoosePost = " do you chose to shift:",
 strSelectDirection = "Select shift direction: ",
+strSelectMoveDirection = "Choose move direction, stop with E. (W↑ S↓ A← D→)",
+strInvalidMove = "Invalid direction, try again.",
 strChooseName = "Choose your name:",
 strUniqueName = "Player name has to be unique.",
 strSelectPlayerNum = "Select number of players:\n2, 3 or 4",
 strNumOORange = "Number out of range.",
 strTryAgain  = " number, try again",
-strFreeField = "Free boardfield:";
+strFreeField = "Free boardfield:",
+strCredits = "xsusov01 & xbandz00\n 2015 - VUT FIT",
+strLoadGame = "Enter name of saved game:";
 
+/// menu
+const std::string
+strMenuNew = "1: Start new game",
+strMenuLoad = "2: Load game",
+strMenuCredits = "3: Credits",
+strMenuExit = "4: Exit";
 
-const std::string wrongDirection =  "can't move in choosen direction";
+const std::string wrongDirection =  "can't move in choosen direction",
+errLogOpen = "err opening log file";
 
 const char* const expWrongSize = "Wrong board size. Please, select size in range from 5 to 11.";
 const char* const expWrongEvenSize = "Wrong board size. Board size oughts to be odd number.";

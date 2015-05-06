@@ -38,8 +38,8 @@ void BoardField::draw()
 std::string BoardField::getStr()
 {
     std::string fieldStr;
-    for(int i = 0; i < 5; i++){
-        appendRow(i, fieldStr);
+    for(int i = 0; i <= maxRow; i++){
+        appendRow(i, fieldStr );
         fieldStr += '\n';
     }
 
@@ -56,28 +56,9 @@ char BoardField::drawItem()
     return item != nullptr ? item->getFigure() : opened;
 }
 
-void BoardField::printRow(const int row)
+char BoardField::getLogItem()
 {
-    if( row < minRow || row > maxRow )
-        return;
-
-    switch(row){
-        case(0):
-            std::cout << closed << closed << getPath(north) << closed << closed;
-            break;
-        case(1):
-            std::cout << closed << getPlayerSlot(north) << opened << getPlayerSlot(east) << closed;
-            break;
-        case(2):
-            std::cout << getPath(west) << opened << drawItem() << opened << getPath(east);
-            break;
-        case(3):
-            std::cout << closed << getPlayerSlot(west) << opened << getPlayerSlot(south) << closed;
-            break;
-        case(4):
-            std::cout << closed << closed << getPath(south) << closed << closed;
-            break;
-    };
+    return item != nullptr ? item->getFigure() : '0';
 }
 
 void BoardField::appendRow(const int row, std::string& str)
@@ -134,24 +115,24 @@ void BoardField::rotate(int x)
     std::rotate( path.rbegin(), path.rbegin() + x, path.rend());
 }
 
-void BoardField::addPlayer(Player *player)
+void BoardField::setPlayer(Player *oldPlayer, Player *newPlayer)
 {
     for( int i = 0; i < maxPlayers; i++){
-        if( playerSlot[i] == nullptr ){
-            playerSlot[i] = player;
+        if( playerSlot[i] == oldPlayer ){
+            playerSlot[i] = newPlayer;
             return;
         }
     }
 }
 
+void BoardField::addPlayer(Player *player)
+{
+    setPlayer(nullptr, player);
+}
+
 void BoardField::removePlayer(Player *player)
 {
-    for( int i = 0; i < maxPlayers; i++){
-        if( playerSlot[i] == player ){
-            playerSlot[i] = nullptr;
-            return;
-        }
-    }
+    setPlayer(player, nullptr);
 }
 
 void BoardField::updateDirection( const int direction )
@@ -166,9 +147,4 @@ void BoardField::updateDirection( const int direction )
       case( west ):  decPosX();
                      return;
   }
-}
-
-char BoardField::getLogItem()
-{
-    return item != nullptr ? item->getFigure() : '0';
 }
