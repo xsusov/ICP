@@ -115,7 +115,7 @@ int cliGame()
 
     delete game;
 
-    return 0;
+    return cliGame();
 }
 
 int main()

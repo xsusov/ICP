@@ -27,6 +27,8 @@ public:
     bool move(const int direction);
     bool turnEnd();
     void setRound(const int newRound) {round = newRound;}
+    int getNumFromSave(int pos, const std::string& savestring );
+    GameItem* getItemByName(const char figure);
 
 private:
     int round;
