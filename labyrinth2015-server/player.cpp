@@ -11,6 +11,14 @@ Player::Player( const std::string playerName )
 {
 }
 
+Player::Player( const std::string playerName, const char figure, const int score, Card* card )
+    : name{ playerName },
+      score { score },
+      figure { figure },
+      card {card}
+{
+}
+
 void Player::drawCard(Deck &deck)
 {
     card = deck.pop();

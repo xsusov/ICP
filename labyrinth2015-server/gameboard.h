@@ -18,7 +18,9 @@ public:
     void setUpItems(std::vector<GameItem *> &items);
     void setUpPlayers(std::vector<Player*> &players);
     BoardField *getField( const int posX, const int posY ) const;
+    void setField( const int posX, const int posY, BoardField *newField);
     BoardField *getFreeField() const {return freeField;}
+    void setFreeField(BoardField *newFreeField) {freeField = newFreeField;}
     BoardField *getNeighbour(const BoardField &from, const int direction ) const;
     inline int pos(const int x, const int y) const {return y * size + x;}
     inline bool isCorner(const int pos);
@@ -28,6 +30,7 @@ public:
     void shift(const int num=0, const int direction=0);
     void shift(const int first, const int last, const int offset, const int direction, const int lastX, const int lastY );
     bool movePlayer( Player *player, const int direction );
+    static BoardField* makeTargetBoardField(const int x, const int y, const int logNum, GameItem *item = nullptr );
 private:
     const int size;
     const int max;
@@ -39,6 +42,7 @@ private:
     inline bool isEdgingDirection(const BoardField &from, const int direction ) const;
     inline static bool updateDirection( int &x, int &y, const int direction );
     static BoardField* makeRandBoardfield(const int x, const int y , const int randNum);
+
     bool isWalkable(BoardField *from, const int direction ) const;
 };
 

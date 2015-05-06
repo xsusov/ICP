@@ -7,8 +7,9 @@
 class LBoardField : public BoardField
 {
 public:
-    LBoardField(const int x,const int y );
-    void rotateInside( const int x, const int y, const int max );
+    LBoardField(const int x,const int y, GameItem *item = nullptr );
+    virtual void rotateInside( const int x, const int y, const int max );
+    virtual int getLogNum();
 };
 
 #endif // LBOARDFIELD_H

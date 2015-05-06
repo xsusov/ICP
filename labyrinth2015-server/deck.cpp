@@ -10,6 +10,18 @@ Deck::Deck()
 
 }
 
+Deck::~Deck()
+{
+    for( Card *card : CardStack ){
+        delete card;
+    }
+}
+
+void Deck::clear()
+{
+    CardStack.clear();
+}
+
 Deck::Deck(std::vector<GameItem*> &vector)
 {
     addItems(vector);

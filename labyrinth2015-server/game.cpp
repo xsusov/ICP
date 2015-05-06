@@ -37,6 +37,16 @@ void Game::addPlayer(const std::string playerName)
     players.push_back(new Player(playerName));
 }
 
+void Game::addPlayer(Player *newPlayer, const int x, const int y)
+{
+    players.push_back(newPlayer);
+    if( x >= 0 && x < board.getSize() && y >= 0 && y < board.getSize() ){
+        board.getField(x, y)->addPlayer(newPlayer);
+        newPlayer->placeOnField(board.getField(x, y));
+    }
+}
+
+
 void Game::setUp()
 {
     board.setUpFields();
@@ -98,47 +108,17 @@ std::string Game::getRoundStr()
 
     /// BOARD FIELDS
     BoardField *field;
-    char itFig;
-    int pathChar;
+
     for( int y = 0; y < (int)board.getSize(); y++ ){
         for( int x = 0; x < (int)board.getSize(); x++ ){
             field = board.getField(x, y);
-
             /// FIELDS PATH + ITEM
-            pathChar = 0;
-            for(int i = 0; i < 4; i++){
-                if( field->getPath(i) != closed ){
-                    pathChar += (1 << i);
-                }
-            }
-
-            ss << std::hex << pathChar;
-
-            itFig = field->drawItem();
-            if( itFig == ' '){
-                itFig = '0';
-            }
-            ss << itFig;
+            ss << field->getLogNum() << field->getLogItem();
         }
     }
 
     field = board.getFreeField();
-    pathChar = 0;
-    for(int i = 0; i < 4; i++){
-        if( field->getPath(i) != closed ){
-            pathChar += (1 << i);
-        }
-    }
-
-    ss << std::hex << pathChar;
-
-    itFig = field->drawItem();
-    if( itFig == ' '){
-        itFig = '0';
-    }
-
-    ss << itFig;
-    ss << logD;
+    ss << field->getLogNum() << field->getLogItem() << logD;
 
     /// PLAYERS INFO
     for( Player* p : players ){
@@ -168,12 +148,6 @@ std::string Game::getFreeFieldString()
 bool Game::finish()
 {
     return currentPlayer->getScore() >= winScore;
-}
-
-
-int Game::getNumFromSave(int pos, const std::string& savestring )
-{
-
 }
 
 GameItem *Game::getItemByName(const char figure)
@@ -219,8 +193,7 @@ Game *Game::loadGame(const std::string savegame)
 
     int roundN;
     int len;
-    int pos = lastround.find_first_of(logD);
-    int pos2;
+    int num;
     int size;
     int itemCount;
     int playerCount;
@@ -250,7 +223,7 @@ Game *Game::loadGame(const std::string savegame)
     playerCount = std::stoi(token);
 
     /* check */
-    std::cout << "round: " << roundN << "size: " << size << "itemcount: " << itemCount << "playerCount: " << playerCount << std::endl;
+    //std::cout << "round: " << roundN << "size: " << size << "itemcount: " << itemCount << "playerCount: " << playerCount << std::endl;
 
     Game *loadedGame = nullptr;
     try{
@@ -267,34 +240,65 @@ Game *Game::loadGame(const std::string savegame)
     len = std::stoi(token);
     std::getline(ss, token, logD);
     GameItem *newItem {nullptr};
+    loadedGame->deck.clear();
     for( int i = 0; i < len; i++){
         newItem = loadedGame->getItemByName(token.at(i));
-        loadedGame->deck.push(new Card(newItem, ""));
+        loadedGame->deck.push(new Card(newItem, newItem->getName()));
     }
 
     /// get Discard
     std::getline(ss, token, logD);
     len = std::stoi(token);
     std::getline(ss, token, logD);
+    loadedGame->discardpile.clear();
     for( int i = 0; i < len; i++){
         newItem = loadedGame->getItemByName(token.at(i));
-        loadedGame->discardpile.push(new Card(newItem, ""));
+        loadedGame->discardpile.push(new Card(newItem, newItem->getName()));
     }
 
     /// get and setup boardfields
-
-
-
-    /// players
-    ///
-    std::string playerName = "p";
-    for(int i = 0; i < playerCount; i++){
-        playerName += "ip";
-        loadedGame->addPlayer(playerName);
+    for( int y = 0; y < size; y++){
+        for( int x = 0; x < size; x++){
+            num = ss.get() - '0';
+            newItem = loadedGame->getItemByName(ss.get());
+            loadedGame->board.setField(x, y, GameBoard::makeTargetBoardField( x, y, num, newItem ) );
+        }
     }
 
-    /// default gameplay
-    loadedGame->setUp();
+    num = ss.get() - '0';
+    newItem = loadedGame->getItemByName(ss.get());
+    loadedGame->board.setFreeField( GameBoard::makeTargetBoardField( posFree, posFree, num, newItem ) );
+
+    ss.get();
+    /// players
+    char figure;
+    int score;
+    int x, y;
+    /// kok;@;0;k;1;6;
+    std::string playerName {""};
+    Player *newPlayer;
+    for(int i = 0; i < playerCount; i++){
+        std::getline(ss, playerName, logD);
+        figure = ss.get();
+        ss.get();
+        std::getline(ss, token, logD);
+        score = std::stoi(token);
+        newItem = loadedGame->getItemByName(ss.get());
+        ss.get();
+        std::getline(ss, token, logD);
+        x = std::stoi(token);
+        std::getline(ss, token, logD);
+        y = std::stoi(token);
+        newPlayer = new Player( playerName, figure, score, (newItem != nullptr ? new Card(newItem, newItem->getName()) : nullptr ) ) ;
+        loadedGame->addPlayer( newPlayer, x, y );
+    }
+
+    loadedGame->currentPlayer = loadedGame->players[roundN % playerCount];
+    if( loadedGame->currentPlayer->getCard() == nullptr ){
+        loadedGame->currentPlayer->drawCard(loadedGame->deck);
+    }
+    ///default gameplay
+    ///loadedGame->setUp();
 
     return loadedGame;
 }

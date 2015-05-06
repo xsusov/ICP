@@ -39,7 +39,7 @@ int cliGame()
     ViewerCli view;             /// VIEW
     ClientHandler controller;   /// CONTROLLER
     std::ofstream log;          /// LOG
-
+    bool loaded {false};
 
     log.open("labyrinth.log",  std::fstream::out | std::fstream::trunc );
     if( !log.is_open() ){
@@ -52,9 +52,11 @@ int cliGame()
     std::string gameName {""};    
     if((gameName = controller.getGame()).empty()){
         game = controller.getNewGame();
+        game->setUp();
     }
     else{
         game = Game::loadGame(gameName);
+        loaded = true;
     }
 
     if( !game ){
@@ -65,11 +67,13 @@ int cliGame()
         int rotate;
         int shiftNum, direction;
 
-        game->setUp();
-
-        do{
-            /// start new round and use view to display it to player
+        if( !loaded ){
             game->nextRound();
+        }
+
+        while( true ){
+            /// start new round and use view to display it to player
+
             view.drawHeader(game->getRoundHeader());
             view.drawBoard(game->getBoardStr());
             view.drawField(game->getFreeFieldString());
@@ -104,7 +108,12 @@ int cliGame()
             log << game->getRoundStr();
             log.flush();
 
-        }while( !game->finish());
+            if( game->finish()){
+                break;
+            }
+
+            game->nextRound();
+        }
 
         ///print_results(game->getPlayers()); // Results.
         view.drawResults(game->getPlayers());

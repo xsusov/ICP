@@ -208,6 +208,7 @@ std::string ClientHandler::getGame()
         case 1:
             return "";
         case 2:
+            std::cout << "Enter name of saved game:" << std::endl;
             std::cin >> savegame;
             return savegame;
         case 3:

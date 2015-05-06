@@ -7,8 +7,9 @@
 class IBoardField : public BoardField
 {
 public:
-    IBoardField(const int x,const int y);
-    void rotateInside( const int x, const int y, const int max );
+    IBoardField(const int x,const int y, GameItem *item = nullptr);
+    virtual void rotateInside( const int x, const int y, const int max );
+    virtual int getLogNum();
 };
 
 #endif // IBOARDFIELD_H

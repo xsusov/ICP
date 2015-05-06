@@ -14,6 +14,7 @@ class Player
 {
 public:
     Player(const std::string playerName );
+    Player(const std::string playerName, const char figure, const int score, Card* card = nullptr );
     void drawCard(Deck &deck);
     //Getters.
     Card * getCard() {return card;}

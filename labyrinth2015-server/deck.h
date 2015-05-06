@@ -10,6 +10,8 @@ class Deck
 
 public:
     Deck();
+    ~Deck();
+    void clear();
     Deck(std::vector<GameItem*> &vector);
     unsigned int size() {return CardStack.size();}
     void addItems(std::vector<GameItem*> &vector);

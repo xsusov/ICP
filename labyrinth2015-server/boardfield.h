@@ -43,7 +43,8 @@ public:
     void addPlayer(Player *player);
     void removePlayer(Player *player);
     void updateDirection( const int direction );
-
+    virtual int getLogNum() = 0;
+    char getLogItem();
 protected:
     int posX;
     int posY;

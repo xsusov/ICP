@@ -14,6 +14,7 @@ public:
     ~Game();
     std::vector<Player*> &getPlayers() {return players;}
     void addPlayer( const std::string playerName );
+    void addPlayer( Player *newPlayer, const int x = -1, const int y = -1 );
     void setUp();
     void nextRound();
     std::string getRoundHeader();
@@ -27,7 +28,6 @@ public:
     bool move(const int direction);
     bool turnEnd();
     void setRound(const int newRound) {round = newRound;}
-    int getNumFromSave(int pos, const std::string& savestring );
     GameItem* getItemByName(const char figure);
 
 private:

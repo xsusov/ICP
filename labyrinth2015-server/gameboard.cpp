@@ -149,18 +149,42 @@ void GameBoard::setUpPlayers(std::vector<Player *> &players)
     }
 }
 
+void GameBoard::setField(const int posX, const int posY, BoardField *newField)
+{
+    field[pos(posX, posY)] = newField;
+}
+
 BoardField *GameBoard::makeRandBoardfield(const int x, const int y, const int randNum)
 {
     switch(randNum % 3){
         case(0):
-            return new LBoardField(x,y);
+            return new LBoardField(x, y);
         case(1):
-            return new TBoardField(x,y);
+            return new TBoardField(x, y);
         case(2):
-            return new IBoardField(x,y);
+            return new IBoardField(x, y);
         default:
             return nullptr;
     }
+}
+
+BoardField *GameBoard::makeTargetBoardField(const int x, const int y, const int logNum, GameItem *item)
+{
+    BoardField *newField {nullptr};
+    if( logNum >= 6){
+        newField = new TBoardField(x, y, item);
+        newField->rotate( logNum - 6);
+    }
+    else if(logNum >= 2){
+        newField = new LBoardField(x, y, item);
+        newField->rotate( logNum - 2);
+    }
+    else{
+        newField = new IBoardField(x, y, item);
+        newField->rotate( logNum );
+    }
+
+    return newField;
 }
 
 

@@ -167,3 +167,8 @@ void BoardField::updateDirection( const int direction )
                      return;
   }
 }
+
+char BoardField::getLogItem()
+{
+    return item != nullptr ? item->getFigure() : '0';
+}
