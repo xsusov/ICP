@@ -10,6 +10,7 @@ namespace labyrinth {
                     west,
                     stop};
     const int saveN = 6;
+    const int undoN = 7;
     const int directionCount = 4;
 
     inline int roundDirection( const int direction ){
@@ -33,10 +34,12 @@ namespace labyrinth {
     const int itemsLarge = 24;
 
     const char playerFigure[4]{ '@', '&', '%', '!'};
+
     const char itemFigure[24]{'a', 'b', 'c', 'd', 'e', 'f',
                               'g', 'h', 'i', 'j', 'k', 'l',
                               'm', 'n', 'o', 'p', 'q', 's',
                               't', 'u', 'v', 'w', 'x', 'y'};
+
     const std::string itemNames[24]
                               {"a", "b", "c", "d", "e", "f",
                                "g", "h", "i", "j", "k", "l",

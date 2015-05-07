@@ -1,12 +1,16 @@
 #ifndef BOARDFIELD_H
 #define BOARDFIELD_H
-
+/// standard libraries
 #include <iostream>
 #include <vector>
+#include <algorithm>
+/// constants
+#include "constants.h"
+/// classes
 #include "gameobject.h"
 #include "gameitem.h"
 #include "player.h"
-#include "constants.h"
+
 
 // forward declaration of Player class
 class Player;

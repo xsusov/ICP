@@ -1,19 +1,21 @@
 /**
- * @project: LABYRINT 2015
+ * @project LABYRINTH2015
  * ICP project
- * @author: xsusov01, xbandz00
- * @file: server.c
- * @date: 2.3.2015
- * @brief: server side of labyrint application
+ * @author xsusov01
+ * @email  xsusov01@stud.fit.vutbr.cz
+ * @author xbandz00
+ * @email  xbandz00@stud.fit.vutbr.cz
+ * @file server.cpp
+ * @date 2015/05/10
+ * @brief main module of labryinth-cli
 */
-
-/// TDD - test first, enjoyment from pure coding later
-
-using namespace std;
-
+/// TDD - test first, enjoyment from pure coding later (jk)
+/// standard libraries
 #include <iostream>
 #include <fstream>
 #include <exception>
+#include <random>
+#include <ctime>
 /// Classes:
 #include "constants.h"
 #include "strings.h"
@@ -22,8 +24,6 @@ using namespace std;
 #include "gameboard.h"
 #include "gameitem.h"
 #include "deck.h"
-#include <random>
-#include <ctime>
 #include "game.h"
 #include "controller.h"
 #include "viewer.h"
@@ -31,46 +31,53 @@ using namespace std;
 
 using namespace labyrinth;
 
-
+/**
+ * @brief cliGame
+ *        implements model view controller interface for running game,
+ *        displaying it (on cout in Cli mode) and recieving user input (from cin in Cli mode)
+ * @return default itself in recursion, or exit by user or by error
+ */
 int cliGame()
 {
     /// MVC:
     Game *game {nullptr};       /// MODEL
     ViewerCli view;             /// VIEW
     ClientHandler controller;   /// CONTROLLER
-    std::ofstream log;          /// LOG
-    bool loaded {false};
 
+    std::srand(time(NULL));     /// srand for 'random' numbers generation seed
+
+    /// opens log for logging in progress of game
+    std::ofstream log;          /// LOG
     log.open(logfile,  std::fstream::out | std::fstream::trunc );
     if( !log.is_open() ){
         std::cerr << errLogOpen << std::endl;
     }
 
-    view.welcome();
-    std::srand(time(NULL));
-
-    std::string gameName {""};    
-    if((gameName = controller.getGame()).empty()){
-        game = controller.getNewGame();
-        game->setUp();
+    view.welcome();             /// welcome message from our game to players
+    std::string gameName {""};  /// get Game from MainMenu
+    try{
+        if((gameName = controller.getGame()).empty()){  /// New Game
+            game = controller.getNewGame();
+            game->setUp();
+            game->nextRound();
+        }
+        else{   /// or load Game from savegame file
+            game = Game::loadGame(gameName);
+        }
     }
-    else{
-        game = Game::loadGame(gameName);
-        loaded = true;
+    catch(std::exception &ex){
+        std::cerr << ex.what() << std::endl;
+        return 1;
     }
 
     if( !game ){
-        return 0;
+        return 1;
     }
 
     try{
-        int rotate;
-        int shiftNum, direction;
+        int rotate, shiftNum, direction;
 
-        if( !loaded ){
-            game->nextRound();
-        }
-
+        /// log statrt state of game
         log << game->getRoundStr();
         log.flush();
 
@@ -93,49 +100,55 @@ int cliGame()
                 view.drawField(game->getFreeFieldString());
             }
 
-            /// movement
+            /// movement until players passing turn to next player
             while((direction = controller.getMoveDirection()) != stop){
-                if(direction == saveN){
+                if(direction == saveN){   /// player wants to save game instead of movement
                     gameName = controller.getSaveGameName();
                     game->saveGame(gameName);
                 }
-                else if(!game->move(direction)){
+                else if(!game->move(direction)){    /// movement in direction given by user wasn't possible
                     view.drawHeader(game->getRoundHeader());
                     view.drawWarnning(wrongDirection);
                     continue;
                 }
 
+                /// displays GameBoard after move
                 view.drawBoard(game->getBoardStr());
-                if( game->turnEnd()){
+                if( game->turnEnd()){   /// turn ends when player picks up item
                     break;
                 }
             }
 
-            log << game->getRoundStr();
-            log.flush();
-
-            if( game->finish()){
+            if( game->finish()){ /// game ends when one player reaches final score
                 break;
             }
 
             game->nextRound();
+            /// log state of game in this turn
+            log << game->getRoundStr();
+            log.flush();
         }
 
-        ///print_results(game->getPlayers()); // Results.
+        ///prints result of game
         view.drawResults(game->getPlayers());
     }
     catch(std::exception &ex){
         std::cerr << ex.what() << std::endl;
     }
 
-    delete game;
-
-    return cliGame();
+    delete game;    /// clean
+    return 0;       /// returns to MainMenu
 }
 
+/**
+ * @brief main function of labyrinth-cli
+ * @return exit by user or by catching error
+ */
 int main()
 {
+    int ret;
+    while((ret = cliGame()) == 0);
     /// terminal mode
-    return cliGame();
+    return ret;
 }
 

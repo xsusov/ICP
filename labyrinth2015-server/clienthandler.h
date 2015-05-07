@@ -4,9 +4,12 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <limits>
 #include "player.h"
 #include "controller.h"
 #include "game.h"
+#include "constants.h"
+#include "strings.h"
 
 class ClientHandler : public Controller
 {

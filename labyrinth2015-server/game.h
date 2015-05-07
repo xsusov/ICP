@@ -29,6 +29,7 @@ public:
     bool move(const int direction);
     bool turnEnd();
     void setRound(const int newRound) {round = newRound;}
+    int getRound() {return round;}
     GameItem* getItemByName(const char figure);
 
 private:

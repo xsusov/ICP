@@ -1,7 +1,5 @@
 #include "player.h"
-#include "constants.h"
-#include "deck.h"
-#include "algorithm"
+
 int Player::count = 0;
 
 Player::Player( const std::string playerName )

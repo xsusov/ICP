@@ -1,11 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <algorithm>
 #include <iostream>
 //#include "playerfigure.h"
 #include "card.h"
 #include "deck.h"
 #include "boardfield.h"
+#include "constants.h"
 
 // Forward declaration of BoardField class
 class BoardField;

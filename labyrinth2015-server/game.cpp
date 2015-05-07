@@ -130,7 +130,7 @@ std::string Game::getRoundStr()
            << p->getCurField()->getPosY() << logD;
     }
 
-    ss << std::endl;
+    ss << std::endl;    /// END OF ROUND
     return ss.str();
 }
 
@@ -151,6 +151,10 @@ bool Game::finish()
 
 GameItem *Game::getItemByName(const char figure)
 {
+    if(figure == '0'){
+        return nullptr;
+    }
+
     for(GameItem *item : items){
         if( item->getFigure() == figure){
             return item;

@@ -1,7 +1,8 @@
 #ifndef DECK_H
 #define DECK_H
-
 #include <vector>
+#include <random>
+#include <algorithm>
 #include "card.h"
 #include "gameitem.h"
 
