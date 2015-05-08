@@ -31,7 +31,9 @@ SOURCES += main.cpp\
     game.cpp \
     viewer.cpp \
     viewercli.cpp \
-    controller.cpp
+    controller.cpp \
+    startdialogue.cpp \
+    namesdialogue.cpp
 
 HEADERS  += widget.h \
     field_const.h \
@@ -53,7 +55,11 @@ HEADERS  += widget.h \
     game.h \
     viewer.h \
     viewercli.h \
-    controller.h
+    controller.h \
+    startdialogue.h \
+    namesdialogue.h
 
 FORMS    += widget.ui \
-    menu.ui
+    menu.ui \
+    startdialogue.ui \
+    namesdialogue.ui

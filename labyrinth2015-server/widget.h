@@ -1,8 +1,15 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include <vector>
+
+#include <QLabel>
 #include <QWidget>
+#include <QPushButton>
 #include <QGraphicsScene>
+
+#include "game.h"
+#include "player.h"
 
 namespace Ui {
 class Widget;
@@ -14,7 +21,7 @@ class Widget : public QWidget
 
 public:
     explicit Widget(QWidget *parent = 0);
-    Widget(QWidget *parent, int n);
+    Widget(QWidget *parent, int n, Game *game);
     ~Widget();
 
 public:
@@ -31,11 +38,13 @@ public:
     void reset_scenes(int n, std::string board_str, std::string field_str);
 
     void change_player_info(); /// Not implemented
+    void change_player_info(Player *actual_player);
+    void disable_buttons();
+    void enable_buttons();
 
-
-
-
-
+    void keyPressEvent(QKeyEvent * key_ptr);
+    void move_player(int direction);
+    void end_turn();
 signals:
     /**
      * @brief send_move sends information about moving row or column
@@ -51,7 +60,6 @@ signals:
 private slots:
     void handle_quit();
     void handle_save();
-    void handle_mute();
     void handle_menu();
     void handle_rotate();
     void handle_undo();
@@ -66,7 +74,14 @@ private:
     // Scenes.
     QGraphicsScene *board_scene;
     QGraphicsScene *field_scene;
-
+    // Buttons.
+    std::vector<QPushButton*> buttons_ptr;
+    // Game.
+    QLabel *player_info;
+    Game *this_game;
+    int game_size;
 };
+
+std::string remove_newlines(std::string source);
 
 #endif // WIDGET_H

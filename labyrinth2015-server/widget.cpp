@@ -1,5 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include "constants.h"
 #include "pixmap_ops.h"
 #include "field_const.h"
 
@@ -8,8 +9,11 @@
 #include <QGraphicsPixmapItem>
 #include <QApplication>
 #include <QPushButton>
+#include <QKeyEvent>
 #include <QObject>
+#include <QString>
 #include <QLabel>
+
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -18,12 +22,14 @@ Widget::Widget(QWidget *parent) :
     ui->setupUi(this);
 }
 
-Widget::Widget(QWidget *parent, int n) :
+Widget::Widget(QWidget *parent, int n, Game *game) :
     QWidget(parent),
     ui(new Ui::Widget)
 {
-    board_scene = new QGraphicsScene;
-    field_scene = new QGraphicsScene;
+    this->game_size = n;
+    this->this_game = game;
+    this->board_scene = new QGraphicsScene;
+    this->field_scene = new QGraphicsScene;
 
     this->setFixedWidth(n * 50 + 350);
     this->setFixedHeight(n * 50 + 150);
@@ -58,29 +64,72 @@ Widget::~Widget()
  */
 void Widget::reset_scenes(int n, std::string board_str, std::string field_str)
 {
-    const char **board_ptr = to_pixmap(n, board_str);
-    const char **field_ptr = to_pixmap(1, field_str);
+    if (!board_str.empty())
+    {
+        // Set board scene.
+        const char **board_ptr = to_pixmap(n, board_str);
+        QPixmap *board = new QPixmap(board_ptr);
+        this->board_scene->clear();
+        this->board_scene->addPixmap(*board);
+        delete board;
+    }
 
-    QPixmap *board = new QPixmap(board_ptr);
-    QPixmap *field = new QPixmap(field_ptr);
-    QPixmap *card = new QPixmap(no_card);
+    if (!field_str.empty())
+    {
+        // Set field scene.
+        const char **field_ptr = to_pixmap(1, field_str);
+        QPixmap *field = new QPixmap(field_ptr);
+        QPixmap *card = new QPixmap(no_card);
+        this->field_scene->clear();
+        this->field_scene->addPixmap(*field);
+        this->field_scene->setSceneRect(n/2 * 50 + 150, -130, 60, 60);
+        // Add card.
+        QGraphicsPixmapItem *card_ptr = this->field_scene->addPixmap(*card);
+        card_ptr->setPos(0, -220);
+        delete field;
+        delete card;
+    }
+}
 
-    // Set board scene.
-    this->board_scene->clear();
-    this->board_scene->addPixmap(*board);
+void Widget::disable_buttons()
+{
+    for (QPushButton* ptr : this->buttons_ptr)
+        ptr->setDisabled(true);
 
-    // Set field scene.
-    this->field_scene->clear();
-    this->field_scene->addPixmap(*field);
-    this->field_scene->setSceneRect(n/2 * 50 + 150, -130, 60, 60);
-    // Add card.
-    QGraphicsPixmapItem *card_ptr = this->field_scene->addPixmap(*card);
-    card_ptr->setPos(0, -220);
+    (this->findChild<QPushButton*>("rotate"))->setDisabled(true);
+}
 
-    // Delete pixmaps.
-    delete board;
-    delete field;
-    delete card;
+void Widget::enable_buttons()
+{
+    for (QPushButton* ptr : this->buttons_ptr)
+        ptr->setEnabled(true);
+
+    (this->findChild<QPushButton*>("rotate"))->setEnabled(true);
+}
+
+void Widget::move_player(int direction)
+{
+    this->disable_buttons();
+    this->this_game->move(direction);
+    reset_scenes(this->game_size,
+                 remove_newlines(this->this_game->getBoardStr()),
+                 "");
+
+    if( this->this_game->turnEnd())
+    {   /// turn ends when player picks up item
+        this->end_turn();
+    }
+}
+
+void Widget::keyPressEvent(QKeyEvent *key_ptr)
+{
+    switch (key_ptr->key())
+    {
+        case Qt::Key_W: this->move_player(labyrinth::north); break;
+        case Qt::Key_S: this->move_player(labyrinth::south); break;
+        case Qt::Key_A: this->move_player(labyrinth::west); break;
+        case Qt::Key_D: this->move_player(labyrinth::east); break;
+    }
 }
 
 /**
@@ -91,7 +140,7 @@ void Widget::set_buttons(int n)
 {
     // All magical constants here were carefully chossen by a professional (lol).
     // It is scientifically proven that these constants are good for your health.
-    // Changing them will cause cancer.
+    // Changing them may cause all kinds of cancer.
 
     // Buttons count.
     int button_half = n - 1;
@@ -168,6 +217,8 @@ void Widget::set_buttons(int n)
         ptr_2->setMaximumSize(40, 20);
         QObject::connect(ptr_2, SIGNAL (clicked()), this, SLOT (column_down()));
         //
+        this->buttons_ptr.push_back(ptr_1);
+        this->buttons_ptr.push_back(ptr_2);
         i += 2;
         pos_x += 100;
     }
@@ -194,6 +245,8 @@ void Widget::set_buttons(int n)
         ptr_2->setMinimumSize(20, 40);
         QObject::connect(ptr_2, SIGNAL (clicked()), this, SLOT (row_right()));
         //
+        this->buttons_ptr.push_back(ptr_1);
+        this->buttons_ptr.push_back(ptr_2);
         i += 2;
         pos_y += 100;
     }
@@ -207,6 +260,7 @@ void Widget::set_labels(int n)
 {
     // Player info text.
     QLabel *player_info = new QLabel(this);
+    this->player_info = player_info;
     player_info->setText("Name: .......\nColor: ......\nScore: ......");
     player_info->setFont(QFont("Courier"));
     player_info->move(this->width()/2 - n * 25 - 152, this->height()/2 - 180);
@@ -218,9 +272,25 @@ void Widget::set_labels(int n)
     labyrinth_lab->move(this->width()/2 - 110, 15);
 }
 
-void Widget::change_player_info()
+std::string remove_newlines(std::string source)
 {
+    std::string result = "";
+    for (auto c : source)
+    {
+        if (c == '\n') continue;
+        else result += c;
+    }
+    return result;
+}
 
+void Widget::change_player_info(Player *actual_player)
+{
+    // Player info text.
+    std::string info = "Name: " + actual_player->getName() + '\n';
+    info = info + "Color: " + std::to_string(actual_player->getColor()) + '\n';
+    info = info + "Score: " + std::to_string(actual_player->getScore()) + '\n';
+
+    this->player_info->setText(QString::fromStdString(info));
 }
 
 /**
@@ -241,15 +311,6 @@ void Widget::handle_save()
 }
 
 /**
- * @brief Widget::handle_mute mute button signal handler
- */
-void Widget::handle_mute()
-{
-    //Not implemented.
-    std::cerr << "click mute" << std::endl;
-}
-
-/**
  * @brief Widget::handle_menu main menu button signal handler
  */
 void Widget::handle_menu()
@@ -263,8 +324,9 @@ void Widget::handle_menu()
  */
 void Widget::handle_rotate()
 {
-    //Not implemented.
-    std::cerr << "click rotate" << std::endl;
+    this->this_game->getBoard()->rotateFreeField(1);
+    this->reset_scenes(this->game_size, "",
+                       remove_newlines(this->this_game->getFreeFieldString()));
 }
 
 /**
@@ -276,13 +338,21 @@ void Widget::handle_undo()
     std::cerr << "click undo" << std::endl;
 }
 
+void Widget::end_turn()
+{
+    this->this_game->nextRound();
+    this->reset_scenes(this->game_size, "",
+                       remove_newlines(this->this_game->getFreeFieldString()));
+    this->change_player_info(this->this_game->get_actual_player());
+    this->enable_buttons();
+}
+
 /**
  * @brief Widget::handle_next_turn next turn button signal handler
  */
 void Widget::handle_next_turn()
 {
-    //Not implemented.
-    std::cerr << "click nextt" << std::endl;
+    end_turn();
 }
 
 /**
@@ -292,8 +362,12 @@ void Widget::column_up()
 {
     QObject * sender = QObject::sender();
     int pos = (sender->objectName()).toInt();
-    // Not implemented
-    std::cerr << "click up " << pos << std::endl;
+    this->this_game->shift(pos-1, labyrinth::north);
+
+    this->reset_scenes(this->game_size,
+                       remove_newlines(this->this_game->getBoardStr()),
+                       remove_newlines(this->this_game->getFreeFieldString()));
+    this->disable_buttons();
 }
 
 /**
@@ -303,8 +377,12 @@ void Widget::column_down()
 {
     QObject * sender = QObject::sender();
     int pos = (sender->objectName()).toInt();
-    // Not implemented
-    std::cerr << "click down " << pos << std::endl;
+    this->this_game->shift(pos-1, labyrinth::south);
+
+    this->reset_scenes(this->game_size,
+                       remove_newlines(this->this_game->getBoardStr()),
+                       remove_newlines(this->this_game->getFreeFieldString()));
+    this->disable_buttons();
 }
 
 /**
@@ -314,8 +392,12 @@ void Widget::row_left()
 {
     QObject * sender = QObject::sender();
     int pos = (sender->objectName()).toInt();
-    // Not implemented
-    std::cerr << "click left " << pos << std::endl;
+    this->this_game->shift(pos-1, labyrinth::west);
+
+    this->reset_scenes(this->game_size,
+                       remove_newlines(this->this_game->getBoardStr()),
+                       remove_newlines(this->this_game->getFreeFieldString()));
+    this->disable_buttons();
 }
 
 /**
@@ -323,8 +405,12 @@ void Widget::row_left()
  */
 void Widget::row_right()
 {
-    // Not Implemented
     QObject * sender = QObject::sender();
     int pos = (sender->objectName()).toInt();
-    std::cerr << "click right " << pos << std::endl;
+    this->this_game->shift(pos-1, labyrinth::east);
+
+    this->reset_scenes(this->game_size,
+                       remove_newlines(this->this_game->getBoardStr()),
+                       remove_newlines(this->this_game->getFreeFieldString()));
+    this->disable_buttons();
 }

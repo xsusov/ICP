@@ -32,6 +32,10 @@ public:
     int getRound() {return round;}
     GameItem* getItemByName(const char figure);
 
+    /// Methods for gui.
+    Player * get_actual_player() {return currentPlayer;} // Better than parsing round strings.
+    void addPlayer(const std::string playerName, int color);
+
 private:
     int round;
     Player *currentPlayer;

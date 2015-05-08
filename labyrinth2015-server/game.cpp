@@ -164,6 +164,13 @@ GameItem *Game::getItemByName(const char figure)
     return nullptr;
 }
 
+void Game::addPlayer(const std::string playerName, int color)
+{
+    Player *tmp = new Player(playerName);
+    tmp->set_color(color);
+    players.push_back(tmp);
+}
+
 
 Game *Game::loadGame(const std::string savegame)
 {
