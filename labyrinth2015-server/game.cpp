@@ -1,4 +1,18 @@
+/**
+ * @project LABYRINTH2015
+ * ICP project
+ * @class Game00
+ * @author xsusov01
+ * @email  xsusov01@stud.fit.vutbr.cz
+ * @author xbandz00
+ * @email  xbandz00@stud.fit.vutbr.cz
+ * @file game.cpp
+ * @date 2015/05/10
+ * @brief class for wrapping game model and providing Viewer/Controller independtent Model
+*/
+#include <iostream>
 #include <fstream>
+#include <cstdio>
 #include <sstream>
 #include <math.h>
 #include "game.h"
@@ -67,7 +81,9 @@ void Game::addPlayer(Player *newPlayer, const int x, const int y)
     }
 }
 
-
+/**
+ * @brief Game::setUp prepares Game's gameboard before starting new game
+ */
 void Game::setUp()
 {
     board.setUpFields();
@@ -75,6 +91,9 @@ void Game::setUp()
     board.setUpItems(items);
 }
 
+/**
+ * @brief Game::nextRound raises round counter and changes active player
+ */
 void Game::nextRound()
 {
     currentPlayer = players[round++ % (int)players.size()];
@@ -84,6 +103,10 @@ void Game::nextRound()
     }
 }
 
+/**
+ * @brief Game::getRoundHeader
+ * @return string of header for current round containg information about round and cactive player
+ */
 std::string Game::getRoundHeader()
 {
     std::stringstream header;
@@ -182,17 +205,33 @@ Game *Game::loadGame(const std::string savegame)
     save.open( savegame, std::ifstream::in );
 
     std::ofstream newLog;
-    newLog.open(logfile,  std::fstream::out | std::fstream::trunc );
+    newLog.open(logfile, std::fstream::out | std::fstream::trunc );
+
+    //lastround = round;
 
     while( std::getline(save, round) ){
         newLog << round << std::endl;
+       /// newLog.flush();
         lastround = round;
-        newLog.flush();
     }
+
+
+/*
+    std::getline(save, round);
+    lastround = round;
+    while( std::getline(save, round) ){
+        newLog << lastround << std::endl;
+        newLog.flush();
+        lastround = round;
+    }
+    lastround = round;
+    */
+    newLog.flush();
+    newLog.close();
+    save.close();
 
     std::cout << "Loaded: " << lastround << std::endl;
     std::cout.flush();
-
 
     /// example:
     /// ###2;11;12;2;kok;@;0;k;1;6;oz;&;0;d;10;0;10;lcefjgbhia0;6050e0a0e0a0e0ege060c05060b0a0c0c0b090e0ae5070e07
@@ -297,7 +336,7 @@ Game *Game::loadGame(const std::string savegame)
         loadedGame->addPlayer( newPlayer, x, y );
     }
 
-    loadedGame->currentPlayer = loadedGame->players[roundN % playerCount];
+    loadedGame->currentPlayer = loadedGame->players[(roundN - 1) % playerCount];
     if( loadedGame->currentPlayer->getCard() == nullptr ){
         loadedGame->currentPlayer->drawCard(*(loadedGame->deck));
     }
@@ -343,6 +382,43 @@ bool Game::shift(const int num, const int direction)
     board.shift(num, direction); /// shift and save info for check in next turn
     lastNum = num;
     lastDirection = direction;
+    return true;
+}
+
+/**
+ * @brief Game::isUndoPossible checks if undo is availabile this turn
+ * @return undo availability
+ */
+bool Game::isUndoPossible()
+{   /// can't undo start of game
+    return round > (int)players.size();
+}
+
+bool Game::undo()
+{
+    int roundAfterUndo = round - ((int)players.size() + 1);
+
+    std::string roundStr;
+
+    std::ifstream log;
+    log.open( logfile, std::ifstream::in );
+
+    std::ofstream newLog;
+    newLog.open(tmplogfile,  std::fstream::out | std::fstream::trunc );
+
+    for(int i = 0; i <= roundAfterUndo; i++){
+        if( !(std::getline(log, roundStr)) ){
+            std::cerr << strUndoErr << std::endl;
+            std::remove(tmplogfile.c_str());
+            return false;
+        }
+
+        std::cout << roundStr << std::endl;
+        newLog << roundStr << std::endl;
+        newLog.flush();
+    }
+
+    log.close();
     return true;
 }
 

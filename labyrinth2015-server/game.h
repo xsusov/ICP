@@ -26,11 +26,14 @@ public:
     static Game *loadGame(const std::string savegame);
     bool saveGame(const std::string savegame);
     bool shift(const int num, const int direction);
+    bool isUndoPossible();
+    bool undo();
     bool move(const int direction);
     bool turnEnd();
     void setRound(const int newRound) {round = newRound;}
     int getRound() {return round;}
     GameItem* getItemByName(const char figure);
+
 
 private:
     int round;

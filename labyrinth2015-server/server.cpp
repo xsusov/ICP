@@ -43,26 +43,32 @@ int cliGame()
     Game *game {nullptr};       /// MODEL
     ViewerCli view;             /// VIEW
     ClientHandler controller;   /// CONTROLLER
-
+    bool loaded = false;
     std::srand(time(NULL));     /// srand for 'random' numbers generation seed
-
-    /// opens log for logging in progress of game
-    std::ofstream log;          /// LOG
-    log.open(logfile,  std::fstream::out | std::fstream::trunc );
-    if( !log.is_open() ){
-        std::cerr << errLogOpen << std::endl;
-    }
-
     view.welcome();             /// welcome message from our game to players
     std::string gameName {""};  /// get Game from MainMenu
+    bool undo = false;
+    /// opens log for logging in progress of game
+    std::ofstream log;          /// LOG
     try{
         if((gameName = controller.getGame()).empty()){  /// New Game
             game = controller.getNewGame();
             game->setUp();
             game->nextRound();
+            /// log statrt state of game
+            log.open(logfile,  std::fstream::out | std::fstream::trunc );
+            if( !log.is_open() ){
+                std::cerr << errLogOpen << std::endl;
+            }
         }
         else{   /// or load Game from savegame file
             game = Game::loadGame(gameName);
+            loaded = true;
+            log.open(logfile, std::fstream::out | std::ios::app );
+            ///std::cout << log.tellp() ;
+            if( !log.is_open() ){
+                std::cerr << errLogOpen << std::endl;
+            }
         }
     }
     catch(std::exception &ex){
@@ -76,32 +82,38 @@ int cliGame()
 
     try{
         int rotate, shiftNum, direction;
-
-        /// log statrt state of game
-        log << game->getRoundStr();
-        log.flush();
-
         while( true ){
             /// start new round and use view to display it to player
             view.drawHeader(game->getRoundHeader());
             view.drawBoard(game->getBoardStr());
             view.drawField(game->getFreeFieldString());
-
-            /// free field rotation before shifiting (can be skipped)
-            while((rotate = controller.getRotate()) > 0){
-                game->getBoard()->rotateFreeField(rotate);
-                view.drawField(game->getFreeFieldString());
-            }
-
-            /// shifting row or column of gameboard (can be skipped)
-            if(controller.getShift(game->getBoard()->getSize(), shiftNum, direction)){
-                while( !game->shift(shiftNum, direction) ){ /// check that player don't reverse last turn by shifting
-                    view.drawWarnning(strWrongShift);
-                    controller.getShift(game->getBoard()->getSize(), shiftNum, direction);
+            if( !loaded ){
+                if( !undo ){
+                    log << game->getRoundStr();
+                    log.flush();
+                }
+                else{
+                    undo = false;
+                }
+                /// free field rotation before shifiting (can be skipped)
+                while((rotate = controller.getRotate()) > 0){
+                    game->getBoard()->rotateFreeField(rotate);
+                    view.drawField(game->getFreeFieldString());
                 }
 
-                view.drawBoard(game->getBoardStr());
-                view.drawField(game->getFreeFieldString());
+                /// shifting row or column of gameboard (can be skipped)
+                if(controller.getShift(game->getBoard()->getSize(), shiftNum, direction)){
+                    while( !game->shift(shiftNum, direction) ){ /// check that player don't reverse last turn by shifting
+                        view.drawWarnning(strWrongShift);
+                        controller.getShift(game->getBoard()->getSize(), shiftNum, direction);
+                    }
+
+                    view.drawBoard(game->getBoardStr());
+                    view.drawField(game->getFreeFieldString());
+                }
+            }
+            else{
+                loaded = false;
             }
 
             /// movement until players passing turn to next player
@@ -109,6 +121,32 @@ int cliGame()
                 if(direction == saveN){   /// player wants to save game instead of movement
                     gameName = controller.getSaveGameName();
                     game->saveGame(gameName);
+                }
+                else if(direction == undoN ){
+                    if( !game->isUndoPossible() ){
+                        view.drawWarnning(strWrongUndo);
+                        continue;
+                    }
+                    else{
+                        log.close();
+                        if( game->undo() ){
+                            delete game;
+                            game = Game::loadGame(tmplogfile);
+                            ///game->setRound(game->getRound() - 1);
+                            std::remove(tmplogfile.c_str());
+                            log.open(logfile,  std::fstream::out | std::ios::app );
+                            if( !log.is_open() ){
+                                std::cerr << errLogOpen << std::endl;
+                            }
+                            loaded = true;
+                            undo = true;
+                            break;
+                        }
+                        log.open(logfile,  std::fstream::out | std::ios::app );
+                        if( !log.is_open() ){
+                            std::cerr << errLogOpen << std::endl;
+                        }
+                    }
                 }
                 else if(!game->move(direction)){    /// movement in direction given by user wasn't possible
                     view.drawHeader(game->getRoundHeader());
@@ -123,14 +161,17 @@ int cliGame()
                 }
             }
 
+            if(loaded){
+                loaded = false;
+                continue;
+            }
+
             if( game->finish()){ /// game ends when one player reaches final score
                 break;
             }
 
-            game->nextRound();
             /// log state of game in this turn
-            log << game->getRoundStr();
-            log.flush();
+            game->nextRound();
         }
 
         ///prints result of game

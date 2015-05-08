@@ -56,6 +56,7 @@ namespace labyrinth {
 
     const std::string newGame = "";
     const std::string logfile = "labyrinth.log";
+    const std::string tmplogfile = "labyrinth.log.tmp";
 }
 
 #endif // CONSTANTS_H
