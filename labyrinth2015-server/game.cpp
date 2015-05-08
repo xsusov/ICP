@@ -7,23 +7,36 @@
 
 using namespace labyrinth;
 
+/**
+ * @brief Game::Game constructor
+ */
 Game::Game()
 {
-
 }
 
+/**
+ * @brief Game::Game parametrized constructor
+ * @param size  board size of new game
+ * @param playerCount number of players in game
+ * @param itemCount number of items
+ */
 Game::Game(const std::size_t size, const int playerCount, const int itemCount )
     : round{0},
+      lastNum {-1},
+      lastDirection {-1},
       currentPlayer{nullptr},
       board{GameBoard( size )}
 {
-    players.reserve(playerCount);
-    GameItem::fillVector(items, itemCount);
-    deck = new Deck(items);
-    discardpile = new Deck();
-    winScore = itemCount / playerCount;
+    players.reserve(playerCount);           /// reserve space for number of players in players vector
+    GameItem::fillVector(items, itemCount); /// fills items vector with all items
+    deck = new Deck(items);                 /// deck of quest cards - filled with cards for each item at start
+    discardpile = new Deck();               /// deck for used cards - empty at start
+    winScore = itemCount / playerCount;     /// number of items needed to find by player to win
 }
 
+/**
+ * @brief Game::~Game destructor
+ */
 Game::~Game()
 {
     for(auto p : players)
@@ -36,6 +49,10 @@ Game::~Game()
     delete discardpile;
 }
 
+/**
+ * @brief Game::addPlayer add
+ * @param playerName
+ */
 void Game::addPlayer(const std::string playerName)
 {
     players.push_back(new Player(playerName));
@@ -70,7 +87,7 @@ void Game::nextRound()
 std::string Game::getRoundHeader()
 {
     std::stringstream header;
-    header << strRound << floor((float)round / (int)players.size()*0.99) + 1 << std::endl << currentPlayer->getName() << strTurn << std::endl
+    header << strRound << floor((float)round / ((int)players.size() - 0.01)) + 1 << std::endl << currentPlayer->getName() << strTurn << std::endl
            << strFigure << currentPlayer->getFigure() << " " << strScore <<  currentPlayer->getScore() << std::endl
            << strQuest << currentPlayer->getQuest() << std::endl;
 
@@ -79,19 +96,12 @@ std::string Game::getRoundHeader()
 
 std::string Game::getRoundStr()
 {
-    std::stringstream ss;
-    ss << logEndOfRound;
-    /// ROUND
-    ss << round << logD;
-
-    /// SIZE
-    ss << (int)board.getSize() << logD;
-
-    /// ITEMS
-    ss << (int)items.size() << logD;
-
-    /// PLAYERS COUNT
-    ss << (int)players.size() << logD;
+    std::stringstream ss;   /// stream for round str
+    ss << logEndOfRound
+       << round << logD                 /// ROUND
+       << (int)board.getSize() << logD  /// SIZE
+       << (int)items.size() << logD     /// ITEMS
+       << (int)players.size() << logD;  /// PLAYERS COUNT
 
     /// DECK
     ss << (int)deck->size() << logD;
@@ -226,7 +236,7 @@ Game *Game::loadGame(const std::string savegame)
     }
     catch(std::exception &ex){
         std::cerr << ex.what() << std::endl;
-        loadedGame = nullptr;
+        return nullptr;
     }
 
     /// get Deck
@@ -291,8 +301,6 @@ Game *Game::loadGame(const std::string savegame)
     if( loadedGame->currentPlayer->getCard() == nullptr ){
         loadedGame->currentPlayer->drawCard(*(loadedGame->deck));
     }
-    ///default gameplay
-    ///loadedGame->setUp();
 
     return loadedGame;
 }
@@ -317,12 +325,25 @@ bool Game::saveGame(const std::string savegame)
     return true;
 }
 
-int Game::shift(const int num, const int direction)
+/**
+ * @brief Game::shift takes direction of shifting and number of row/column
+ *        checks that this shift doen't reverse last turn's shift and do it on board if possible
+ * @param num number of row/column to shift
+ * @param direction shifting direction
+ * @return true wheter this shifting won't reverse shifting in last turn
+ */
+bool Game::shift(const int num, const int direction)
 {
-    board.shift(num, direction);
-    /// @todo: check for last move undo
-    ///
-    return 1;
+    /// check for last move
+    if( round > (int)players.size()){
+        if( lastDirection == opositeDirection(direction) && lastNum == num){
+            return false;   /// this shifiting would reverse shifitng in last turn
+        }
+    }
+    board.shift(num, direction); /// shift and save info for check in next turn
+    lastNum = num;
+    lastDirection = direction;
+    return true;
 }
 
 bool Game::move(const int direction)

@@ -25,6 +25,7 @@ strShiftMode = "Select shift mode:\nr - rows shift\nc - columns shift\nother - s
 strShiftChoosePre = "Which (even) ",
 strShiftChoosePost = " do you chose to shift:",
 strSelectDirection = "Select shift direction: ",
+strWrongShift = "Can't reverse last round by this shifiting!",
 strSelectMoveDirection = "Choose move direction, stop with E. (W↑ S↓ A← D→)",
 strInvalidMove = "Invalid direction, try again.",
 strChooseName = "Choose your name:",

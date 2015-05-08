@@ -95,7 +95,11 @@ int cliGame()
 
             /// shifting row or column of gameboard (can be skipped)
             if(controller.getShift(game->getBoard()->getSize(), shiftNum, direction)){
-                game->shift(shiftNum, direction);
+                while( !game->shift(shiftNum, direction) ){ /// check that player don't reverse last turn by shifting
+                    view.drawWarnning(strWrongShift);
+                    controller.getShift(game->getBoard()->getSize(), shiftNum, direction);
+                }
+
                 view.drawBoard(game->getBoardStr());
                 view.drawField(game->getFreeFieldString());
             }
