@@ -35,6 +35,9 @@ public:
     bool pickupItem();
     void dropCard() {card=nullptr;}
 
+    /// For GUI
+    static void reset_count() {count = 0;}
+
 private:
     static int count;
 

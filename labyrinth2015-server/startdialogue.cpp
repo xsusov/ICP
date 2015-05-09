@@ -98,11 +98,7 @@ void StartDialogue::on_confirm_button_clicked()
 void StartDialogue::on_start_button_clicked()
 {
     this->hide(); // Hide start as game already started.
-    if (!this->type)
-    {   // Delete old game.
-        ((Widget*)parentWidget())->delete_game();
-    }
-
+    Player::reset_count();
     Game * game = new Game(this->gameboard_size, this->player_count, this->item_count);
     // Add players and setup.
     game->addPlayer(this->player_1);
@@ -111,12 +107,6 @@ void StartDialogue::on_start_button_clicked()
     if (this->player_count > 3) game->addPlayer(this->player_4);
     game->setUp();
     game->nextRound();
-
-    if (!this->type)
-    {   // debug
-
-        std::cerr << game->get_actual_player()->getFigure() << std::endl;
-    }
 
     // Prepare game main window.
     Widget* game_window = new Widget(0, this->gameboard_size, game);
@@ -132,6 +122,7 @@ void StartDialogue::on_start_button_clicked()
 
     if (!this->type)
     {   // Delete old widget.
+        ((Widget*)parentWidget())->delete_game();
         delete ((Widget*)parentWidget());
     }
 }
