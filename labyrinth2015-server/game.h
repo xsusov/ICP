@@ -36,6 +36,7 @@ public:
 
     /// Methods for gui.
     Player * get_actual_player() {return currentPlayer;}
+    int get_game_size() {return board.getSize();}
 
 private:
     int round;

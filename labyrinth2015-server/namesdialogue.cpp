@@ -26,14 +26,6 @@ void NamesDialogue::enable_n(int n)
 
 void NamesDialogue::set_ok_button(const QString &arg1)
 {
-    if (arg1.isEmpty())
-    {
-        this->ui->ok_button->setDisabled(true);
-        return;
-    }
-    else
-        this->ui->ok_button->setEnabled(true);
-
     for (auto sign: arg1)
     {
         if (sign.isLetterOrNumber()) continue;
@@ -46,24 +38,55 @@ void NamesDialogue::set_ok_button(const QString &arg1)
     this->ui->ok_button->setEnabled(true);
 }
 
+void NamesDialogue::compare()
+{
+        if (this->ui->player_1->displayText() == this->ui->player_2->displayText())
+            this->ui->ok_button->setDisabled(true);
+        if (this->ui->player_1->displayText() == this->ui->player_3->displayText())
+            this->ui->ok_button->setDisabled(true);
+        if (this->ui->player_1->displayText() == this->ui->player_4->displayText())
+            this->ui->ok_button->setDisabled(true);
+        //
+        if (this->ui->player_2->displayText() == this->ui->player_3->displayText())
+            this->ui->ok_button->setDisabled(true);
+        if (this->ui->player_2->displayText() == this->ui->player_4->displayText())
+            this->ui->ok_button->setDisabled(true);
+        //
+        if (this->ui->player_3->displayText() == this->ui->player_4->displayText())
+            this->ui->ok_button->setDisabled(true);
+
+        if (this->ui->player_1->displayText().isEmpty() ||
+            this->ui->player_2->displayText().isEmpty() ||
+            this->ui->player_3->displayText().isEmpty() ||
+            this->ui->player_4->displayText().isEmpty())
+        {
+            this->ui->ok_button->setDisabled(true);
+            return;
+        }
+}
+
 void NamesDialogue::on_player_1_textEdited(const QString &arg1)
 {
-    set_ok_button(arg1);
+    this->set_ok_button(arg1);
+    this->compare();
 }
 
 void NamesDialogue::on_player_2_textEdited(const QString &arg1)
 {
-   set_ok_button(arg1);
+    this->set_ok_button(arg1);
+    this->compare();
 }
 
 void NamesDialogue::on_player_3_textEdited(const QString &arg1)
 {
-   set_ok_button(arg1);
+    this->set_ok_button(arg1);
+    this->compare();
 }
 
 void NamesDialogue::on_player_4_textEdited(const QString &arg1)
 {
-    set_ok_button(arg1);
+    this->set_ok_button(arg1);
+    this->compare();
 }
 
 void NamesDialogue::on_ok_button_clicked()

@@ -1,9 +1,12 @@
 #include "widget.h"
+#include "gameover.h"
 #include "ui_widget.h"
 #include "constants.h"
 #include "pixmap_ops.h"
+#include "loaddialog.h"
 #include "field_const.h"
 #include "savedialogue.h"
+#include "startdialogue.h"
 
 #include <iostream>
 
@@ -70,13 +73,14 @@ Widget::~Widget()
  * @brief Widget::set_buttons prepares all buttons used in widget
  * @param n - size of a boardfield.
  */
-void Widget::set_buttons(int n)
+void Widget::set_buttons()
 {
     // All magical constants here were carefully chossen by a professional (lol).
     // It is scientifically proven that these constants are good for your health.
     // Changing them may cause all kinds of cancer.
 
     // Buttons count.
+    int n = this->game_size;
     int button_half = n - 1;
 
     // Rotate button.
@@ -104,6 +108,24 @@ void Widget::set_buttons(int n)
     next_turn->setMaximumSize(121, 25);
     next_turn->setMinimumSize(121, 25);
     QObject::connect(next_turn, SIGNAL (clicked()), this, SLOT (handle_next_turn()));
+
+    // Start button. (Part of "menu").
+    QPushButton *start = new QPushButton(this);
+    start->setText("New");
+    start->setObjectName("new");
+    start->move(this->width() - 197, this->height() - 25);
+    start->setMaximumSize(50, 25);
+    start->setMinimumSize(50, 25);
+    QObject::connect(start, SIGNAL (clicked()), this, SLOT (handle_new()));
+
+    // Start button. (Part of "menu").
+    QPushButton *load = new QPushButton(this);
+    load->setText("Load");
+    load->setObjectName("load");
+    load->move(this->width() - 148, this->height() - 25);
+    load->setMaximumSize(50, 25);
+    load->setMinimumSize(50, 25);
+    QObject::connect(load, SIGNAL (clicked()), this, SLOT (handle_load()));
 
     // Save button. (Part of "menu").
     QPushButton *save = new QPushButton(this);
@@ -194,7 +216,7 @@ void Widget::set_labels()
 
     // Player info text.
     this->player_info = new QLabel(this);
-    this->player_info->setText("Score: ....\nColor ....");
+    this->player_info->setText("Score:              \nColor             ");
     this->player_info->setFont(QFont("Courier", 12, QFont::Bold));
     this->player_info->move(20, this->height()/2 - 155);
 
@@ -202,7 +224,7 @@ void Widget::set_labels()
     QLabel *labyrinth_lab = new QLabel(this);
     labyrinth_lab->setText("The Labyrinth");
     labyrinth_lab->setFont(QFont("Arial", 20, QFont::Bold));
-    labyrinth_lab->move(this->width()/2 - 60, 8);
+    labyrinth_lab->move(this->width()/2 - 60, 6);
 
     // Message label.
     this->message_label = new QLabel(this);
@@ -356,7 +378,7 @@ std::string get_color(char c)
     switch (c)
     {
         case '@': return "brown";
-        case '&': return "yellow";
+        case '&': return "white";
         case '%': return "red";
         case '!': return "blue";
     }
@@ -393,6 +415,20 @@ void Widget::print_message(QString const message)
 void Widget::handle_quit()
 {
     QApplication::quit();
+}
+
+void Widget::handle_new()
+{
+    StartDialogue * new_game_dialogue = new StartDialogue(this, false);
+    this->disable_button("new");
+    new_game_dialogue->show();
+}
+
+void Widget::handle_load()
+{
+    LoadDialog * dialogue = new LoadDialog(this, false);
+    this->disable_button("load");
+    dialogue->show();
 }
 
 /**
@@ -453,11 +489,43 @@ void Widget::handle_undo()
     }
 }
 
+bool compare_players(Player * i, Player * j)
+{
+    return (i->getScore() < j->getScore());
+}
+
+std::string prepare_results(std::vector<Player*> &players)
+{
+    std::sort(players.begin(), players.end(), compare_players);
+    std::string results = "";
+    for (int i = players.size(); i > 0; i--)
+    {
+        results = results + players[i-1]->getName()
+                          + "'s score is "
+                          + std::to_string(players[i-1]->getScore())
+                          + ".\n";
+    }
+    return results;
+}
+
 /**
  * @brief Widget::end_turn - ends turn, writes logs, resets buttons
  */
 void Widget::end_turn()
 {
+    /// Check for ent game
+    if (this->game->finish())
+    {
+        GameOver *game_over = new GameOver;
+        this->disable_buttons();
+        this->disable_button("save");
+        this->disable_button("undo");
+        this->disable_button("next_turn");
+        game_over->set_results(QString::fromStdString(prepare_results(this->game->getPlayers())));
+        game_over->show();
+        return;
+    }
+
     /// Writes logs
     this->log << this->game->getRoundStr();
     this->log.flush();

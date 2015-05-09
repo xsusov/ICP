@@ -13,7 +13,7 @@ class StartDialogue : public QDialog
     Q_OBJECT
 
 public:
-    explicit StartDialogue(QWidget *parent = 0);
+    explicit StartDialogue(QWidget *parent = 0, bool type = true);
     ~StartDialogue();
     void enable_start();
     void enable_confirm();
@@ -41,6 +41,7 @@ private slots:
 
 private:
     Ui::StartDialogue *ui;
+    bool type; /// If false - ingame start
 
     int item_count;
     int player_count;

@@ -19,6 +19,7 @@ public:
     void enable_n(int n);
 
     void set_ok_button(const QString &arg1);
+    void compare();
 private slots:
 
     void on_player_1_textEdited(const QString &arg1);

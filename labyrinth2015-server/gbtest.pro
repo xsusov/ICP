@@ -34,7 +34,9 @@ SOURCES += main.cpp\
     controller.cpp \
     startdialogue.cpp \
     namesdialogue.cpp \
-    savedialogue.cpp
+    savedialogue.cpp \
+    loaddialog.cpp \
+    gameover.cpp
 
 HEADERS  += widget.h \
     field_const.h \
@@ -59,10 +61,14 @@ HEADERS  += widget.h \
     controller.h \
     startdialogue.h \
     namesdialogue.h \
-    savedialogue.h
+    savedialogue.h \
+    loaddialog.h \
+    gameover.h
 
 FORMS    += widget.ui \
     menu.ui \
     startdialogue.ui \
     namesdialogue.ui \
-    savedialogue.ui
+    savedialogue.ui \
+    loaddialog.ui \
+    gameover.ui

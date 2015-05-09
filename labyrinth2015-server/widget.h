@@ -30,7 +30,7 @@ public:
      * @brief set_buttons - prepares all buttons
      * @param n - size of the gameboard
      */
-    void set_buttons(int n);
+    void set_buttons();
     /**
      * @brief set_labels - prepares all labels
      */
@@ -42,6 +42,8 @@ public:
     void change_player_info(Player *actual_player);
     void disable_buttons();
     void enable_buttons();
+
+    void delete_game() {delete this->game;}
 
     void keyPressEvent(QKeyEvent * key_ptr);
     void move_player(int direction);
@@ -63,6 +65,8 @@ signals:
 
 private slots:
     void handle_quit();
+    void handle_new();
+    void handle_load();
     void handle_save();
     void handle_rotate();
     void handle_undo();

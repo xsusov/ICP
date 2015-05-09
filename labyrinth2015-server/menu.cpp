@@ -1,6 +1,7 @@
 #include "menu.h"
 #include "widget.h"
 #include "ui_menu.h"
+#include "loaddialog.h"
 #include "startdialogue.h"
 
 #include <iostream>
@@ -38,4 +39,11 @@ void Menu::on_new_game_clicked()
     StartDialogue * new_game_dialogue = new StartDialogue(this);
     this->hide();
     new_game_dialogue->show();
+}
+
+void Menu::on_load_game_clicked()
+{
+    LoadDialog * load_dialogue = new LoadDialog(this);
+    this->hide();
+    load_dialogue->show();
 }

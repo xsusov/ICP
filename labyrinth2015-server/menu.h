@@ -22,6 +22,8 @@ private slots:
     void on_quit_clicked();
     void on_new_game_clicked();
 
+    void on_load_game_clicked();
+
 private:
     Ui::menu *ui;
 };

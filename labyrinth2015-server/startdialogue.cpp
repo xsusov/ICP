@@ -10,11 +10,13 @@
 #include <iostream>
 #include <QObject>
 
-StartDialogue::StartDialogue(QWidget *parent) :
+
+StartDialogue::StartDialogue(QWidget *parent, bool type) :
     QDialog(parent),
     ui(new Ui::StartDialogue)
 {
     ui->setupUi(this);
+    this->type = type;
     this->ui->start_button->setDisabled(true);
     this->gameboard_size = 11;
     this->player_count = 4;
@@ -75,7 +77,9 @@ void StartDialogue::on_item_slider_valueChanged(int value)
 
 void StartDialogue::on_cancel_button_clicked()
 {
-    ((Menu*)parentWidget())->show();
+    if (this->type) ((Menu*)parentWidget())->show();
+    else ((Widget*)parentWidget())->enable_button("new");
+
     delete this;
 }
 
@@ -93,7 +97,11 @@ void StartDialogue::on_confirm_button_clicked()
 
 void StartDialogue::on_start_button_clicked()
 {
-    this->hide(); // Hide start as game alfready started.
+    this->hide(); // Hide start as game already started.
+    if (!this->type)
+    {   // Delete old game.
+        ((Widget*)parentWidget())->delete_game();
+    }
 
     Game * game = new Game(this->gameboard_size, this->player_count, this->item_count);
     // Add players and setup.
@@ -104,9 +112,15 @@ void StartDialogue::on_start_button_clicked()
     game->setUp();
     game->nextRound();
 
+    if (!this->type)
+    {   // debug
+
+        std::cerr << game->get_actual_player()->getFigure() << std::endl;
+    }
+
     // Prepare game main window.
     Widget* game_window = new Widget(0, this->gameboard_size, game);
-    game_window->set_buttons(this->gameboard_size);
+    game_window->set_buttons();
     game_window->set_labels();
     game_window->set_log();
     game_window->change_player_info(game->get_actual_player());
@@ -115,4 +129,9 @@ void StartDialogue::on_start_button_clicked()
     game_window->reset_scenes(remove_newlines(game->getBoardStr()),
                               remove_newlines(game->getFreeFieldString()));
     game_window->show();
+
+    if (!this->type)
+    {   // Delete old widget.
+        delete ((Widget*)parentWidget());
+    }
 }

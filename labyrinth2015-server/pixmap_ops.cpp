@@ -21,7 +21,7 @@ const char **to_pixmap(int size, std::string to_parse)
     result_ptr[3] = "$ c green";
     result_ptr[4] = "% c red";
     result_ptr[5] = "! c blue";
-    result_ptr[6] = "^ c yellow";
+    result_ptr[6] = "^ c white";
     result_ptr[7] = "& c brown";
 
     int offset = 0;
