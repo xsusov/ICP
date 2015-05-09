@@ -70,11 +70,14 @@ void Deck::push(Card * card_ptr)
 
 /**
  * @brief Deck::pop takes top card from deck and returns it
- * @return card from top of deck
+ * @return card from top of deck or nullptr for empty stack
  */
 Card* Deck::pop()
 {
-    Card* ptr = CardStack.back();
-    CardStack.pop_back();
+    Card* ptr {nullptr};
+    if( !CardStack.empty() ){
+        ptr = CardStack.back();
+        CardStack.pop_back();
+    }
     return ptr;
 }

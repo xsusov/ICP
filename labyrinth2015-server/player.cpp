@@ -40,7 +40,7 @@ void Player::placeOnField(BoardField *newField)
 
 bool Player::pickupItem()
 {
-    if(curField == nullptr)
+    if(curField == nullptr || card == nullptr)
         return false;
 
     if(curField->getItem() == card->getItem()){
