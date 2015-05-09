@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Save</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -82,7 +82,7 @@
      <x>0</x>
      <y>80</y>
      <width>401</width>
-     <height>51</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="font">

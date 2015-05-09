@@ -41,18 +41,18 @@ Widget::Widget(QWidget *parent, int n, Game *game) :
     this->board_scene = new QGraphicsScene;
     this->field_scene = new QGraphicsScene;
     // Set size.
-    this->setFixedWidth(n * 50 + 350);
-    this->setFixedHeight(n * 50 + 160);
+    this->setFixedWidth(n * 50 + 230);
+    this->setFixedHeight(n * 50 + 140);
     // UI settings.
     ui->setupUi(this);
     // Add scenes.
     ui->board_view->setScene(board_scene);
     ui->field_view->setScene(field_scene);
     // Set views fixed size.
-    ui->board_view->setFixedWidth(n * 50 + 350);
-    ui->board_view->setFixedHeight(n * 50 + 160);
-    ui->field_view->setFixedWidth(n * 50 + 350);
-    ui->field_view->setFixedHeight(n * 50 + 160);
+    ui->board_view->setFixedWidth(n * 50 + 360);
+    ui->board_view->setFixedHeight(n * 50 + 140);
+    ui->field_view->setFixedWidth(n * 50 + 230);
+    ui->field_view->setFixedHeight(n * 50 + 140);
     // Set background color: transparent.
     ui->board_view->setStyleSheet("background: transparent");
     ui->field_view->setStyleSheet("background: transparent");
@@ -80,18 +80,18 @@ void Widget::set_buttons(int n)
     int button_half = n - 1;
 
     // Rotate button.
-    QPushButton *rotate_free_field = new QPushButton(this);
-    rotate_free_field->setText("Rotate");
-    rotate_free_field->setObjectName("rotate");
-    rotate_free_field->move(this->width()/2 - n * 25 - 80, this->height()/2 + 102);
-    rotate_free_field->setMaximumSize(60, 25);
-    QObject::connect(rotate_free_field, SIGNAL (clicked()), this, SLOT (handle_rotate()));
+    QPushButton *rotate = new QPushButton(this);
+    rotate->setText("Rotate");
+    rotate->setObjectName("rotate");
+    rotate->move(80, this->height()/2 + 100);
+    rotate->setMaximumSize(60, 25);
+    QObject::connect(rotate, SIGNAL (clicked()), this, SLOT (handle_rotate()));
 
     // Undo button. Disabled by default.
     QPushButton *undo = new QPushButton(this);
     undo->setText("Undo");
     undo->setObjectName("undo");
-    undo->move(this->width()/2 - n * 25 - 80, this->height()/2 + 132);
+    undo->move(80, this->height()/2 + 125);
     undo->setMaximumSize(60, 25);
     QObject::connect(undo, SIGNAL (clicked()), this, SLOT (handle_undo()));
     undo->setDisabled(true);
@@ -100,32 +100,33 @@ void Widget::set_buttons(int n)
     QPushButton *next_turn = new QPushButton(this);
     next_turn->setText("Next Turn");
     next_turn->setObjectName("next_turn");
-    next_turn->move(this->width()/2 - n * 25 - 150, this->height()/2 + 165);
-    next_turn->setMaximumSize(120, 25);
-    next_turn->setMinimumSize(120, 25);
+    next_turn->move(19, this->height()/2 + 158);
+    next_turn->setMaximumSize(121, 25);
+    next_turn->setMinimumSize(121, 25);
     QObject::connect(next_turn, SIGNAL (clicked()), this, SLOT (handle_next_turn()));
 
     // Save button. (Part of "menu").
     QPushButton *save = new QPushButton(this);
     save->setText("Save");
     save->setObjectName("save");
-    save->move(this->width() - 100, this->height()/2 - 55);
-    save->setMaximumSize(70, 50);
-    save->setMinimumSize(70, 50);
+    save->move(this->width() - 99, this->height() - 25);
+    save->setMaximumSize(50, 25);
+    save->setMinimumSize(50, 25);
     QObject::connect(save, SIGNAL (clicked()), this, SLOT (handle_save()));
 
     // Quit button. (Part of "menu").
     QPushButton *quit = new QPushButton(this);
     quit->setText("Quit");
     quit->setObjectName("quit");
-    quit->move(this->width() - 100, this->height()/2 + 5);
-    quit->setMaximumSize(70, 50);
-    quit->setMinimumSize(70, 50);
+    quit->move(this->width() - 50, this->height() - 25);
+    quit->setMaximumSize(50, 25);
+    quit->setMinimumSize(50, 25);
     QObject::connect(quit, SIGNAL (clicked()), this, SLOT (handle_quit()));
 
     // Init buttons for collumns.
-    int pos_x = this->width()/2 - (n/2-1) * 50 - 19;
-    int pos_y = this->height()/2 + n/2 * 50 + 28;
+    int pos_x = 235;
+    int pos_y = 50;
+    int pos_y2 = pos_y + this->game_size * 50 + 20;
     for (int i = 0; i < button_half;)
     {
         QPushButton *ptr_1 = new QPushButton(this);
@@ -133,11 +134,11 @@ void Widget::set_buttons(int n)
         //
         ptr_1->setText("↑");
         ptr_1->setObjectName(QString::number(i+2));
-        ptr_1->move(pos_x, pos_y);
+        ptr_1->move(pos_x, pos_y2);
         ptr_1->setMaximumSize(40, 20);
         QObject::connect(ptr_1, SIGNAL (clicked()), this, SLOT (column_up()));
         //
-        ptr_2->move(pos_x, pos_y + 18);
+        ptr_2->move(pos_x, pos_y);
         ptr_2->setObjectName(QString::number(i+2));
         ptr_2->setText("↓");
         ptr_2->setMaximumSize(40, 20);
@@ -150,8 +151,9 @@ void Widget::set_buttons(int n)
     }
 
     // Init buttons for rows.
-    pos_x = this->width()/2 + (n/2+1) * 50 - 23;
-    pos_y = this->height()/2 - (n/2-1) * 50 - 18;
+    int pos_x_2 = 160;
+    pos_x = pos_x_2 + this->game_size * 50 + 20;
+    pos_y = 125;
     for (int i = 0; i < button_half;)
     {
         QPushButton *ptr_1 = new QPushButton(this);
@@ -166,7 +168,7 @@ void Widget::set_buttons(int n)
         //
         ptr_2->setText("→");
         ptr_2->setObjectName(QString::number(i+2));
-        ptr_2->move(pos_x + 18, pos_y);
+        ptr_2->move(pos_x_2, pos_y);
         ptr_2->setMaximumSize(20, 40);
         ptr_2->setMinimumSize(20, 40);
         QObject::connect(ptr_2, SIGNAL (clicked()), this, SLOT (row_right()));
@@ -182,27 +184,31 @@ void Widget::set_buttons(int n)
  * @brief Widget::set_labels prepares all text fields in game
  * @param n - size of a boardfield
  */
-void Widget::set_labels(int n)
+void Widget::set_labels()
 {
     // Player info text.
-    QLabel *player_info = new QLabel(this);
-    this->player_info = player_info;
-    player_info->setText("Name: .......\nColor: ......\nScore: ......");
-    player_info->setFont(QFont("Courier"));
-    player_info->move(this->width()/2 - n * 25 - 152, this->height()/2 - 180);
+    this->player_name = new QLabel(this);
+    this->player_name->setText("            ");
+    this->player_name->setFont(QFont("Arial", 15, QFont::Bold));
+    this->player_name->move(20, this->height()/2 - 179);
+
+    // Player info text.
+    this->player_info = new QLabel(this);
+    this->player_info->setText("Score: ....\nColor ....");
+    this->player_info->setFont(QFont("Courier", 12, QFont::Bold));
+    this->player_info->move(20, this->height()/2 - 155);
 
     // Labyrinth label.
     QLabel *labyrinth_lab = new QLabel(this);
     labyrinth_lab->setText("The Labyrinth");
-    labyrinth_lab->setFont(QFont("Arial", 24, QFont::Bold));
-    labyrinth_lab->move(this->width()/2 - 110, 15);
+    labyrinth_lab->setFont(QFont("Arial", 20, QFont::Bold));
+    labyrinth_lab->move(this->width()/2 - 60, 8);
 
     // Message label.
-    QLabel *message_lab = new QLabel(this);
-    this->message_label = message_lab;
-    message_lab->setText("Message: ...                                                ");
-    message_lab->setFont(QFont("Arial", 12, QFont::Bold));
-    message_lab->move(this->width()/2 - 200, this->height() - 30);
+    this->message_label = new QLabel(this);
+    this->message_label->setText("Message: ...                                      ");
+    this->message_label->setFont(QFont("Arial", 10, QFont::Bold));
+    this->message_label->move(180, this->height() - 40);
 }
 
 /**
@@ -242,10 +248,10 @@ void Widget::reset_scenes(std::string board_str, std::string field_str)
         QPixmap *card = new QPixmap(no_card);
         this->field_scene->clear();
         this->field_scene->addPixmap(*field);
-        this->field_scene->setSceneRect(this->game_size/2 * 50 + 150, -130, 60, 60);
+        this->field_scene->setSceneRect(this->width()/2 - 50, -130, 60, 60);
         // Add card.
         QGraphicsPixmapItem *card_ptr = this->field_scene->addPixmap(*card);
-        card_ptr->setPos(0, -220);
+        card_ptr->setPos(0, -210);
         delete field;
         delete card;
     }
@@ -364,11 +370,12 @@ std::string get_color(char c)
 void Widget::change_player_info(Player *actual_player)
 {
     // Player info text.
-    std::string info = "Name: " + actual_player->getName() + '\n';
-    info = info + "Color: " + get_color(actual_player->getFigure()) + '\n';
-    info = info + "Score: " + std::to_string(actual_player->getScore()) + '\n';
+    std::string info = "";
+    info = info + "Score: " + std::to_string(actual_player->getScore()) + "\n";
+    info = info + "Color: " + get_color(actual_player->getFigure()) + "\n";
 
     this->player_info->setText(QString::fromStdString(info));
+    this->player_name->setText(QString::fromStdString(actual_player->getName()));
 }
 
 /**

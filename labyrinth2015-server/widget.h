@@ -27,15 +27,14 @@ public:
 
 public:
     /**
-     * @brief set_buttons prepares all buttons
+     * @brief set_buttons - prepares all buttons
      * @param n - size of the gameboard
      */
     void set_buttons(int n);
     /**
-     * @brief set_labels prepares all labels
-     * @param n - size of the gameboard
+     * @brief set_labels - prepares all labels
      */
-    void set_labels(int n);
+    void set_labels();
     void set_log();
     void reset_scenes(std::string board_str, std::string field_str);
 
@@ -84,6 +83,7 @@ private:
     std::ofstream log;
     // Game.
     QLabel *message_label;
+    QLabel *player_name;
     QLabel *player_info;
     Game *game;
     int game_size;

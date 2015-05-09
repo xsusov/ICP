@@ -107,7 +107,7 @@ void StartDialogue::on_start_button_clicked()
     // Prepare game main window.
     Widget* game_window = new Widget(0, this->gameboard_size, game);
     game_window->set_buttons(this->gameboard_size);
-    game_window->set_labels(this->gameboard_size);
+    game_window->set_labels();
     game_window->set_log();
     game_window->change_player_info(game->get_actual_player());
 
