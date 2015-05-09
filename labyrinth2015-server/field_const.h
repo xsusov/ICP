@@ -8,6 +8,8 @@ extern const char *color_B[];
 // Players
 extern const char *player_1[];
 extern const char *player_2[];
+extern const char *player_3[];
+extern const char *player_4[];
 // Items TBD
 
 // Other

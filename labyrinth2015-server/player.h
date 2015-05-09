@@ -35,9 +35,6 @@ public:
     bool pickupItem();
     void dropCard() {card=nullptr;}
 
-    /// For GUI.
-    void set_color(int color) {this->color = color;}
-
 private:
     static int count;
 

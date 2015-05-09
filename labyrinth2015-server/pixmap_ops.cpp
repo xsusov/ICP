@@ -4,9 +4,9 @@
 const char **to_pixmap(int size, std::string to_parse)
 {
     int len  = size * 5 * 10;
-    const char **result_ptr = new const char* [len + 4];
+    const char **result_ptr = new const char* [len + 8];
 
-    std::string head = std::to_string(len) + " " + std::to_string(len) + " 3" + " 1";
+    std::string head = std::to_string(len) + " " + std::to_string(len) + " 7" + " 1";
     // Aloc and store to Pixmap.
     char *head_ptr = new char[head.length()];
     head_ptr[head.length()] = '\0';
@@ -16,13 +16,17 @@ const char **to_pixmap(int size, std::string to_parse)
     }
 
     result_ptr[0] = head_ptr;
-    result_ptr[1] = "$ c green";
-    result_ptr[2] = "@ c blue";
-    result_ptr[3] = "# c red";
+    result_ptr[1] = "@ c grey";
+    result_ptr[2] = "# c black";
+    result_ptr[3] = "$ c green";
+    result_ptr[4] = "% c red";
+    result_ptr[5] = "! c blue";
+    result_ptr[6] = "^ c yellow";
+    result_ptr[7] = "& c brown";
 
     int offset = 0;
     int counter = 0;
-    for (int i = 4; i < len + 4; i++)
+    for (int i = 8; i < len + 8; i++)
     {
         std::string line = "";
         for (int j = 0; j < size * 5; j++)
@@ -32,8 +36,10 @@ const char **to_pixmap(int size, std::string to_parse)
             {
                 case 'X': line += color_R[counter]; break;
                 case ' ': line += color_B[counter]; break;
-                case '@':
+                case '@': line += player_1[counter]; break;
                 case '&': line += player_2[counter]; break;
+                case '%': line += player_3[counter]; break;
+                case '!': line += player_4[counter]; break;
                 default:  line += color_G[counter]; break;
             }
         }

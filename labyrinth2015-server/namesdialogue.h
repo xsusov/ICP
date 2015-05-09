@@ -18,19 +18,20 @@ public:
     ~NamesDialogue();
     void enable_n(int n);
 
+    void set_ok_button(const QString &arg1);
 private slots:
 
     void on_player_1_textEdited(const QString &arg1);
-
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
 
     void on_player_2_textEdited(const QString &arg1);
 
     void on_player_3_textEdited(const QString &arg1);
 
     void on_player_4_textEdited(const QString &arg1);
+
+    void on_ok_button_clicked();
+
+    void on_cancel_button_clicked();
 
 private:
     Ui::NamesDialogue *ui;

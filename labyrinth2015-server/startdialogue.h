@@ -16,6 +16,7 @@ public:
     explicit StartDialogue(QWidget *parent = 0);
     ~StartDialogue();
     void enable_start();
+    void enable_confirm();
     void enable_dialogue();
 
     void set_player_1(std::string name) {this->player_1 = name;}
@@ -32,11 +33,11 @@ private slots:
 
     void on_item_slider_valueChanged(int value);
 
-    void on_pushButton_clicked();
+    void on_cancel_button_clicked();
 
-    void on_pushButton_2_clicked();
+    void on_confirm_button_clicked();
 
-    void on_pushButton_3_clicked();
+    void on_start_button_clicked();
 
 private:
     Ui::StartDialogue *ui;

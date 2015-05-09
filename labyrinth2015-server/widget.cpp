@@ -3,6 +3,7 @@
 #include "constants.h"
 #include "pixmap_ops.h"
 #include "field_const.h"
+#include "savedialogue.h"
 
 #include <iostream>
 
@@ -14,7 +15,10 @@
 #include <QString>
 #include <QLabel>
 
-
+/**
+ * @brief Widget::Widget - cosntructor
+ * @param parent - parent widget
+ */
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
@@ -22,30 +26,36 @@ Widget::Widget(QWidget *parent) :
     ui->setupUi(this);
 }
 
+/**
+ * @brief Widget::Widget - constructor
+ * @param parent - parent widget
+ * @param n - size of gameboard (5, 7, 9 or 11)
+ * @param game - pointer to game
+ */
 Widget::Widget(QWidget *parent, int n, Game *game) :
     QWidget(parent),
     ui(new Ui::Widget)
 {
+    this->game = game;
     this->game_size = n;
-    this->this_game = game;
     this->board_scene = new QGraphicsScene;
     this->field_scene = new QGraphicsScene;
-
+    // Set size.
     this->setFixedWidth(n * 50 + 350);
-    this->setFixedHeight(n * 50 + 150);
-
+    this->setFixedHeight(n * 50 + 160);
+    // UI settings.
     ui->setupUi(this);
     // Add scenes.
-    ui->view_1->setScene(board_scene);
-    ui->view_2->setScene(field_scene);
+    ui->board_view->setScene(board_scene);
+    ui->field_view->setScene(field_scene);
     // Set views fixed size.
-    ui->view_1->setFixedWidth(n * 50 + 350);
-    ui->view_1->setFixedHeight(n * 50 + 150);
-    ui->view_2->setFixedWidth(n * 50 + 350);
-    ui->view_2->setFixedHeight(n * 50 + 150);
+    ui->board_view->setFixedWidth(n * 50 + 350);
+    ui->board_view->setFixedHeight(n * 50 + 160);
+    ui->field_view->setFixedWidth(n * 50 + 350);
+    ui->field_view->setFixedHeight(n * 50 + 160);
     // Set background color: transparent.
-    ui->view_1->setStyleSheet("background: transparent");
-    ui->view_2->setStyleSheet("background: transparent");
+    ui->board_view->setStyleSheet("background: transparent");
+    ui->field_view->setStyleSheet("background: transparent");
 }
 
 /**
@@ -54,82 +64,6 @@ Widget::Widget(QWidget *parent, int n, Game *game) :
 Widget::~Widget()
 {
     delete ui;
-}
-
-/**
- * @brief Widget::reset_scenes (re)sets the scenes
- * @param board - pointer to pixmap conating gameboard
- * @param field - pointer po pixmap conating free field
- * @param card - pointer to pixmap containg card
- */
-void Widget::reset_scenes(int n, std::string board_str, std::string field_str)
-{
-    if (!board_str.empty())
-    {
-        // Set board scene.
-        const char **board_ptr = to_pixmap(n, board_str);
-        QPixmap *board = new QPixmap(board_ptr);
-        this->board_scene->clear();
-        this->board_scene->addPixmap(*board);
-        delete board;
-    }
-
-    if (!field_str.empty())
-    {
-        // Set field scene.
-        const char **field_ptr = to_pixmap(1, field_str);
-        QPixmap *field = new QPixmap(field_ptr);
-        QPixmap *card = new QPixmap(no_card);
-        this->field_scene->clear();
-        this->field_scene->addPixmap(*field);
-        this->field_scene->setSceneRect(n/2 * 50 + 150, -130, 60, 60);
-        // Add card.
-        QGraphicsPixmapItem *card_ptr = this->field_scene->addPixmap(*card);
-        card_ptr->setPos(0, -220);
-        delete field;
-        delete card;
-    }
-}
-
-void Widget::disable_buttons()
-{
-    for (QPushButton* ptr : this->buttons_ptr)
-        ptr->setDisabled(true);
-
-    (this->findChild<QPushButton*>("rotate"))->setDisabled(true);
-}
-
-void Widget::enable_buttons()
-{
-    for (QPushButton* ptr : this->buttons_ptr)
-        ptr->setEnabled(true);
-
-    (this->findChild<QPushButton*>("rotate"))->setEnabled(true);
-}
-
-void Widget::move_player(int direction)
-{
-    this->disable_buttons();
-    this->this_game->move(direction);
-    reset_scenes(this->game_size,
-                 remove_newlines(this->this_game->getBoardStr()),
-                 "");
-
-    if (this->this_game->turnEnd())
-    {   /// turn ends when player picks up item
-        this->end_turn();
-    }
-}
-
-void Widget::keyPressEvent(QKeyEvent *key_ptr)
-{
-    switch (key_ptr->key())
-    {
-        case Qt::Key_W: this->move_player(labyrinth::north); break;
-        case Qt::Key_S: this->move_player(labyrinth::south); break;
-        case Qt::Key_A: this->move_player(labyrinth::west); break;
-        case Qt::Key_D: this->move_player(labyrinth::east); break;
-    }
 }
 
 /**
@@ -153,13 +87,14 @@ void Widget::set_buttons(int n)
     rotate_free_field->setMaximumSize(60, 25);
     QObject::connect(rotate_free_field, SIGNAL (clicked()), this, SLOT (handle_rotate()));
 
-    // Undo button. (Under rotate button).
+    // Undo button. Disabled by default.
     QPushButton *undo = new QPushButton(this);
     undo->setText("Undo");
     undo->setObjectName("undo");
     undo->move(this->width()/2 - n * 25 - 80, this->height()/2 + 132);
     undo->setMaximumSize(60, 25);
     QObject::connect(undo, SIGNAL (clicked()), this, SLOT (handle_undo()));
+    undo->setDisabled(true);
 
     // Next turn button. (Under rotate field scene and buttons).
     QPushButton *next_turn = new QPushButton(this);
@@ -169,15 +104,6 @@ void Widget::set_buttons(int n)
     next_turn->setMaximumSize(120, 25);
     next_turn->setMinimumSize(120, 25);
     QObject::connect(next_turn, SIGNAL (clicked()), this, SLOT (handle_next_turn()));
-
-    // Main menu button. (Part of "menu").
-    QPushButton *menu = new QPushButton(this);
-    menu->setText("Main\nMenu");
-    menu->setObjectName("menu");
-    menu->move(this->width() - 100, this->height()/2 - 115);
-    menu->setMaximumSize(70, 50);
-    menu->setMinimumSize(70, 50);
-    QObject::connect(menu, SIGNAL (clicked()), this, SLOT (handle_menu()));
 
     // Save button. (Part of "menu").
     QPushButton *save = new QPushButton(this);
@@ -270,17 +196,139 @@ void Widget::set_labels(int n)
     labyrinth_lab->setText("The Labyrinth");
     labyrinth_lab->setFont(QFont("Arial", 24, QFont::Bold));
     labyrinth_lab->move(this->width()/2 - 110, 15);
+
+    // Message label.
+    QLabel *message_lab = new QLabel(this);
+    this->message_label = message_lab;
+    message_lab->setText("Message: ...                                                ");
+    message_lab->setFont(QFont("Arial", 12, QFont::Bold));
+    message_lab->move(this->width()/2 - 200, this->height() - 30);
 }
 
+/**
+ * @brief Widget::set_log - opens log file
+ */
 void Widget::set_log()
 {
     this->log.open(labyrinth::logfile,  std::fstream::out | std::fstream::trunc);
     if(!log.is_open())
     {
-        //TBD
+        this->message_label->setText("Error: log file not opened, rerun game!");
     }
 }
 
+/**
+ * @brief Widget::reset_scenes (re)sets the scenes
+ * @param board - pointer to pixmap conating gameboard - can be empty, old pixmap will be used
+ * @param field - pointer po pixmap conating free field -  can be empty, old pixmap will be used
+ */
+void Widget::reset_scenes(std::string board_str, std::string field_str)
+{
+    if (!board_str.empty())
+    {
+        // Set board scene.
+        const char **board_ptr = to_pixmap(this->game_size, board_str);
+        QPixmap *board = new QPixmap(board_ptr);
+        this->board_scene->clear();
+        this->board_scene->addPixmap(*board);
+        delete board;
+    }
+
+    if (!field_str.empty())
+    {
+        // Set field scene.
+        const char **field_ptr = to_pixmap(1, field_str);
+        QPixmap *field = new QPixmap(field_ptr);
+        QPixmap *card = new QPixmap(no_card);
+        this->field_scene->clear();
+        this->field_scene->addPixmap(*field);
+        this->field_scene->setSceneRect(this->game_size/2 * 50 + 150, -130, 60, 60);
+        // Add card.
+        QGraphicsPixmapItem *card_ptr = this->field_scene->addPixmap(*card);
+        card_ptr->setPos(0, -220);
+        delete field;
+        delete card;
+    }
+}
+
+/**
+ * @brief Widget::disable_buttons - disables shift and rotate buttons.
+ */
+void Widget::disable_buttons()
+{
+    for (QPushButton* ptr : this->buttons_ptr)
+        ptr->setDisabled(true);
+
+    (this->findChild<QPushButton*>("rotate"))->setDisabled(true);
+}
+
+/**
+ * @brief Widget::enable_buttons - enables shift and rotate buttons.
+ */
+void Widget::enable_buttons()
+{
+    for (QPushButton* ptr : this->buttons_ptr)
+        ptr->setEnabled(true);
+
+    (this->findChild<QPushButton*>("rotate"))->setEnabled(true);
+}
+
+/**
+ * @brief Widget::disable_button - disables button selected by objject name
+ * @param obj_name - name of the button
+ */
+void Widget::disable_button(QString const obj_name)
+{
+    (this->findChild<QPushButton*>(obj_name))->setDisabled(true);
+}
+
+/**
+ * @brief Widget::enable_button - enables button selected by objject name
+ * @param obj_name - name of the button
+ */
+void Widget::enable_button(QString const obj_name)
+{
+    (this->findChild<QPushButton*>(obj_name))->setEnabled(true);
+}
+
+/**
+ * @brief Widget::move_player - calls game's move method and resets scenes
+ * @param direction - direction of the move
+ */
+void Widget::move_player(int direction)
+{
+    this->disable_buttons();
+    this->game->move(direction);
+    reset_scenes(remove_newlines(this->game->getBoardStr()),
+                 ""); /// Free field does not change.
+
+    if (this->game->turnEnd())
+    {   /// turn ends when player picks up item
+        this->end_turn();
+    }
+}
+
+/**
+ * @brief Widget::keyPressEvent - player movement key bindings
+ * @param key_ptr - key pressed
+ */
+void Widget::keyPressEvent(QKeyEvent *key_ptr)
+{
+    switch (key_ptr->key())
+    {
+        case Qt::Key_W: this->move_player(labyrinth::north); break;
+        case Qt::Key_S: this->move_player(labyrinth::south); break;
+        case Qt::Key_A: this->move_player(labyrinth::west); break;
+        case Qt::Key_D: this->move_player(labyrinth::east); break;
+    }
+}
+
+
+/**
+ * @brief remove_newlines - removes newlines from string
+ * @param source string with newlines
+ * @return source string without newlines
+ */
 std::string remove_newlines(std::string source)
 {
     std::string result = "";
@@ -292,18 +340,48 @@ std::string remove_newlines(std::string source)
     return result;
 }
 
+/**
+ * @brief get_color - get color according to player figure
+ * @param c - player figure (char)
+ * @return string with color description
+ */
+std::string get_color(char c)
+{
+    switch (c)
+    {
+        case '@': return "brown";
+        case '&': return "yellow";
+        case '%': return "red";
+        case '!': return "blue";
+    }
+    return "";
+}
+
+/**
+ * @brief Widget::change_player_info - sets in game info about actual player
+ * @param actual_player - pointer to Player object
+ */
 void Widget::change_player_info(Player *actual_player)
 {
     // Player info text.
     std::string info = "Name: " + actual_player->getName() + '\n';
-    info = info + "Color: " + std::to_string(actual_player->getColor()) + '\n';
+    info = info + "Color: " + get_color(actual_player->getFigure()) + '\n';
     info = info + "Score: " + std::to_string(actual_player->getScore()) + '\n';
 
     this->player_info->setText(QString::fromStdString(info));
 }
 
 /**
- * @brief Widget::handle_quit ends whole program
+ * @brief Widget::print_message - prints message to game
+ * @param message - message (QString)
+ */
+void Widget::print_message(QString const message)
+{
+    this->message_label->setText("Message: " + message);
+}
+
+/**
+ * @brief Widget::handle_quit - ends whole program when quit button pressed
  */
 void Widget::handle_quit()
 {
@@ -311,118 +389,148 @@ void Widget::handle_quit()
 }
 
 /**
- * @brief Widget::handle_save save button signal handler
+ * @brief Widget::handle_save - save button signal handler
  */
 void Widget::handle_save()
 {
-    // Not implemented
-    std::cerr << "click save" << std::endl;
+    SaveDialogue *save_dialogue = new SaveDialogue(this, this->game);
+    this->disable_button("save");
+    save_dialogue->show();
 }
 
 /**
- * @brief Widget::handle_menu main menu button signal handler
- */
-void Widget::handle_menu()
-{
-    //Not implemented.
-    std::cerr << "click menu" << std::endl;
-}
-
-/**
- * @brief Widget::handle_rotate rotate button signal handler
+ * @brief Widget::handle_rotate - rotate button signal handler
  */
 void Widget::handle_rotate()
 {
-    this->this_game->getBoard()->rotateFreeField(1);
-    this->reset_scenes(this->game_size, "",
-                       remove_newlines(this->this_game->getFreeFieldString()));
+    this->game->getBoard()->rotateFreeField(1);
+    this->reset_scenes("",
+                       remove_newlines(this->game->getFreeFieldString()));
 }
 
 /**
- * @brief Widget::handle_undo undo button signal handler
+ * @brief Widget::handle_undo - undo button signal handler
  */
 void Widget::handle_undo()
 {
-    //Not implemented.
-    std::cerr << "click undo" << std::endl;
-}
+    if(!this->game->isUndoPossible())
+    {
+        print_message("undo is not possible.");
+    }
+    else
+    {
+        this->log.close();
+        if (this->game->undo())
+        {
+            delete this->game;
+            this->game = Game::loadGame(labyrinth::tmplogfile);
+            std::remove(labyrinth::tmplogfile.c_str());
+            this->log.open(labyrinth::logfile, std::fstream::out | std::ios::app );
+            if (!this->log.is_open())
+            {
+                this->print_message("Error: log file not opened, rerun game!");
+            }
+        }
+        this->log.open(labyrinth::logfile,  std::fstream::out | std::ios::app );
+        if (!this->log.is_open())
+        {
+            this->print_message("Error: log file not opened, rerun game!");
+        }
+    }
+    reset_scenes(remove_newlines(this->game->getBoardStr()),
+                 remove_newlines(this->game->getFreeFieldString()));
 
-void Widget::end_turn()
-{
-    this->log << this->this_game->getRoundStr();
-    this->log.flush();
-
-    this->this_game->nextRound();
-    this->reset_scenes(this->game_size, "",
-                       remove_newlines(this->this_game->getFreeFieldString()));
-    this->change_player_info(this->this_game->get_actual_player());
-    this->enable_buttons();
+    if(!this->game->isUndoPossible())
+    {
+        disable_button("undo");
+    }
 }
 
 /**
- * @brief Widget::handle_next_turn next turn button signal handler
+ * @brief Widget::end_turn - ends turn, writes logs, resets buttons
+ */
+void Widget::end_turn()
+{
+    /// Writes logs
+    this->log << this->game->getRoundStr();
+    this->log.flush();
+    /// Calls nect round.
+    this->game->nextRound();
+    this->reset_scenes("",
+                       remove_newlines(this->game->getFreeFieldString()));
+    this->change_player_info(this->game->get_actual_player());
+    /// Enable buttons and reset message.
+    this->enable_buttons();
+    if (this->game->isUndoPossible())
+        this->enable_button("undo");
+
+    this->message_label->setText("Message: ...");
+}
+
+/**
+ * @brief Widget::handle_next_turn - next turn button signal handler
  */
 void Widget::handle_next_turn()
 {
-    end_turn();
+    this->end_turn();
 }
 
 /**
- * @brief Widget::column_up up buttons signal handler
+ * @brief Widget::column_up - shift up buttons signal handler
  */
 void Widget::column_up()
 {
     QObject * sender = QObject::sender();
     int pos = (sender->objectName()).toInt();
-    this->this_game->shift(pos-1, labyrinth::north);
-
-    this->reset_scenes(this->game_size,
-                       remove_newlines(this->this_game->getBoardStr()),
-                       remove_newlines(this->this_game->getFreeFieldString()));
-    this->disable_buttons();
+    if (this->game->shift(pos-1, labyrinth::north))
+    {
+        this->reset_scenes(remove_newlines(this->game->getBoardStr()),
+                           remove_newlines(this->game->getFreeFieldString()));
+        this->disable_buttons();
+    }
 }
 
 /**
- * @brief Widget::column_down down buttons signal handler
+ * @brief Widget::column_down - shift down buttons signal handler
  */
 void Widget::column_down()
 {
     QObject * sender = QObject::sender();
     int pos = (sender->objectName()).toInt();
-    this->this_game->shift(pos-1, labyrinth::south);
-
-    this->reset_scenes(this->game_size,
-                       remove_newlines(this->this_game->getBoardStr()),
-                       remove_newlines(this->this_game->getFreeFieldString()));
-    this->disable_buttons();
+    if (this->game->shift(pos-1, labyrinth::south))
+    {
+        this->reset_scenes(remove_newlines(this->game->getBoardStr()),
+                           remove_newlines(this->game->getFreeFieldString()));
+        this->disable_buttons();
+    }
 }
 
 /**
- * @brief Widget::row_left left buttons signal handler
+ * @brief Widget::row_left - shift left buttons signal handler
  */
 void Widget::row_left()
 {
     QObject * sender = QObject::sender();
     int pos = (sender->objectName()).toInt();
-    this->this_game->shift(pos-1, labyrinth::west);
-
-    this->reset_scenes(this->game_size,
-                       remove_newlines(this->this_game->getBoardStr()),
-                       remove_newlines(this->this_game->getFreeFieldString()));
-    this->disable_buttons();
+    if (this->game->shift(pos-1, labyrinth::west))
+    {
+        this->reset_scenes(remove_newlines(this->game->getBoardStr()),
+                           remove_newlines(this->game->getFreeFieldString()));
+        this->disable_buttons();
+    }
 }
 
 /**
- * @brief Widget::row_right right buttons signal handler
+ * @brief Widget::row_right - shift right buttons signal handler
  */
 void Widget::row_right()
 {
     QObject * sender = QObject::sender();
     int pos = (sender->objectName()).toInt();
-    this->this_game->shift(pos-1, labyrinth::east);
-
-    this->reset_scenes(this->game_size,
-                       remove_newlines(this->this_game->getBoardStr()),
-                       remove_newlines(this->this_game->getFreeFieldString()));
-    this->disable_buttons();
+    if (this->game->shift(pos-1, labyrinth::east))
+    {
+        this->reset_scenes(remove_newlines(this->game->getBoardStr()),
+                           remove_newlines(this->game->getFreeFieldString()));
+        this->disable_buttons();
+    }
 }

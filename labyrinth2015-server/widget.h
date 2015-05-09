@@ -37,7 +37,7 @@ public:
      */
     void set_labels(int n);
     void set_log();
-    void reset_scenes(int n, std::string board_str, std::string field_str);
+    void reset_scenes(std::string board_str, std::string field_str);
 
     void change_player_info(); /// Not implemented
     void change_player_info(Player *actual_player);
@@ -47,6 +47,9 @@ public:
     void keyPressEvent(QKeyEvent * key_ptr);
     void move_player(int direction);
     void end_turn();
+    void disable_button(const QString obj_name);
+    void enable_button(const QString obj_name);
+    void print_message(const QString message);
 signals:
     /**
      * @brief send_move sends information about moving row or column
@@ -62,7 +65,6 @@ signals:
 private slots:
     void handle_quit();
     void handle_save();
-    void handle_menu();
     void handle_rotate();
     void handle_undo();
     void handle_next_turn();
@@ -81,8 +83,9 @@ private:
     // Log.
     std::ofstream log;
     // Game.
+    QLabel *message_label;
     QLabel *player_info;
-    Game *this_game;
+    Game *game;
     int game_size;
 };
 

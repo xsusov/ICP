@@ -114,7 +114,7 @@
     <string>Name is max. 10 letters or digits long.</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="cancel_button">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -127,7 +127,7 @@
     <string>Cancel</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="ok_button">
    <property name="geometry">
     <rect>
      <x>210</x>

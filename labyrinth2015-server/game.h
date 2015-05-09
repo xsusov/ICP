@@ -36,7 +36,6 @@ public:
 
     /// Methods for gui.
     Player * get_actual_player() {return currentPlayer;}
-    void addPlayer(const std::string playerName, int color);
 
 private:
     int round;

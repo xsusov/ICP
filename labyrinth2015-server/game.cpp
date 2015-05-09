@@ -81,12 +81,6 @@ void Game::addPlayer(Player *newPlayer, const int x, const int y)
     }
 }
 
-void Game::addPlayer(const std::string playerName, int color)
-{
-    Player *tmp = new Player(playerName);
-    tmp->set_color(color);
-    players.push_back(tmp);
-}
 
 /**
  * @brief Game::setUp prepares Game's gameboard before starting new game

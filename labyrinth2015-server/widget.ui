@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Widget</string>
   </property>
-  <widget class="QGraphicsView" name="view_1">
+  <widget class="QGraphicsView" name="board_view">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -23,7 +23,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QGraphicsView" name="view_2">
+  <widget class="QGraphicsView" name="field_view">
    <property name="geometry">
     <rect>
      <x>0</x>
