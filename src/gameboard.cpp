@@ -18,9 +18,9 @@
 using namespace labyrinth;
 
 /**
- * @brief random_bool
- * @param ratio
- * @return
+ * @brief random_bool function for random distribution generation for items setup
+ * @param ratio - ratio used for check against generated value
+ * @return boolean value as result of comparsion of ratio parameter and randomly generated number
  */
 bool random_bool(const float ratio)
 {
@@ -28,6 +28,11 @@ bool random_bool(const float ratio)
     return random < static_cast<int>(ratio * 100);
 }
 
+/**
+ * @brief GameBoard::GameBoard constructor
+ * @param size - number of rows and columns on board
+ * @see   GameBoard::setUpFields()
+ */
 GameBoard::GameBoard( const int size )
     : size{size},
       max{size - 1},
@@ -35,20 +40,24 @@ GameBoard::GameBoard( const int size )
       freeField{nullptr}
 {
     if( size < labyrinth::boardMinSize || size > labyrinth::boardMaxSize ){
-        throw expWrongSize;
+        throw expWrongSize; /// size is limited by rules of game to be in range <5;11>
     }
 
-    if( !(size%2) ){
+    if( !(size%2) ){        /// size is also limited to be odd number only
         throw expWrongEvenSize;
     }
 
+    /// reserve space in field vector for all new field (will be added by setUpFields() method later)
     field.reserve(totalFields);
     for( int i = 0; i < totalFields; i++){
         field.push_back(nullptr);
+        /// new field will be filled with randomly selected board fields, given some rules (corner field must be LBoardField fe.)
     }
-    /// new field will be filled with randomly selected board fields, given some rules (corner field must be LBoardField fe.)
 }
 
+/**
+ * @brief GameBoard::~GameBoard destructor
+ */
 GameBoard::~GameBoard()
 {
     for( auto curField : field){
