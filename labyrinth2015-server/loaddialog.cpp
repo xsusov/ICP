@@ -54,7 +54,7 @@ void LoadDialog::on_load_button_clicked()
     Widget* game_window = new Widget(0, game->get_game_size(), game);
     game_window->set_buttons();
     game_window->set_labels();
-    game_window->set_log();
+    game_window->set_load_log();
     game_window->change_player_info(game->get_actual_player());
 
     // Start game.

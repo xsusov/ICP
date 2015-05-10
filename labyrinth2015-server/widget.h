@@ -51,6 +51,7 @@ public:
     void disable_button(const QString obj_name);
     void enable_button(const QString obj_name);
     void print_message(const QString message);
+    void set_load_log();
 signals:
     /**
      * @brief send_move sends information about moving row or column

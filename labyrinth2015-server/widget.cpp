@@ -244,6 +244,18 @@ void Widget::set_log()
     }
 }
 
+/**
+ * @brief Widget::set_log - opens log file for load game
+ */
+void Widget::set_load_log()
+{
+    this->log.open(labyrinth::logfile,  std::fstream::out | std::fstream::app);
+    if(!log.is_open())
+    {
+        this->message_label->setText("Error: log file not opened, rerun game!");
+    }
+}
+
 char get_quest(std::string header)
 {
     return header[header.length() - 2];
