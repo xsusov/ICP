@@ -245,6 +245,12 @@ void Widget::set_log()
     }
 }
 
+char get_quest(std::string header)
+{
+    return header[header.length() - 2];
+}
+
+
 /**
  * @brief Widget::reset_scenes (re)sets the scenes
  * @param board - pointer to pixmap conating gameboard - can be empty, old pixmap will be used
@@ -252,6 +258,7 @@ void Widget::set_log()
  */
 void Widget::reset_scenes(std::string board_str, std::string field_str)
 {
+    char quest = get_quest(this->game->getRoundHeader());
     if (!board_str.empty())
     {
         // Set board scene.
@@ -260,22 +267,26 @@ void Widget::reset_scenes(std::string board_str, std::string field_str)
         this->board_scene->clear();
         this->board_scene->addPixmap(*board);
         delete board;
+        free_xpm(this->game_size, board_ptr);
     }
 
     if (!field_str.empty())
     {
         // Set field scene.
         const char **field_ptr = to_pixmap(1, field_str);
+        const char **card_ptr = create_card(decide_color(quest), decide_shape(quest));
         QPixmap *field = new QPixmap(field_ptr);
-        QPixmap *card = new QPixmap(no_card);
+        QPixmap *card = new QPixmap(card_ptr);
         this->field_scene->clear();
         this->field_scene->addPixmap(*field);
         this->field_scene->setSceneRect(this->width()/2 - 50, -130, 60, 60);
         // Add card.
-        QGraphicsPixmapItem *card_ptr = this->field_scene->addPixmap(*card);
-        card_ptr->setPos(0, -210);
+        QGraphicsPixmapItem *card_item_ptr = this->field_scene->addPixmap(*card);
+        card_item_ptr->setPos(0, -210);
         delete field;
         delete card;
+        free_card(card_ptr);
+        free_xpm(1, field_ptr);
     }
 }
 
@@ -328,7 +339,7 @@ void Widget::move_player(int direction)
     this->disable_buttons();
     this->game->move(direction);
     reset_scenes(remove_newlines(this->game->getBoardStr()),
-                 ""); /// Free field does not change.
+                 remove_newlines(this->game->getFreeFieldString()));
 
     if (this->game->turnEnd())
     {   /// turn ends when player picks up item
@@ -414,9 +425,13 @@ void Widget::print_message(QString const message)
  */
 void Widget::handle_quit()
 {
+    delete this;
     QApplication::quit();
 }
 
+/**
+ * @brief Widget::handle_new - ingamew new game button signal handler
+ */
 void Widget::handle_new()
 {
     StartDialogue * new_game_dialogue = new StartDialogue(this, false);
@@ -424,6 +439,9 @@ void Widget::handle_new()
     new_game_dialogue->show();
 }
 
+/**
+ * @brief Widget::handle_load - ingame load button signal handler
+ */
 void Widget::handle_load()
 {
     LoadDialog * dialogue = new LoadDialog(this, false);
@@ -447,7 +465,7 @@ void Widget::handle_save()
 void Widget::handle_rotate()
 {
     this->game->getBoard()->rotateFreeField(1);
-    this->reset_scenes("",
+    this->reset_scenes(remove_newlines(this->game->getBoardStr()),
                        remove_newlines(this->game->getFreeFieldString()));
 }
 
@@ -480,8 +498,8 @@ void Widget::handle_undo()
             this->print_message("Error: log file not opened, rerun game!");
         }
     }
-    reset_scenes(remove_newlines(this->game->getBoardStr()),
-                 remove_newlines(this->game->getFreeFieldString()));
+    this->reset_scenes(remove_newlines(this->game->getBoardStr()),
+                       remove_newlines(this->game->getFreeFieldString()));
 
     if(!this->game->isUndoPossible())
     {
@@ -531,7 +549,7 @@ void Widget::end_turn()
     this->log.flush();
     /// Calls nect round.
     this->game->nextRound();
-    this->reset_scenes("",
+    this->reset_scenes(remove_newlines(this->game->getBoardStr()),
                        remove_newlines(this->game->getFreeFieldString()));
     this->change_player_info(this->game->get_actual_player());
     /// Enable buttons and reset message.
@@ -589,8 +607,9 @@ void Widget::row_left()
     int pos = (sender->objectName()).toInt();
     if (this->game->shift(pos-1, labyrinth::west))
     {
-        this->reset_scenes(remove_newlines(this->game->getBoardStr()),
-                           remove_newlines(this->game->getFreeFieldString()));
+        (remove_newlines(this->game->getBoardStr()),
+                         remove_newlines(this->game->getFreeFieldString()),
+                         this->game->get_actual_player()->getFigure());
         this->disable_buttons();
     }
 }
