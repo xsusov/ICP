@@ -15,6 +15,7 @@ GameOver::~GameOver()
 
 void GameOver::set_results(QString const results)
 {
+    this->ui->results->clear();
     this->ui->results->setText(results);
 }
 

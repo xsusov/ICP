@@ -104,7 +104,7 @@ void Widget::set_buttons()
     QPushButton *next_turn = new QPushButton(this);
     next_turn->setText("Next Turn");
     next_turn->setObjectName("next_turn");
-    next_turn->move(19, this->height()/2 + 158);
+    next_turn->move(19, this->height()/2 + 153);
     next_turn->setMaximumSize(121, 25);
     next_turn->setMinimumSize(121, 25);
     QObject::connect(next_turn, SIGNAL (clicked()), this, SLOT (handle_next_turn()));
@@ -208,17 +208,16 @@ void Widget::set_buttons()
  */
 void Widget::set_labels()
 {
-    // Player info text.
+    // Player name text.
     this->player_name = new QLabel(this);
     this->player_name->setText("            ");
-    this->player_name->setFont(QFont("Arial", 15, QFont::Bold));
-    this->player_name->move(20, this->height()/2 - 179);
+    this->player_name->setFont(QFont("Arial", 13, QFont::Bold));
+    this->player_name->move(20, this->height()/2 - 186);
 
     // Player info text.
     this->player_info = new QLabel(this);
-    this->player_info->setText("Score:              \nColor             ");
     this->player_info->setFont(QFont("Courier", 12, QFont::Bold));
-    this->player_info->move(20, this->height()/2 - 155);
+    this->player_info->move(20, this->height()/2 - 165);
 
     // Labyrinth label.
     QLabel *labyrinth_lab = new QLabel(this);
@@ -228,7 +227,7 @@ void Widget::set_labels()
 
     // Message label.
     this->message_label = new QLabel(this);
-    this->message_label->setText("Message: ...                                      ");
+    this->message_label->setText("Message: ...                 ");
     this->message_label->setFont(QFont("Arial", 10, QFont::Bold));
     this->message_label->move(180, this->height() - 40);
 }
@@ -282,7 +281,7 @@ void Widget::reset_scenes(std::string board_str, std::string field_str)
         this->field_scene->setSceneRect(this->width()/2 - 50, -130, 60, 60);
         // Add card.
         QGraphicsPixmapItem *card_item_ptr = this->field_scene->addPixmap(*card);
-        card_item_ptr->setPos(0, -210);
+        card_item_ptr->setPos(0, -205);
         delete field;
         delete card;
         free_card(card_ptr);
@@ -388,10 +387,10 @@ std::string get_color(char c)
 {
     switch (c)
     {
-        case '@': return "brown";
-        case '&': return "white";
-        case '%': return "red";
-        case '!': return "blue";
+        case '@': return "BROWN ";
+        case '&': return "WHITE ";
+        case '%': return "RED   ";
+        case '!': return "BLUE  ";
     }
     return "";
 }
@@ -404,9 +403,12 @@ void Widget::change_player_info(Player *actual_player)
 {
     // Player info text.
     std::string info = "";
+    info = info + "Round: " + std::to_string(this->game->getRound()) + "\n";
     info = info + "Score: " + std::to_string(actual_player->getScore()) + "\n";
     info = info + "Color: " + get_color(actual_player->getFigure()) + "\n";
 
+    this->player_info->clear();
+    this->player_name->clear();
     this->player_info->setText(QString::fromStdString(info));
     this->player_name->setText(QString::fromStdString(actual_player->getName()));
 }
@@ -417,6 +419,7 @@ void Widget::change_player_info(Player *actual_player)
  */
 void Widget::print_message(QString const message)
 {
+    this->message_label->clear();
     this->message_label->setText("Message: " + message);
 }
 
@@ -500,6 +503,7 @@ void Widget::handle_undo()
     }
     this->reset_scenes(remove_newlines(this->game->getBoardStr()),
                        remove_newlines(this->game->getFreeFieldString()));
+    this->change_player_info(this->game->get_actual_player());
 
     if(!this->game->isUndoPossible())
     {
@@ -607,9 +611,8 @@ void Widget::row_left()
     int pos = (sender->objectName()).toInt();
     if (this->game->shift(pos-1, labyrinth::west))
     {
-        (remove_newlines(this->game->getBoardStr()),
-                         remove_newlines(this->game->getFreeFieldString()),
-                         this->game->get_actual_player()->getFigure());
+        this->reset_scenes(remove_newlines(this->game->getBoardStr()),
+                           remove_newlines(this->game->getFreeFieldString()));
         this->disable_buttons();
     }
 }

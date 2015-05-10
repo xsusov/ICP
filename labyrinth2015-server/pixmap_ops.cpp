@@ -214,7 +214,7 @@ int decide_shape(char quest)
         case 'v':
         case 'w':
         case 'x':
-        case 'y': return TDWN;
+        case 'y': return BIGT;
     }
     return RECT;
 }

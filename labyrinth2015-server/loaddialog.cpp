@@ -60,6 +60,7 @@ void LoadDialog::on_load_button_clicked()
     // Start game.
     game_window->reset_scenes(remove_newlines(game->getBoardStr()),
                               remove_newlines(game->getFreeFieldString()));
+    game_window->disable_buttons();
     game_window->show();
 
     if (!this->type)
