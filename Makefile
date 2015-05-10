@@ -3,7 +3,7 @@ CXX           	= g++
 LINK		= g++
 CFLAGS        	= -pipe -g -Wall -W $(DEFINES)
 CXXFLAGS      	= -pipe -std=c++11 -g -Wall -W $(DEFINES)
-QMAKE         	= /usr/bin/qmake-qt4
+QMAKE         	= qmake
 ALLDIRS		= ./src/* ./docu/* ./examples/*
 ALLFILES	= Makefile README.txt
 PACKNAME	= xsusov01-xbandz00
@@ -208,7 +208,8 @@ all:	gui cli server
 .PHONY: gui
 gui:		
 	@echo "Making some " $(GUI);	
-
+	$(QMAKE) -makefile src/labyrinth2015.pro -o gui_makefile
+	make -f gui_makefile
 
 .PHONY: cli
 cli:	$(SOURCES_CLI) $(OBJECTS_CLI)
@@ -235,6 +236,4 @@ doxygen:
 	
 .PHONY: clean
 clean:
-	rm -rf *.o $(ALLBIN) ./docu/html *.log *.tmp
-
-
+	rm -rf *.o $(ALLBIN) ./docu/html *.log *.tmp moc_* ui_* gui_makefile
