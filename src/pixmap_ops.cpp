@@ -6,10 +6,9 @@ const char **to_pixmap(int size, std::string to_parse)
     int len  = size * 5 * 10;
     const char **result_ptr = new const char* [len + 9];
 
-    std::string head = std::to_string(len) + " " + std::to_string(len) + " 8" + " 1";
+    std::string head = std::to_string(len) + " " + std::to_string(len) + " 8" + " 1 ";
     // Aloc and store to Pixmap.
     char *head_ptr = new char[head.length()];
-    head_ptr[head.length()] = '\0';
     for (unsigned k = 0; k < head.length(); k++)
     {   // Copy to memory.
         head_ptr[k] = head[k];
