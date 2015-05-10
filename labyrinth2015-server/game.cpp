@@ -1,7 +1,7 @@
 /**
  * @project LABYRINTH2015
  * ICP project
- * @class Game00
+ * @class Game
  * @author xsusov01
  * @email  xsusov01@stud.fit.vutbr.cz
  * @author xbandz00
@@ -395,10 +395,13 @@ bool Game::isUndoPossible()
     return round > (int)players.size();
 }
 
+/**
+ * @brief Game::undo reverse game state to beginning of current player's previous turn
+ * @return succes of undo operation
+ */
 bool Game::undo()
 {
     int roundAfterUndo = round - ((int)players.size() + 1);
-
     std::string roundStr;
 
     std::ifstream log;
@@ -423,6 +426,12 @@ bool Game::undo()
     return true;
 }
 
+/**
+ * @brief Game::move tries to move current player in given direction
+ *        also checks new player field for item hes finding and if possible pick it
+ * @param direction for player move on boardfield
+ * @return possibility of player move in direction
+ */
 bool Game::move(const int direction)
 {
     if(!board.movePlayer(currentPlayer, direction)){
@@ -436,6 +445,10 @@ bool Game::move(const int direction)
     return true;
 }
 
+/**
+ * @brief Game::turnEnd checks wheter player picked item this turn and thus his turn ends
+ * @return wheter player picked up item this turn
+ */
 bool Game::turnEnd()
 {
     return currentPlayer->getCard() == nullptr;

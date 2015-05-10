@@ -154,7 +154,7 @@ void Widget::set_buttons()
         QPushButton *ptr_1 = new QPushButton(this);
         QPushButton *ptr_2 = new QPushButton(this);
         //
-        ptr_1->setText("↑");
+        ptr_1->setText("^");
         ptr_1->setObjectName(QString::number(i+2));
         ptr_1->move(pos_x, pos_y2);
         ptr_1->setMaximumSize(40, 20);
@@ -162,7 +162,7 @@ void Widget::set_buttons()
         //
         ptr_2->move(pos_x, pos_y);
         ptr_2->setObjectName(QString::number(i+2));
-        ptr_2->setText("↓");
+        ptr_2->setText(QString("v"));
         ptr_2->setMaximumSize(40, 20);
         QObject::connect(ptr_2, SIGNAL (clicked()), this, SLOT (column_down()));
         //
@@ -181,14 +181,14 @@ void Widget::set_buttons()
         QPushButton *ptr_1 = new QPushButton(this);
         QPushButton *ptr_2 = new QPushButton(this);
         //
-        ptr_1->setText("←");
+        ptr_1->setText("<");
         ptr_1->setObjectName(QString::number(i+2));
         ptr_1->move(pos_x, pos_y);
         ptr_1->setMaximumSize(20, 40);
         ptr_1->setMinimumSize(20, 40);
         QObject::connect(ptr_1, SIGNAL (clicked()), this, SLOT (row_left()));
         //
-        ptr_2->setText("→");
+        ptr_2->setText(">");
         ptr_2->setObjectName(QString::number(i+2));
         ptr_2->move(pos_x_2, pos_y);
         ptr_2->setMaximumSize(20, 40);

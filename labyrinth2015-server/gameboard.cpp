@@ -1,10 +1,27 @@
+/**
+ * @project LABYRINTH2015
+ * ICP project
+ * @class GameBoard
+ * @author xsusov01
+ * @email  xsusov01@stud.fit.vutbr.cz
+ * @author xbandz00
+ * @email  xbandz00@stud.fit.vutbr.cz
+ * @file gameboard.cpp
+ * @date 2015/05/10
+ * @brief class for wrapping board of game model as vector of boardfields and free field used for changing board placement
+*/
+#include <random>
 #include "constants.h"
 #include "strings.h"
 #include "gameboard.h"
-#include <random>
 
 using namespace labyrinth;
 
+/**
+ * @brief random_bool
+ * @param ratio
+ * @return
+ */
 bool random_bool(const float ratio)
 {
     int random = std::rand() % 101;
@@ -122,6 +139,7 @@ void GameBoard::setUpItems(std::vector<GameItem *> &items )
             curPos = pos(x, y);
             if((static_cast<std::size_t>(totalFields - curPos) <=  (items.size() - i)) || random_bool(ratio)){
                 field[curPos]->setItem( items[i++] );
+
             }
         }
     }
@@ -255,21 +273,22 @@ bool GameBoard::isEdgingDirection(const BoardField &from, const int direction) c
 bool GameBoard::updateDirection( int &x, int &y, const int direction )
 {
     // @todo -> look at border limit
-  switch( roundDirection(direction )){
-      case( north ):
-          y--;
-          break;
-      case( east ):
-          x++;
-          break;
-      case( south ):
-          y++;
-          break;
-      case( west ):
-          x--;
-          break;
+    switch( roundDirection(direction )){
+        case( north ):
+            y--;
+            break;
+        case( east ):
+            x++;
+            break;
+        case( south ):
+            y++;
+            break;
+        case( west ):
+            x--;
+            break;
     }
-  return true;
+
+    return true;
 }
 
 bool GameBoard::isWalkable(BoardField *from, const int direction ) const
