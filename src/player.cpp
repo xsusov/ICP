@@ -1,3 +1,15 @@
+/**
+ * @project LABYRINTH2015
+ * ICP project
+ * @class Player
+ * @author xsusov01
+ * @email  xsusov01@stud.fit.vutbr.cz
+ * @author xbandz00
+ * @email  xbandz00@stud.fit.vutbr.cz
+ * @file player.cpp
+ * @date 2015/05/10
+ * @brief class for player's game representation
+*/
 #include "player.h"
 
 int Player::count = 0;

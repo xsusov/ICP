@@ -6,7 +6,7 @@
  * @email  xsusov01@stud.fit.vutbr.cz
  * @author xbandz00
  * @email  xbandz00@stud.fit.vutbr.cz
- * @file boardfield.cpp
+ * @file card.cpp
  * @date 2015/05/10
  * @brief class for card of items for players quests
 */

@@ -1,3 +1,15 @@
+/**
+ * @project LABYRINTH2015
+ * ICP project
+ * @class ViewerCli
+ * @author xsusov01
+ * @email  xsusov01@stud.fit.vutbr.cz
+ * @author xbandz00
+ * @email  xbandz00@stud.fit.vutbr.cz
+ * @file viewercli.cpp
+ * @date 2015/05/10
+ * @brief class for handling Viewer part of MVC decomposition in CLI mode
+*/
 #include <iostream>
 #include "viewercli.h"
 #include "strings.h"
