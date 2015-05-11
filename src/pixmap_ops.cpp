@@ -1,6 +1,25 @@
+/**
+ * @project LABYRINTH2015
+ * ICP project
+ * @author xsusov01
+ * @email  xsusov01@stud.fit.vutbr.cz
+ * @author xbandz00
+ * @email  xbandz00@stud.fit.vutbr.cz
+ * @file pixmap_ops.cpp
+ * @date 2015/05/10
+ * @brief functions for creating valid QPixMaps from avaliabe static data
+*/
+
 #include "field_const.h"
 #include <string>
 
+/**
+ * @brief to_pixmap creates allocates pixmap from availabe static data according to input string
+ * @param size - size of game (can be 1 for generating free field)
+ * @param to_parse - string describing fields
+ * @return pointer to dynamically allocated data
+ * @see free_xpm();
+ */
 const char **to_pixmap(int size, std::string to_parse)
 {
     int len  = size * 5 * 10;
@@ -21,8 +40,8 @@ const char **to_pixmap(int size, std::string to_parse)
     result_ptr[4] = "% c red";
     result_ptr[5] = "! c blue";
     result_ptr[6] = "^ c white";
-    result_ptr[7] = "& c brown";
-    result_ptr[8] = "* c green";
+    result_ptr[7] = "& c #878719";
+    result_ptr[8] = "* c #C440A3";
 
     int offset = 0;
     int counter = 0;
@@ -38,8 +57,8 @@ const char **to_pixmap(int size, std::string to_parse)
                 case '&': line += player_2[counter]; break;
                 case '%': line += player_3[counter]; break;
                 case '!': line += player_4[counter]; break;
-                case 'X': line += color_R[counter]; break;
-                case ' ': line += color_B[counter]; break;
+                case 'X': line += color_B[counter]; break;
+                case ' ': line += color_G[counter]; break;
                 //
                 case 'a': line += item_a[counter]; break;
                 case 'b': line += item_b[counter]; break;
@@ -68,7 +87,7 @@ const char **to_pixmap(int size, std::string to_parse)
                 case 'w': line += item_w[counter]; break;
                 case 'x': line += item_x[counter]; break;
                 case 'y': line += item_y[counter]; break;
-                default:  line += color_G[counter]; break;
+                default:  line += color_B[counter]; break;
             }
         }
 
@@ -90,6 +109,14 @@ const char **to_pixmap(int size, std::string to_parse)
     return result_ptr;
 }
 
+/**
+ * @brief create_card allocates card picture
+ * @param color - color of the item card is showing
+ * @param shape - shape of the item card is showing
+ * @return pointer to dynamically allocated data
+ * @see free_card();
+ * @see decide_color(); and decide_shape();
+ */
 const char **create_card(int color, int shape)
 {
     const char **result_ptr = new const char* [203];
@@ -99,12 +126,12 @@ const char **create_card(int color, int shape)
 
     switch (color)
     {
-        case RED:    result_ptr[2] = "  c red";    break;
-        case GREEN:  result_ptr[2] = "  c green";  break;
-        case BLUE:   result_ptr[2] = "  c blue";   break;
-        case WHITE:  result_ptr[2] = "  c white";  break;
-        case BROWN:  result_ptr[2] = "  c brown";  break;
-        case ORANGE: result_ptr[2] = "  c orange"; break;
+        case RED:    result_ptr[2] = "  c red";      break;
+        case GREEN:  result_ptr[2] = "  c #C440A3";  break;
+        case BLUE:   result_ptr[2] = "  c blue";     break;
+        case WHITE:  result_ptr[2] = "  c white";    break;
+        case BROWN:  result_ptr[2] = "  c #878719";  break;
+        case ORANGE: result_ptr[2] = "  c orange";   break;
     }
 
     for (int i = 3; i < 203; i++)
@@ -114,7 +141,7 @@ const char **create_card(int color, int shape)
         {
             case RECT: line = card_rect[i]; break;
             case TDWN: line = card_tdwn[i]; break;
-            case BIGT: line = card_bigt[i]; break;
+            case BIGI: line = card_bigi[i]; break;
             case CRSS: line = card_crss[i]; break;
         }
 
@@ -129,6 +156,49 @@ const char **create_card(int color, int shape)
     return result_ptr;
 }
 
+/**
+ * @brief create_figure allocates and creates figure pixmap
+ * @param figure - char representing player figure
+ * @return pointer to dynamically allocated data
+ * @see free_figure();
+ */
+const char **create_figure(char figure)
+{
+    const char **result_ptr = new const char* [16];
+
+    result_ptr[0] = "10 10 5 1";
+    result_ptr[1] = "% c red";
+    result_ptr[2] = "@ c none";
+    result_ptr[3] = "! c blue";
+    result_ptr[4] = "# c black";
+    result_ptr[5] = "* c #C440A3";
+
+    for (int i = 6; i < 16; i++)
+    {
+        std::string line = "";
+        switch (figure)
+        {
+            case '@': line += player_1[i-6]; break;
+            case '&': line += player_2[i-6]; break;
+            case '%': line += player_3[i-6]; break;
+            case '!': line += player_4[i-6]; break;
+        }
+
+        char *line_ptr = new char[line.length()];
+        for (unsigned l = 0; l < line.length(); l++)
+        {   // Copy to memory.
+            line_ptr[l] = line[l];
+        }
+        // Save and reset line.
+        result_ptr[i] = line_ptr;
+    }
+    return result_ptr;
+}
+
+/**
+ * @brief free_card deallocates card
+ * @param to_delete - pointer to card data
+ */
 void free_card(const char **to_delete)
 {
     // Delete individual strings;
@@ -140,6 +210,26 @@ void free_card(const char **to_delete)
     delete [] to_delete;
 }
 
+/**
+ * @brief free_figure deallocates figure
+ * @param to_delete - pointer to figure data
+ */
+void free_figure(const char **to_delete)
+{
+    // Delete individual strings;
+    for (int i = 6; i < 16; i++)
+    {
+        delete [] to_delete[i];
+    }
+    // Delete array of pointers.
+    delete [] to_delete;
+}
+
+/**
+ * @brief free_xpm deallocates pixmap
+ * @param size - size of game (1 for free field)
+ * @param to_delete - pointer to pixmap data
+ */
 void free_xpm(int size, const char **to_delete)
 {
     // Delete map head.
@@ -154,6 +244,12 @@ void free_xpm(int size, const char **to_delete)
     delete [] to_delete;
 }
 
+/**
+ * @brief decide_color decides color card item should be
+ * @param quest - actual players's quest
+ * @return color code
+ * @see FIELD_CONST_H for enums
+ */
 int decide_color(char quest)
 {
     switch (quest)
@@ -186,6 +282,12 @@ int decide_color(char quest)
     return RED;
 }
 
+/**
+ * @brief decide_shape decides shape card item should be
+ * @param quest - actual players's quest
+ * @return shape code
+ * @see FIELD_CONST_H for enmus
+ */
 int decide_shape(char quest)
 {
     switch (quest)
@@ -213,7 +315,7 @@ int decide_shape(char quest)
         case 'v':
         case 'w':
         case 'x':
-        case 'y': return BIGT;
+        case 'y': return BIGI;
     }
     return RECT;
 }

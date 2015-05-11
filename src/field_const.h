@@ -2,18 +2,18 @@
 #define FIELD_CONST_H
 
 enum COLOR {RED, GREEN, BLUE, WHITE, BROWN, ORANGE};
-enum SHAPE {RECT, TDWN, CRSS, BIGT};
+enum SHAPE {RECT, TDWN, CRSS, BIGI};
 
-// Textures and colors
-extern const char *color_R[];
-extern const char *color_G[];
+/// Textures and colors
 extern const char *color_B[];
-// Players
+extern const char *color_G[];
+
+/// Players
 extern const char *player_1[];
 extern const char *player_2[];
 extern const char *player_3[];
 extern const char *player_4[];
-// Items
+/// Items
 extern const char *item_a[];
 extern const char *item_b[];
 extern const char *item_c[];
@@ -41,13 +41,10 @@ extern const char *item_v[];
 extern const char *item_w[];
 extern const char *item_x[];
 extern const char *item_y[];
-// Cards
+/// Cards
 extern char *card_rect[];
 extern char *card_tdwn[];
 extern char *card_crss[];
-extern char *card_bigt[];
-// Other
-extern const char *no_card[];
-extern const char *empty_pixmap[];
+extern char *card_bigi[];
 
 #endif // FIELD_CONST_H

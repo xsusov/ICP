@@ -12,6 +12,7 @@ void free_card(const char **to_delete);
 int decide_color(char quest);
 int decide_shape(char quest);
 
-
+const char **create_figure(char figure);
+void free_figure(const char **to_delete);
 
 #endif // PIXMAP_OPS_H

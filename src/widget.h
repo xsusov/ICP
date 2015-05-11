@@ -52,6 +52,7 @@ public:
     void enable_button(const QString obj_name);
     void print_message(const QString message);
     void set_load_log();
+    char get_quest();
 signals:
     /**
      * @brief send_move sends information about moving row or column
@@ -92,6 +93,8 @@ private:
     QLabel *player_info;
     Game *game;
     int game_size;
+    // Key press event
+    bool move_availbe;
 };
 
 std::string remove_newlines(std::string source);
