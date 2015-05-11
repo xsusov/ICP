@@ -100,8 +100,9 @@ void Widget::set_buttons()
     QPushButton *rotate = new QPushButton(this);
     rotate->setText("Rotate");
     rotate->setObjectName("rotate");
-    rotate->move(80, this->height()/2 + 100);
-    rotate->setMaximumSize(60, 25);
+    rotate->move(73, this->height()/2 + 100);
+    rotate->setMaximumSize(68, 25);
+    rotate->setMinimumSize(68, 25);
     rotate->setFocusPolicy(Qt::NoFocus);
     QObject::connect(rotate, SIGNAL (clicked()), this, SLOT (handle_rotate()));
 
@@ -109,15 +110,16 @@ void Widget::set_buttons()
     QPushButton *undo = new QPushButton(this);
     undo->setText("Undo");
     undo->setObjectName("undo");
-    undo->move(80, this->height()/2 + 125);
-    undo->setMaximumSize(60, 25);
+    undo->move(73, this->height()/2 + 125);
+    undo->setMaximumSize(68, 25);
+    undo->setMinimumSize(68, 25);
     undo->setFocusPolicy(Qt::NoFocus);
     QObject::connect(undo, SIGNAL (clicked()), this, SLOT (handle_undo()));
     undo->setDisabled(true);
 
     // Next turn button. (Under rotate field scene and buttons).
     QPushButton *next_turn = new QPushButton(this);
-    next_turn->setText("Next Turn");
+    next_turn->setText("Next &Turn");
     next_turn->setObjectName("next_turn");
     next_turn->move(19, this->height()/2 + 153);
     next_turn->setMaximumSize(121, 25);
@@ -406,6 +408,7 @@ void Widget::keyPressEvent(QKeyEvent *key_ptr)
             case Qt::Key_S: this->move_player(labyrinth::south); break;
             case Qt::Key_A: this->move_player(labyrinth::west); break;
             case Qt::Key_D: this->move_player(labyrinth::east); break;
+            case Qt::Key_T: end_turn(); break;
         }
     }
     else
