@@ -3,7 +3,7 @@ CXX           	= g++
 LINK		= g++
 CFLAGS        	= -pipe -g -Wall -W $(DEFINES)
 CXXFLAGS      	= -pipe -std=c++11 -g -Wall -W $(DEFINES)
-QMAKE         	= qmake-qt4
+QMAKE         	= /usr/local/share/Qt-5.2.1/5.2.1/gcc_64/bin/qmake 
 ALLDIRS		= ./src/* ./docu/* ./examples/*
 ALLFILES	= Makefile README.txt
 PACKNAME	= xsusov01-xbandz00
