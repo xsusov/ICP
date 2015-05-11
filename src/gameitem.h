@@ -10,7 +10,7 @@ class GameItem : GameObject
 public:
     GameItem(const char figure = '$', const std::string name = "item");
     ~GameItem();
-    char getFigure();
+    char getFigure() {return figure;}
     static void fillVector(std::vector<GameItem *> &vector, const int itemCount);
     static int randItem(const int itemCount);
 

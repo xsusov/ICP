@@ -1,3 +1,15 @@
+/**
+ * @project LABYRINTH2015
+ * ICP project
+ * @class LBoardField
+ * @author xsusov01
+ * @email  xsusov01@stud.fit.vutbr.cz
+ * @author xbandz00
+ * @email  xbandz00@stud.fit.vutbr.cz
+ * @file lboardfield.cpp
+ * @date 2015/05/10
+ * @brief subclass of Boardfields type L
+*/
 #include "lboardfield.h"
 #include "constants.h"
 
