@@ -576,11 +576,22 @@ void Widget::handle_undo()
     }
 }
 
+/**
+ * @brief compare_players
+ * @param i - first player
+ * @param j - second player
+ * @return comparison bool
+ */
 bool compare_players(Player * i, Player * j)
 {
     return (i->getScore() < j->getScore());
 }
 
+/**
+ * @brief prepare_results prepares results for message output
+ * @param players - vector of players.
+ * @return formatted string
+ */
 std::string prepare_results(std::vector<Player*> &players)
 {
     std::sort(players.begin(), players.end(), compare_players);
