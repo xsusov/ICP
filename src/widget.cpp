@@ -90,7 +90,7 @@ void Widget::set_buttons()
 {
     // All magical constants here were carefully chossen by a professional (lol).
     // It is scientifically proven that these constants are good for your health.
-    // Changing them may cause all kinds of cancer.
+    // Changing them may cause cancer. You have been warned.
 
     // Buttons count.
     int n = this->game_size;
@@ -122,8 +122,8 @@ void Widget::set_buttons()
     next_turn->setText("Next &Turn");
     next_turn->setObjectName("next_turn");
     next_turn->move(19, this->height()/2 + 153);
-    next_turn->setMaximumSize(121, 25);
-    next_turn->setMinimumSize(121, 25);
+    next_turn->setMaximumSize(123, 25);
+    next_turn->setMinimumSize(123, 25);
     next_turn->setFocusPolicy(Qt::NoFocus);
     QObject::connect(next_turn, SIGNAL (clicked()), this, SLOT (handle_next_turn()));
 

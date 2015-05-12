@@ -14,7 +14,7 @@
 #include <string>
 
 /**
- * @brief to_pixmap creates allocates pixmap from availabe static data according to input string
+ * @brief to_pixmap creates and allocates pixmap from availabe static data according to input string
  * @param size - size of game (can be 1 for generating free field)
  * @param to_parse - string describing fields
  * @return pointer to dynamically allocated data

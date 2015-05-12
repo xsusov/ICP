@@ -2,7 +2,6 @@
  * @project LABYRINTH2015
  * ICP project
  * @class NamesDialogue
- * @class NamesDialogue
  * @author xsusov01
  * @email  xsusov01@stud.fit.vutbr.cz
  * @author xbandz00

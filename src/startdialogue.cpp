@@ -32,7 +32,7 @@ StartDialogue::StartDialogue(QWidget *parent, bool type) :
 {
     ui->setupUi(this);
     this->type = type;
-    this->ui->start_button->setDisabled(true);
+    this->ui->start_button->hide();
     this->gameboard_size = 11;
     this->player_count = 4;
     this->item_count = 24;
@@ -51,7 +51,7 @@ StartDialogue::~StartDialogue()
  */
 void StartDialogue::enable_start()
 {
-    this->ui->start_button->setEnabled(true);
+    this->ui->start_button->show();
 }
 
 /**
@@ -59,7 +59,7 @@ void StartDialogue::enable_start()
  */
 void StartDialogue::enable_confirm()
 {
-    this->ui->confirm_button->setEnabled(true);
+    this->ui->confirm_button->show();
 }
 
 /**
@@ -137,7 +137,7 @@ void StartDialogue::on_confirm_button_clicked()
     get_names->enable_n(this->player_count);
     get_names->setObjectName("names");
     get_names->show();
-    this->ui->confirm_button->setDisabled(true);
+    this->ui->confirm_button->hide();
     this->disable_dialogue();
     this->hide();
 }
