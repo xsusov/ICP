@@ -26,57 +26,45 @@ public:
     ~Widget();
 
 public:
-    /**
-     * @brief set_buttons - prepares all buttons
-     * @param n - size of the gameboard
-     */
     void set_buttons();
-    /**
-     * @brief set_labels - prepares all labels
-     */
     void set_labels();
     void set_log();
-    void reset_scenes(std::string board_str, std::string field_str);
-
-    void change_player_info(); /// Not implemented
-    void change_player_info(Player *actual_player);
-    void disable_buttons();
-    void enable_buttons();
-
-    void delete_game() {delete this->game;}
-
-    void keyPressEvent(QKeyEvent * key_ptr);
-    void move_player(int direction);
+    //
     void end_turn();
+    void reset_scenes(std::string board_str, std::string field_str);
+    void change_player_info(Player *actual_player);
     void disable_button(const QString obj_name);
     void enable_button(const QString obj_name);
+    //
+    void disable_buttons();
+    void enable_buttons();
+    //
+    void delete_game() {delete this->game;}
+    //
+    void keyPressEvent(QKeyEvent * key_ptr);
+    void move_player(int direction);
+    //
     void print_message(const QString message);
     void set_load_log();
     char get_quest();
+
 signals:
-    /**
-     * @brief send_move sends information about moving row or column
-     * @param position - position of row/column (2, 4, 6...)
-     * @param type - row or column
-     */
     void send_move(int position, char type);
-    /**
-     * @brief send_rotate sends information abot rotating free field
-     */
     void send_rotate();
 
 private slots:
+    void handle_next_turn();
+    void handle_rotate();
     void handle_quit();
-    void handle_new();
     void handle_load();
     void handle_save();
-    void handle_rotate();
     void handle_undo();
-    void handle_next_turn();
-    void column_up();
+    void handle_new();
+
     void column_down();
-    void row_left();
+    void column_up();
     void row_right();
+    void row_left();
 
 private:
     Ui::Widget *ui;

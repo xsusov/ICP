@@ -26,7 +26,6 @@
 #include <QCoreApplication>
 #include <QGraphicsRectItem>
 
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -35,6 +34,7 @@ int main(int argc, char *argv[])
     /// open and show menu
     Menu m(0);
     m.show();
+
 
     return a.exec();
     return 0;

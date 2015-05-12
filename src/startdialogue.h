@@ -28,8 +28,8 @@ public:
     void start_game();
 
 private slots:
-    void on_size_slider_valueChanged(int value);
     void on_player_slider_valueChanged(int value);
+    void on_size_slider_valueChanged(int value);
     void on_item_slider_valueChanged(int value);
     void on_cancel_button_clicked();
     void on_confirm_button_clicked();
@@ -38,7 +38,6 @@ private slots:
 private:
     Ui::StartDialogue *ui;
     bool type; /// If false - ingame start
-
     int item_count;
     int player_count;
     int gameboard_size;

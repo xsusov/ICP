@@ -149,6 +149,7 @@ void NamesDialogue::on_ok_button_clicked()
     // Click start.
     ((StartDialogue*)parentWidget())->enable_start();
     ((StartDialogue*)parentWidget())->start_game();
+    this->hide();
 }
 
 /**

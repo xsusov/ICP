@@ -22,6 +22,9 @@ private slots:
 
     void on_load_button_clicked();
 
+
+    void on_browse_clicked();
+
 private:
     Ui::LoadDialog *ui;
     bool type;

@@ -12,9 +12,9 @@ class GameOver : public QDialog
     Q_OBJECT
 
 public:
-    explicit GameOver(QWidget *parent = 0);
     ~GameOver();
-
+    explicit GameOver(QWidget *parent = 0);
+    //
     void set_results(const QString results);
 
 private slots:

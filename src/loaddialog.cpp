@@ -14,6 +14,8 @@
 #include "loaddialog.h"
 #include "ui_loaddialog.h"
 
+#include <QFileDialog>
+
 #include "menu.h"
 #include "game.h"
 #include "widget.h"
@@ -98,4 +100,12 @@ void LoadDialog::on_load_button_clicked()
     {   // Delete old game.
         delete ((Widget*)parentWidget());
     }
+}
+
+void LoadDialog::on_browse_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(this, QString::null);
+    if (filename.isEmpty()) return;
+    this->ui->lineEdit->setText(filename);
+    this->ui->load_button->clicked();
 }

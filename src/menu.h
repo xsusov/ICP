@@ -12,8 +12,8 @@ class Menu : public QWidget
     Q_OBJECT
 
 public:
-    explicit Menu(QWidget *parent = 0);
     ~Menu();
+    explicit Menu(QWidget *parent = 0);
 
     void enable_new_game_button();
     void disable_new_game_button();
@@ -21,7 +21,6 @@ public:
 private slots:
     void on_quit_clicked();
     void on_new_game_clicked();
-
     void on_load_game_clicked();
 
 private:

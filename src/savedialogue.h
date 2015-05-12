@@ -14,16 +14,13 @@ class SaveDialogue : public QDialog
     Q_OBJECT
 
 public:
+    ~SaveDialogue();
     explicit SaveDialogue(QWidget *parent = 0);
     SaveDialogue(QWidget *parent, Game *ptr);
-    ~SaveDialogue();
-
 
 private slots:
     void on_lineEdit_textChanged(const QString &arg1);
-
     void on_close_button_clicked();
-
     void on_save_button_clicked();
 
 private:
