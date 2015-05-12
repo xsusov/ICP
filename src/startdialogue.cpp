@@ -128,6 +128,14 @@ void StartDialogue::on_cancel_button_clicked()
 }
 
 /**
+ * @brief StartDialogue::start_game clicks start button
+ */
+void StartDialogue::start_game()
+{
+    this->ui->start_button->clicked();
+}
+
+/**
  * @brief StartDialogue::on_confirm_button_clicked starts names dialogue
  */
 void StartDialogue::on_confirm_button_clicked()

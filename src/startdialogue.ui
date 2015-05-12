@@ -370,7 +370,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Confirm</string>
+    <string>Start</string>
    </property>
   </widget>
  </widget>

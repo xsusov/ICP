@@ -146,10 +146,9 @@ void NamesDialogue::on_ok_button_clicked()
     ((StartDialogue*)parentWidget())->set_player_2(this->ui->player_2->displayText().toStdString());
     ((StartDialogue*)parentWidget())->set_player_3(this->ui->player_3->displayText().toStdString());
     ((StartDialogue*)parentWidget())->set_player_4(this->ui->player_4->displayText().toStdString());
-    // Enable start and return.
+    // Click start.
     ((StartDialogue*)parentWidget())->enable_start();
-    ((StartDialogue*)parentWidget())->show();
-    delete this;
+    ((StartDialogue*)parentWidget())->start_game();
 }
 
 /**

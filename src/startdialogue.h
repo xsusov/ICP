@@ -25,18 +25,14 @@ public:
     void set_player_4(std::string name) {this->player_4 = name;}
 
     void disable_dialogue();
+    void start_game();
+
 private slots:
-
     void on_size_slider_valueChanged(int value);
-
     void on_player_slider_valueChanged(int value);
-
     void on_item_slider_valueChanged(int value);
-
     void on_cancel_button_clicked();
-
     void on_confirm_button_clicked();
-
     void on_start_button_clicked();
 
 private:
