@@ -181,6 +181,6 @@ void StartDialogue::on_start_button_clicked()
     if (!this->type)
     {   // Delete old widget.
         ((Widget*)parentWidget())->delete_game();
-        delete ((Widget*)parentWidget());
+        ((Widget*)parentWidget())->hide();
     }
 }

@@ -255,7 +255,7 @@ void Widget::set_labels()
     this->message_label = new QLabel(this);
     this->message_label->setText("Message: ...                                                                 ");
     this->message_label->setFont(QFont("Arial", 10, QFont::Bold));
-    this->message_label->move(180, this->height() - 42);
+    this->message_label->move(180, this->height() - 45);
 }
 
 /**
