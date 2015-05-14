@@ -224,7 +224,7 @@ server:	$(SOURCES_CLI) $(OBJECTS_CLI)
 
 
 .PHONY:	run
-run:	gui
+run:	
 	./$(GUI)
 
 .PHONY:	pack

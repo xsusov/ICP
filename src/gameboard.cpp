@@ -82,6 +82,10 @@ std::string GameBoard::getStr()
     return str;
 }
 
+/**
+ * @brief GameBoard::draw
+ *        prints GameBoard and freefield on standard output in text format
+ */
 void GameBoard::draw()
 {
     std::cout << getStr() << std::endl;
@@ -89,6 +93,10 @@ void GameBoard::draw()
 }
 
 
+/**
+ * @brief GameBoard::setUpFields
+ *        prepares randomly selected fields (by game rules limited) on GameBoard
+ */
 void GameBoard::setUpFields()
 {
     std::default_random_engine randGenerator;
@@ -117,11 +125,23 @@ void GameBoard::setUpFields()
     freeField->rotate( rotateDistribution(randGenerator));
 }
 
+/**
+ * @brief GameBoard::isCorner
+ * @param pos - linear position in field vector
+ * @return wheter is this field in corner or not
+ */
 inline bool GameBoard::isCorner(const int pos)
 {
     return !pos || pos == max || pos == totalFields - size || pos == totalFields - 1;
 }
 
+/**
+ * @brief GameBoard::isPathOpen
+ * @param xFrom - x position of starting field
+ * @param yFrom - y position of starting field
+ * @param direction - direction for move
+ * @return reue if there is possible to move from first field to next
+ */
 bool GameBoard::isPathOpen(const int xFrom, const int yFrom, const int direction)
 {
     BoardField *from = getField( xFrom, yFrom );
@@ -135,6 +155,11 @@ bool GameBoard::isPathOpen(const int xFrom, const int yFrom, const int direction
     return from->isOpen( direction ) && to->isOpen( opositeDirection(direction) );
 }
 
+/**
+ * @brief GameBoard::setUpItems
+ *        places all items from  items vector on gameboard randomly
+ * @param items vector of GameItems
+ */
 void GameBoard::setUpItems(std::vector<GameItem *> &items )
 {
     std::size_t i = 0;
@@ -162,6 +187,11 @@ void GameBoard::setUpItems(std::vector<GameItem *> &items )
     freeField->setItem( items[i] );
 }
 
+/**
+ * @brief GameBoard::setUpPlayers
+ *        sets all players to corner fields of gameboard
+ * @param players vector with all players
+ */
 void GameBoard::setUpPlayers(std::vector<Player *> &players)
 {
     int startingFieldsX[4] { 0, max, 0, max};
@@ -176,11 +206,25 @@ void GameBoard::setUpPlayers(std::vector<Player *> &players)
     }
 }
 
+/**
+ * @brief GameBoard::setField
+ *        moves newField to given position on gameboard
+ * @param posX - x position for target
+ * @param posY - y position for target
+ * @param newField - fields which be moved on position
+ */
 void GameBoard::setField(const int posX, const int posY, BoardField *newField)
 {
     field[pos(posX, posY)] = newField;
 }
 
+/**
+ * @brief GameBoard::makeRandBoardfield
+ * @param x
+ * @param y
+ * @param randNum
+ * @return new random type of boardfield object
+ */
 BoardField *GameBoard::makeRandBoardfield(const int x, const int y, const int randNum)
 {
     switch(randNum % 3){
@@ -195,6 +239,14 @@ BoardField *GameBoard::makeRandBoardfield(const int x, const int y, const int ra
     }
 }
 
+/**
+ * @brief GameBoard::makeTargetBoardField
+ * @param x
+ * @param y
+ * @param logNum
+ * @param item
+ * @return
+ */
 BoardField *GameBoard::makeTargetBoardField(const int x, const int y, const int logNum, GameItem *item)
 {
     BoardField *newField {nullptr};
@@ -214,7 +266,12 @@ BoardField *GameBoard::makeTargetBoardField(const int x, const int y, const int 
     return newField;
 }
 
-
+/**
+ * @brief GameBoard::getNeighbour
+ * @param from
+ * @param direction
+ * @return field next to from-field in direction
+ */
 BoardField *GameBoard::getNeighbour(const BoardField &from, const int direction) const
 {
     int neighbourX = from.getPosX(),
@@ -226,6 +283,12 @@ BoardField *GameBoard::getNeighbour(const BoardField &from, const int direction)
     return getField( neighbourX, neighbourY );
 }
 
+/**
+ * @brief GameBoard::getField
+ * @param posX
+ * @param posY
+ * @return field on position or nullptr if out of border
+ */
 BoardField* GameBoard::getField( int posX, int posY ) const
 {
     if( posX < 0 || posX > max || posY < 0 || posY > max )
@@ -234,11 +297,25 @@ BoardField* GameBoard::getField( int posX, int posY ) const
     return field[ pos(posX, posY) ];
 }
 
+/**
+ * @brief GameBoard::rotateFreeField
+ * @param rotate - number of how many times should be freefield rotated
+ */
 void GameBoard::rotateFreeField(const int rotate)
 {
     freeField->rotate(rotate);
 }
 
+/**
+ * @brief GameBoard::shift
+ *        shifts row or column in given direction using freefield to replace last field
+ * @param first
+ * @param last
+ * @param offset
+ * @param direction
+ * @param lastX
+ * @param lastY
+ */
 void GameBoard::shift(const int first, const int last, const int offset, const int direction, const int lastX, const int lastY )
 {
     BoardField *tmp = field[ first ];
@@ -255,6 +332,11 @@ void GameBoard::shift(const int first, const int last, const int offset, const i
 
 }
 
+/**
+ * @brief GameBoard::shift
+ * @param num
+ * @param direction
+ */
 void GameBoard::shift(const int num, const int direction)
 {
     switch( direction ){
@@ -269,16 +351,35 @@ void GameBoard::shift(const int num, const int direction)
     }
 }
 
+/**
+ * @brief GameBoard::isEdge
+ * @param x
+ * @param y
+ * @return
+ */
 bool GameBoard::isEdge(const int x, const int y) const
 {
     return !x || !y || x == max || y == max;
 }
 
+/**
+ * @brief GameBoard::isEdgingDirection
+ * @param from
+ * @param direction
+ * @return
+ */
 bool GameBoard::isEdgingDirection(const BoardField &from, const int direction) const
 {
     return getNeighbour(from, direction) != nullptr;
 }
 
+/**
+ * @brief GameBoard::updateDirection
+ * @param x
+ * @param y
+ * @param direction
+ * @return
+ */
 bool GameBoard::updateDirection( int &x, int &y, const int direction )
 {
     // @todo -> look at border limit
@@ -300,6 +401,12 @@ bool GameBoard::updateDirection( int &x, int &y, const int direction )
     return true;
 }
 
+/**
+ * @brief GameBoard::isWalkable
+ * @param from
+ * @param direction
+ * @return
+ */
 bool GameBoard::isWalkable(BoardField *from, const int direction ) const
 {
     if( from == nullptr || !from->isOpen(direction))
@@ -312,6 +419,12 @@ bool GameBoard::isWalkable(BoardField *from, const int direction ) const
     return true;
 }
 
+/**
+ * @brief GameBoard::movePlayer
+ * @param player
+ * @param direction
+ * @return
+ */
 bool GameBoard::movePlayer(Player *player, const int direction)
 {
     if(player == nullptr)
