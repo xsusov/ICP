@@ -243,6 +243,8 @@ void Widget::set_labels()
     // Player info text.
     this->player_info = new QLabel(this);
     this->player_info->setFont(QFont("Courier", 12, QFont::Bold));
+    this->player_info->setFixedWidth(400);
+    this->player_info->setWordWrap(true);
     this->player_info->move(20, this->height()/2 - 165);
 
     // Labyrinth label.
@@ -415,7 +417,9 @@ void Widget::keyPressEvent(QKeyEvent *key_ptr)
     {
         switch (key_ptr->key())
         {
-            case Qt::Key_Space: this->move_availbe = true;
+            case Qt::Key_Space:
+            if (this->game->finish()) return;
+            this->move_availbe = true;
             this->enable_buttons();
             this->enable_button("next_turn");
             if (this->game->isUndoPossible())
@@ -467,9 +471,9 @@ void Widget::change_player_info(Player *actual_player)
 {
     // Player info text.
     std::string info = "";
-    info = info + "Round: " + std::to_string(this->game->getRound()) + "\n";
-    info = info + "Score: " + std::to_string(actual_player->getScore()) + "\n";
-    info = info + "Color: ";
+    info = info + "Round: " + std::to_string(this->game->getRound());
+    info = info + "\nScore: " + std::to_string(actual_player->getScore());
+    info = info + "\nColor: ";
 
     this->reset_scenes("",remove_newlines(this->game->getFreeFieldString()));
     this->player_info->clear();
@@ -625,6 +629,7 @@ void Widget::end_turn()
         this->disable_button("save");
         this->disable_button("undo");
         this->disable_button("next_turn");
+        this->message_label->setText("Message: game over.");
         game_over->set_results(QString::fromStdString(prepare_results(this->game->getPlayers())));
         game_over->show();
         return;
