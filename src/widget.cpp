@@ -190,6 +190,7 @@ void Widget::set_buttons()
         ptr_2->setFocusPolicy(Qt::NoFocus);
         QObject::connect(ptr_2, SIGNAL (clicked()), this, SLOT (column_down()));
         //
+        //std::cout << ptr_2->objectName().toStdString() << std::endl;
         this->buttons_ptr.push_back(ptr_1);
         this->buttons_ptr.push_back(ptr_2);
         i += 2;
@@ -243,7 +244,7 @@ void Widget::set_labels()
     // Player info text.
     this->player_info = new QLabel(this);
     this->player_info->setFont(QFont("Courier", 12, QFont::Bold));
-    this->player_info->setFixedWidth(400);
+    this->player_info->setFixedWidth(200);
     this->player_info->setWordWrap(true);
     this->player_info->move(20, this->height()/2 - 165);
 
